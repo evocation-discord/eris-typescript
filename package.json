@@ -1,0 +1,8 @@
+{
+  "name": "@evocation/eris",
+  "version": "1.0.0",
+  "main": "bin",
+  "repository": "git@github.com:Evocation-Discord/Eris.git",
+  "author": "Stijn <stijn@kolkies.dev>",
+  "license": "MIT"
+}
