@@ -1,5 +1,2 @@
 # @evocation/Eris
-
-Made by Stijn#0001
-
-Evocation is owned by Ace#1406
+Eris is a discord bot made for a server named Evocation on Discord
