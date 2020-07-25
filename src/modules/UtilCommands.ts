@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import { command, Module, ErisClient, inhibitors, Remainder } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
+import { TextChannel } from "discord.js";
 
 export default class UtilCommandModule extends Module {
 
@@ -56,5 +57,23 @@ export default class UtilCommandModule extends Module {
         return msg.channel.send("**ERROR**: Type needs to be `watching`, `playing` or `listening`.");
     }
     return msg.channel.send(`**SUCCESS**: I'm now ${type}${type === "listening" ? " to" : ""} **${game}**.`);
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String, new Remainder(String)] })
+  async edit(msg: Message, messageLink: string, newContent: string) {
+    let isError = false;
+    const messageLinkRegex = /^(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(\@me|\d+)\/(\d+)\/(\d+)$/g;
+    const executedRegex = messageLinkRegex.exec(messageLink);
+    if(!executedRegex) return msg.channel.send("**ERROR**: Link doesnt match a discord message link.");
+    const [, guildId, channelId, messageId] = executedRegex;
+    const guild = this.client.guilds.resolve(guildId);
+    if(!guild) return msg.channel.send(`**ERROR**: Guild with ID ${guildId} was not found.`);
+    const channel = guild.channels.resolve(channelId) as TextChannel;
+    if(!channel) return msg.channel.send(`**ERROR**: Channel with ID ${channelId} was not found.`);
+    const message = await channel.messages.fetch(messageId)
+    if(!message) return msg.channel.send(`**ERROR**: Message with ID ${messageId} was not found.`);
+    await message.edit(newContent).catch(_ => isError = true);
+    if (isError) return msg.channel.send("**ERROR**: Something went wrong.")
+    return msg.channel.send("**SUCCESS**: Message has been edited.");
   }
 }
