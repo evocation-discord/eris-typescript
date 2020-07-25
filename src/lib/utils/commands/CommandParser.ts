@@ -11,12 +11,15 @@ export class CommandParserModule extends Module {
   }
   @listener({ event: "message" })
   async onMessage(msg: Message) {
-    const prefix = process.env.PREFIX;
-
     if (msg.author && msg.author.bot) return;
-    if (!msg.content.startsWith(prefix)) return;
 
-    const noPrefix = msg.content.replace(prefix, "");
+    const prefix = process.env.PREFIX;
+    const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
+    if (!prefixRegex.test(msg.content)) return;
+
+    const [, matchedPrefix] = msg.content.match(prefixRegex);
+
+    const noPrefix = msg.content.slice(matchedPrefix.length).trim();
     const stringArgs: string[] = noPrefix.split(" ").slice(1) || [];
     const cmdTrigger = noPrefix.split(" ")[0].toLowerCase();
     const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
@@ -82,3 +85,5 @@ export class CommandParserModule extends Module {
     }
   }
 }
+
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
