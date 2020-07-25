@@ -6,7 +6,7 @@ export default class EventModule extends Module {
     super(client);
   }
   @listener({ event: "guildUpdate" })
-  onGuidUpdate(oldGuild: Guild, newGuild: Guild) {
+  onGuildUpdate(oldGuild: Guild, newGuild: Guild) {
     if (newGuild.id == process.env.MAIN_GUILD_ID && newGuild.name !== process.env.MAIN_GUILD_NAME) newGuild.edit({ name: process.env.MAIN_GUILD_NAME });
   }
 
