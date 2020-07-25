@@ -13,5 +13,6 @@ export default class EventModule extends Module {
   @listener({ event: "ready" })
   onReady() {
     console.log("Bot up and running!");
+    this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }
 }

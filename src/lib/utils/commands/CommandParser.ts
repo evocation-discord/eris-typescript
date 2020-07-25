@@ -2,8 +2,8 @@ import { Message } from "discord.js";
 import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
 import { listener } from "../listener/decorator";
-import { getArgTypes } from "../argTypeProvider";
-import { Context } from "../Context";
+import { getArgumentParser, Greedy } from "../arguments/Arguments";
+import ArgTextProcessor from "../arguments/ArgumentProcessor";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -33,45 +33,33 @@ export class CommandParserModule extends Module {
         return;
       }
     }
-    // Argument type validation
-    const typedArgs = [] as unknown[];
-    const leastArgs =
-      cmd.args.length - cmd.args.filter(x => x.optional).length;
-    if (cmd.single) {
-      typedArgs.push(stringArgs.join(" "));
-    } else {
-      if (stringArgs.length < leastArgs)
-        return msg.reply(
-          `:warning: expected atleast ${leastArgs} argument${
-          leastArgs !== 1 ? "s" : ""
-          } but got ${stringArgs.length} argument${
-          stringArgs.length !== 1 ? "s" : ""
-          } instead`
-        );
-      for (const i in stringArgs) {
-        const sa = stringArgs[i];
-        // Beware: arg is `unknown`
-        console.log(cmd.args[i])
-        const arg = getArgTypes(this.client)[cmd.args[i].type.name](
-          sa,
-          msg
-        );
-        if (arg === null || arg === undefined) {
-          return msg.reply(
-            `:warning: argument #${parseInt(i, 10) +
-            1} is not of expected type ${cmd.args[i].type.name}`
-          );
-        } else typedArgs.push(arg);
+    const processor = new ArgTextProcessor(stringArgs);
+    const args: any[] = [];
+    for (const cmdArg of cmd.args || []) {
+      const parser = getArgumentParser(cmdArg);
+      try {
+        // Process the argument.
+        const p = await parser(processor, msg);
+        if (p.length === 1 && !(cmdArg instanceof Greedy)) args.push(p[0]);
+        else if (p.length === 0) args.push(undefined);
+        else args.push(p);
+      } catch (err) {
+        // Return a error.
+        try {
+          return msg.channel.send((err as Error).message);
+        } catch (_) {
+          // Do nothing. The user doesn't have the correct arguments.
+          return;
+        }
       }
     }
 
     // Executing the command
-    const context = new Context(msg, prefix, cmdTrigger, cmd);
     try {
       const result = cmd.func.call(
         cmd.module,
-        cmd.usesContextAPI ? context : msg,
-        ...typedArgs
+        msg,
+        ...args
       );
       if (result instanceof Promise) {
         await result;

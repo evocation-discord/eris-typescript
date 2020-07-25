@@ -4,7 +4,6 @@ import { IListenerDecoratorMeta } from "../listener/decorator";
 import { Listener } from "../listener/Listener";
 import { ICommandDecorator } from "../commands/decorator";
 import { Command } from "../commands/Command";
-import { getArgTypes } from "../argTypeProvider";
 
 export class Module {
   public client: ErisClient;
@@ -39,19 +38,9 @@ export class Module {
             id.toLowerCase()
           ),
           module: this,
-          single: meta.single,
           inhibitors: meta.inhibitors,
-          onError: meta.onError,
-          usesContextAPI: meta.usesContextAPI
+          onError: meta.onError
         } as Command)
-    );
-    cmds.forEach(cmd =>
-      cmd.args.forEach(arg => {
-        if (!getArgTypes(this.client)[arg.type.name])
-          throw new Error(
-            `command tried to use an unsupported argument type ${arg.type.name}`
-          );
-      })
     );
     return cmds;
   }

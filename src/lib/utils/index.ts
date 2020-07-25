@@ -5,6 +5,10 @@ import { CommandParserModule } from "./commands/CommandParser";
 
 export { ErisClient, Command, CommandManager, CommandParserModule };
 
+export * from "./arguments/ArgumentProcessor";
+export * from "./arguments/Arguments";
+export * from "./arguments/supportedArgs";
+
 export * from "./commands/decorator";
 
 export * from "./inhibitors/Inhibitor";

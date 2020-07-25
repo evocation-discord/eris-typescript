@@ -5,7 +5,6 @@ import { readdirSync } from "fs";
 import { CommandManager } from "../commands/CommandManager";
 import { ListenerManager } from "../listener/ListenerManager";
 import { Module } from "../modules/Module";
-import { ArgTypes } from "../argTypeProvider";
 import { CommandParserModule } from "../commands/CommandParser";
 
 export class ErisClient extends Client {
@@ -13,13 +12,11 @@ export class ErisClient extends Client {
   public listenerManager: ListenerManager;
   public modules: Set<Module> = new Set();
   readonly botAdmins: string[];
-  readonly commandArgumentTypes: ArgTypes;
   constructor(opts: Partial<ErisClientOptions> = {}) {
     super({});
     this.botAdmins = opts.botAdmins || [];
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);
-    this.commandArgumentTypes = opts.commandArgumentTypes || {};
     this.registerModule(CommandParserModule);
   }
 
@@ -114,5 +111,4 @@ export class ErisClient extends Client {
 
 interface ErisClientOptions {
   botAdmins: string[];
-  commandArgumentTypes: ArgTypes;
 }

@@ -1,17 +1,16 @@
 import { Message } from "discord.js";
 import { Module } from "../modules/Module";
-import { ICommandArgument } from "./decorator";
 import { Inhibitor } from "../inhibitors/Inhibitor";
+import { supportedArgs } from "../arguments/supportedArgs";
+import { Greedy, Remainder, Optional } from "../arguments/Arguments";
 
 export interface Command {
     func: Function;
-    args: ICommandArgument[];
+    args?: (supportedArgs | Greedy | Remainder | Optional)[];
     triggers: string[];
     id: string;
     description?: string;
     module: Module;
-    single: boolean;
     inhibitors: Inhibitor[];
-    usesContextAPI: boolean;
     onError: (msg: Message, error: Error) => void;
 }
