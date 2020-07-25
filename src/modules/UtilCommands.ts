@@ -9,6 +9,6 @@ export default class UtilCommandModule extends Module {
   @command({ inhibitors: [inhibitors.botAdminsOnly], single: true })
   echo(msg: Message, args: string) {
     msg.delete();
-    msg.channel.send(args, { allowedMentions: { parse: [] }});
+    msg.channel.send(args, { allowedMentions: { parse: [], users: [], roles: [] }});
   }
 }
