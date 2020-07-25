@@ -23,6 +23,7 @@
     "typescript": "^3.9.7"
   },
   "_moduleAliases": {
-		"@lib": "dist/lib"
+    "@lib": "dist/lib",
+    "@modules": "dist/modules"
 	}
 }

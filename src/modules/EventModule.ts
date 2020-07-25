@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { command, listener, Module, ErisClient } from "@lib/utils";
+import { listener, Module, ErisClient } from "@lib/utils";
 import { Guild } from "discord.js";
 
 export default class EventModule extends Module {
@@ -14,10 +13,5 @@ export default class EventModule extends Module {
   @listener({ event: "ready" })
   onReady() {
     console.log("Bot up and running!");
-  }
-
-  @command()
-  ping(msg: Message) {
-    msg.reply("pong");
   }
 }

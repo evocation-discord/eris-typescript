@@ -2,8 +2,9 @@ import 'module-alias/register';
 import "@lib/utils/types/discord";
 
 import dotenv from "dotenv";
-import EventModule from "./modules/EventModule";
+import EventModule from "@modules/EventModule";
 import { ErisClient } from "@lib/utils";
+import UtilCommandModule from '@modules/UtilCommands';
 dotenv.config();
 
 const client = new ErisClient({
@@ -13,4 +14,4 @@ const client = new ErisClient({
   ],
 });
 
-client.registerModule(EventModule).login(process.env.DISCORD_TOKEN);
+client.registerModule(EventModule).registerModule(UtilCommandModule).login(process.env.DISCORD_TOKEN);

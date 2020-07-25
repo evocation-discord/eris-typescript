@@ -26,7 +26,7 @@ export class CommandParserModule extends Module {
       const reason = await inhibitor(msg, this.client);
       if (reason) {
         // It inhibited
-        msg.reply(`:warning: command was inhibited: ${reason}`);
+        msg.channel.send(`${msg.author} | **COMMAND INHIBITED**: ${reason}`);
         return;
       }
     }
@@ -48,6 +48,7 @@ export class CommandParserModule extends Module {
       for (const i in stringArgs) {
         const sa = stringArgs[i];
         // Beware: arg is `unknown`
+        console.log(cmd.args[i])
         const arg = getArgTypes(this.client)[cmd.args[i].type.name](
           sa,
           msg

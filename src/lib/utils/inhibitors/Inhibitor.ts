@@ -13,19 +13,16 @@ export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
 const botAdminsOnly: Inhibitor = async (
   msg: Message,
   client: ErisClient
-) => (client.botAdmins.includes(msg.author.id) ? undefined : "not a bot admin");
+) => (client.botAdmins.includes(msg.author.id) ? undefined : "You are not authorised to use this command.");
 
 const guildsOnly: Inhibitor = async msg =>
-  msg.member ? undefined : "not in a guild";
-
-const dmsOnly: Inhibitor = async msg =>
-  msg.channel.type == "dm" ? undefined : "not in dms";
+  msg.member ? undefined : "You are not in a guild.";
 
 const hasGuildPermission = (perm: PermissionResolvable) =>
   mergeInhibitors(guildsOnly, async msg =>
     msg.member!.hasPermission(perm)
       ? undefined
-      : "missing discord permission " + perm
+      : "You miss a discord permission:" + perm
   );
 
 const userCooldown = (ms: number): Inhibitor => {
@@ -36,7 +33,7 @@ const userCooldown = (ms: number): Inhibitor => {
         map.set(msg.author.id, Date.now() + ms);
         return undefined;
       } else {
-        return `you must wait ${humanizeDuration(
+        return `You must wait ${humanizeDuration(
           Date.now() - (map.get(msg.author.id) || 0)
         )} to run this command!`;
       }
@@ -54,7 +51,6 @@ export type Inhibitor = (
 export const inhibitors = {
   botAdminsOnly,
   guildsOnly,
-  dmsOnly,
   hasGuildPermission,
   userCooldown
 }
