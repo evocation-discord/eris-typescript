@@ -8,7 +8,7 @@ export default class DonationCommandsModule extends Module {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
       const firstEntry = auditLogs.entries.first();
       if(!(firstEntry.changes[0].key === "$add" && firstEntry.executor.id === this.client.user.id))
-        newMember.roles.remove(process.env.WHITE_HALLOWS, "Role was not added by the bot");
+        newMember.roles.remove(process.env.WHITE_HALLOWS, "[FORCED REVOCATION] Authenticity cannot be verified.");
     }
   }
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [GuildMember, new Remainder(String)] })
