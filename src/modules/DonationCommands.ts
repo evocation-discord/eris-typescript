@@ -1,7 +1,16 @@
-import { Module, command, inhibitors, Remainder } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, listener } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationCommandsModule extends Module {
+  @listener({ event: "guildMemberUpdate" })
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember) {
+    if(!oldMember.roles.cache.has(process.env.WHITE_HALLOWS) && newMember.roles.cache.has(process.env.WHITE_HALLOWS)) {
+      const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+      const firstEntry = auditLogs.entries.first();
+      if(!(firstEntry.changes[0].key === "$add" && firstEntry.executor.id === this.client.user.id))
+        newMember.roles.remove(process.env.WHITE_HALLOWS, "Role was not added by the bot");
+    }
+  }
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [GuildMember, new Remainder(String)] })
   logdonation(msg: Message, member: GuildMember, item: string) {
     msg.delete();
