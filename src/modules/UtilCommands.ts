@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { command, Module, ErisClient, inhibitors, Remainder } from "@lib/utils";
+import { command, Module, inhibitors, Remainder } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
 
