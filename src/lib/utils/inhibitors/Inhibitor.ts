@@ -18,11 +18,11 @@ const botAdminsOnly: Inhibitor = async (
 const guildsOnly: Inhibitor = async msg =>
   msg.member ? undefined : "You are not in a guild.";
 
-const hasGuildPermission = (perm: PermissionResolvable) =>
+const hasGuildPermission = (perm: PermissionResolvable): Inhibitor =>
   mergeInhibitors(guildsOnly, async msg =>
-    msg.member!.hasPermission(perm)
+    msg.member.hasPermission(perm)
       ? undefined
-      : "You miss a discord permission:" + perm
+      : `You miss a discord permission:${  perm}`
   );
 
 const userCooldown = (ms: number): Inhibitor => {
@@ -53,4 +53,4 @@ export const inhibitors = {
   guildsOnly,
   hasGuildPermission,
   userCooldown
-}
+};

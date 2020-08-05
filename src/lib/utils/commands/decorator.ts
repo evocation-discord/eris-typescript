@@ -5,18 +5,18 @@ import { Remainder, Greedy, Optional } from "../arguments/Arguments";
 import { supportedArgs } from "../arguments/supportedArgs";
 
 export interface ICommandDecoratorOptions {
-  description?: string;
-  aliases: string[];
-  inhibitors: Inhibitor[];
-  onError: (msg: Message, error: Error) => void;
-  args: (supportedArgs | Greedy | Remainder | Optional)[];
+  description?: string,
+  aliases: string[],
+  inhibitors: Inhibitor[],
+  onError: (msg: Message, error: Error) => void,
+  args: (supportedArgs | Greedy | Remainder | Optional)[]
 }
 
 interface ICommandDecoratorMeta {
-  id: string;
+  id: string
 }
 
-type ICommandDecorator = ICommandDecoratorMeta & ICommandDecoratorOptions;
+export type ICommandDecorator = ICommandDecoratorMeta & ICommandDecoratorOptions;
 
 export function command(
   opts: Partial<ICommandDecoratorOptions> | undefined = {}
@@ -25,7 +25,7 @@ export function command(
     target: Module,
     propertyKey: string,
     descriptor: PropertyDescriptor
-  ) {
+  ): void {
     const targetConstructorName = target.constructor.name;
     if (!(target instanceof Module))
       throw new TypeError(
@@ -54,4 +54,3 @@ export function command(
     Reflect.defineMetadata("cookiecord:commandMetas", targetMetas, target);
   };
 }
-export { ICommandDecorator };

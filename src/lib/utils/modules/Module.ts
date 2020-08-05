@@ -10,7 +10,7 @@ export class Module {
   constructor(client: ErisClient) {
     this.client = client;
   }
-  processListeners() {
+  processListeners(): Listener[] {
     const listenersMeta: IListenerDecoratorMeta[] =
       Reflect.getMetadata("cookiecord:listenerMetas", this) || [];
 
@@ -18,13 +18,13 @@ export class Module {
       meta =>
         ({
           event: meta.event,
-          id: this.constructor.name + "/" + meta.id,
+          id: `${this.constructor.name  }/${  meta.id}`,
           module: this,
           func: meta.func
         } as Listener)
     );
   }
-  processCommands() {
+  processCommands(): Command[] {
     const targetMetas: ICommandDecorator[] =
       Reflect.getMetadata("cookiecord:commandMetas", this) || [];
     const cmds = targetMetas.map(
@@ -32,7 +32,7 @@ export class Module {
         ({
           description: meta.description,
           func: Reflect.get(this, meta.id),
-          id: this.constructor.name + "/" + meta.id,
+          id: `${this.constructor.name  }/${  meta.id}`,
           args: meta.args,
           triggers: [meta.id, ...meta.aliases].map(id =>
             id.toLowerCase()

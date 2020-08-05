@@ -1,13 +1,15 @@
 import * as discord from "discord.js";
 
+export type GuildMemberOrUserID = string;
+
 // All supported arguments.
-export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof String | typeof Number;
+export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof String | typeof Number | GuildMemberOrUserID;
 
 // Defines all parsers.
-export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<any>> = new Map();
+export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
 
 // Used to parse a number.
-const numberParser = async (arg: string): Promise<Number> => {
+const numberParser = async (arg: string): Promise<number> => {
   const n = Number(arg);
   if (typeof n === "number") return n;
   throw new Error("The argument must be a valid number.");

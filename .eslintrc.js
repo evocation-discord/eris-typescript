@@ -17,7 +17,7 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/camelcase": "warn",
+    "@typescript-eslint/camelcase": "off",
     "prefer-arrow-callback": "warn",
     "@typescript-eslint/semi": [2, "always"],
     "@typescript-eslint/quotes": ["error", "double"],
@@ -32,6 +32,7 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "array-bracket-spacing": [2, "never"],
     "arrow-spacing": "error",
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/member-delimiter-style": [
       2,
       {

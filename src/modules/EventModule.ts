@@ -6,12 +6,12 @@ export default class EventModule extends Module {
     super(client);
   }
   @listener({ event: "guildUpdate" })
-  onGuildUpdate(oldGuild: Guild, newGuild: Guild) {
-    if (newGuild.id == process.env.MAIN_GUILD_ID && newGuild.name !== process.env.MAIN_GUILD_NAME) newGuild.edit({ name: process.env.MAIN_GUILD_NAME });
+  onGuildUpdate(oldGuild: Guild, newGuild: Guild): void {
+    if (newGuild.id === process.env.MAIN_GUILD_ID && newGuild.name !== process.env.MAIN_GUILD_NAME) newGuild.edit({ name: process.env.MAIN_GUILD_NAME });
   }
 
   @listener({ event: "ready" })
-  onReady() {
+  onReady(): void {
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }

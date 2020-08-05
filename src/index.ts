@@ -1,11 +1,11 @@
-import 'module-alias/register';
+import "module-alias/register";
 import "@lib/utils/types/discord";
 
 import dotenv from "dotenv";
 import EventModule from "@modules/EventModule";
 import { ErisClient } from "@lib/utils";
-import UtilCommandModule from '@modules/UtilCommands';
-import DonationCommandsModule from '@modules/DonationCommands';
+import UtilCommandModule from "@modules/UtilCommands";
+import DonationCommandsModule from "@modules/DonationCommands";
 dotenv.config();
 
 const client = new ErisClient({

@@ -20,16 +20,16 @@ export class ErisClient extends Client {
     this.registerModule(CommandParserModule);
   }
 
-  registerModule(module: typeof Module | Module) {
-    if (module == Module || module instanceof Module)
+  registerModule(module: typeof Module | Module): this {
+    if (module === Module || module instanceof Module)
       throw new TypeError(
         "registerModule only takes in classes that extend Module"
       );
     if (
       Array.from(this.modules).some(
         m =>
-          m.constructor.name == module.name ||
-          m.constructor.name == module.constructor.name
+          m.constructor.name === module.name ||
+          m.constructor.name === module.constructor.name
       )
     )
       throw new Error(
@@ -47,19 +47,19 @@ export class ErisClient extends Client {
     return this;
   }
 
-  unregisterModule(mod: Module) {
+  unregisterModule(mod: Module): this {
     if (!this.modules.has(mod))
       throw new Error("Cannot unregister unregistered module");
     Array.from(this.listenerManager.listeners)
-      .filter(l => l.module == mod)
+      .filter(l => l.module === mod)
       .forEach(l => this.listenerManager.remove(l));
     Array.from(this.commandManager.cmds)
-      .filter(c => c.module == mod)
+      .filter(c => c.module === mod)
       .forEach(c => this.commandManager.remove(c));
     this.modules.delete(mod);
     return this;
   }
-  reloadModulesFromFolder(path: string) {
+  reloadModulesFromFolder(path: string): void {
     const fn = join(process.cwd(), path);
     const watcher = chokidar.watch(fn);
 
@@ -67,13 +67,14 @@ export class ErisClient extends Client {
       // Here be dragons.
       // Might need more validation here...
       delete require.cache[file];
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const module = require(file) as {
-        default: typeof Module;
+        default: typeof Module
       };
       if (module.default) {
-        if (Object.getPrototypeOf(module.default) == Module) {
+        if (Object.getPrototypeOf(module.default) === Module) {
           const old = Array.from(this.modules).find(
-            mod => module.default.name == mod.constructor.name
+            mod => module.default.name === mod.constructor.name
           );
           if (old) this.unregisterModule(old);
           this.registerModule(module.default);
@@ -89,13 +90,14 @@ export class ErisClient extends Client {
     });
   }
 
-  loadModulesFromFolder(path: string) {
+  loadModulesFromFolder(path: string): void {
     const files = readdirSync(path);
     files.forEach(file => {
       const fn = join(process.cwd(), path, file);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const module = require(fn);
       if (module.default) {
-        if (Object.getPrototypeOf(module.default) == Module) {
+        if (Object.getPrototypeOf(module.default) === Module) {
           this.registerModule(module.default);
         } else {
           throw new TypeError(
@@ -110,5 +112,5 @@ export class ErisClient extends Client {
 }
 
 interface ErisClientOptions {
-  botAdmins: string[];
+  botAdmins: string[]
 }

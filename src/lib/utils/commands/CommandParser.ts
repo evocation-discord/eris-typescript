@@ -10,7 +10,7 @@ export class CommandParserModule extends Module {
     super(client);
   }
   @listener({ event: "message" })
-  async onMessage(msg: Message) {
+  async onMessage(msg: Message): Promise<Message|void> {
     if (msg.author && msg.author.bot) return;
 
     const prefix = process.env.PREFIX;
@@ -34,7 +34,7 @@ export class CommandParserModule extends Module {
       }
     }
     const processor = new ArgTextProcessor(stringArgs);
-    const args: any[] = [];
+    const args: unknown[] = [];
     for (const cmdArg of cmd.args || []) {
       const parser = getArgumentParser(cmdArg);
       try {
@@ -74,4 +74,4 @@ export class CommandParserModule extends Module {
   }
 }
 
-const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

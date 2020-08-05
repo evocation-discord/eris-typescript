@@ -33,14 +33,14 @@ export default class ArgTextProcessor {
     if (!a) return null;
 
     // If this doesn't start with a quote, we just return this argument.
-    if (!a.startsWith('"')) return new ArgConstructor([a], a);
+    if (!a.startsWith("\"")) return new ArgConstructor([a], a);
 
     // Ok, if not, we combine until the quote ends (if the string ends before a end quote, we just return all arguments).
-    let argParts = [a];
+    const argParts = [a];
     let argsCombined = a.substr(1);
     for (; ;) {
       // Shift the argument.
-      let arg = this.unusedArgs.shift();
+      const arg = this.unusedArgs.shift();
 
       // If this doesn't exist, return all the current arguments combined.
       if (!arg) return new ArgConstructor(argParts, argsCombined);
@@ -49,7 +49,7 @@ export default class ArgTextProcessor {
       argParts.push(arg);
 
       // Check if the string ends with a quote. If so, return the args combined with this string (and the quote removed).
-      if (arg.endsWith('"')) return new ArgConstructor(argParts, `${argsCombined} ${arg.slice(0, -1)}`);
+      if (arg.endsWith("\"")) return new ArgConstructor(argParts, `${argsCombined} ${arg.slice(0, -1)}`);
 
       // Add to the arguments if not.
       argsCombined += ` ${arg}`;
@@ -57,8 +57,8 @@ export default class ArgTextProcessor {
   }
 
   // Handle greedy argument parsing.
-  async greedy(parser: (arg: string, msg: discord.Message) => Promise<any>, msg: discord.Message): Promise<any[]> {
-    const a: any[] = [];
+  async greedy(parser: (arg: string, msg: discord.Message) => Promise<unknown>, msg: discord.Message): Promise<unknown[]> {
+    const a: unknown[] = [];
     for (; ;) {
       const argString = this.getArgumentString();
       if (!argString) return a;
@@ -79,7 +79,7 @@ export default class ArgTextProcessor {
   }
 
   // Get one argument.
-  async one(parser: (arg: string, msg: discord.Message) => Promise<any>, msg: discord.Message): Promise<any> {
+  async one(parser: (arg: string, msg: discord.Message) => Promise<unknown>, msg: discord.Message): Promise<unknown> {
     // Get the argument if we can.
     const x = this.getArgumentString();
     if (!x) throw new Error("No argument was supplied.");
