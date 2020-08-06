@@ -16,4 +16,8 @@ export * from "./listener/Listener";
 export * from "./listener/ListenerManager";
 export * from "./listener/decorator";
 
+export * from "./monitor/Monitor";
+export * from "./monitor/MonitorManager";
+export * from "./monitor/decorator";
+
 export * from "./modules/Module";

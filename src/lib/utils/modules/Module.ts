@@ -4,6 +4,8 @@ import { IListenerDecoratorMeta } from "../listener/decorator";
 import { Listener } from "../listener/Listener";
 import { ICommandDecorator } from "../commands/decorator";
 import { Command } from "../commands/Command";
+import { Monitor } from "../monitor/Monitor";
+import { IMonitorDecoratorMeta } from "../monitor/decorator";
 
 export class Module {
   public client: ErisClient;
@@ -18,7 +20,7 @@ export class Module {
       meta =>
         ({
           event: meta.event,
-          id: `${this.constructor.name  }/${  meta.id}`,
+          id: `${this.constructor.name}/${meta.id}`,
           module: this,
           func: meta.func
         } as Listener)
@@ -32,7 +34,7 @@ export class Module {
         ({
           description: meta.description,
           func: Reflect.get(this, meta.id),
-          id: `${this.constructor.name  }/${  meta.id}`,
+          id: `${this.constructor.name}/${meta.id}`,
           args: meta.args,
           triggers: [meta.id, ...meta.aliases].map(id =>
             id.toLowerCase()
@@ -43,5 +45,19 @@ export class Module {
         } as Command)
     );
     return cmds;
+  }
+
+  processMonitors(): Monitor[] {
+    const targetMetas: IMonitorDecoratorMeta[] =
+      Reflect.getMetadata("cookiecord:monitorMetas", this) || [];
+    const monitors = targetMetas.map(
+      meta =>
+        ({
+          func: Reflect.get(this, meta.id),
+          id: `${this.constructor.name}/${meta.id}`,
+          module: this,
+        } as Monitor)
+    );
+    return monitors;
   }
 }

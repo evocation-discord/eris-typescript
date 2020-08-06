@@ -6,6 +6,7 @@ import EventModule from "@modules/EventModule";
 import { ErisClient } from "@lib/utils";
 import UtilCommandModule from "@modules/UtilCommands";
 import DonationCommandsModule from "@modules/DonationCommands";
+import DirectMessageModule from "@modules/DirectMessageModule";
 dotenv.config();
 
 const client = new ErisClient({
@@ -19,4 +20,5 @@ client
   .registerModule(EventModule)
   .registerModule(UtilCommandModule)
   .registerModule(DonationCommandsModule)
+  .registerModule(DirectMessageModule)
   .login(process.env.DISCORD_TOKEN);

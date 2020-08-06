@@ -13,6 +13,8 @@ export class CommandParserModule extends Module {
   async onMessage(msg: Message): Promise<Message|void> {
     if (msg.author && msg.author.bot) return;
 
+    this.client.monitorManager.monitors.forEach(monitor => monitor.func.call(monitor.module, msg));
+
     const prefix = process.env.PREFIX;
     const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
     if (!prefixRegex.test(msg.content)) return;

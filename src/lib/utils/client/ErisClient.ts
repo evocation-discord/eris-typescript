@@ -6,10 +6,12 @@ import { CommandManager } from "../commands/CommandManager";
 import { ListenerManager } from "../listener/ListenerManager";
 import { Module } from "../modules/Module";
 import { CommandParserModule } from "../commands/CommandParser";
+import { MonitorManager } from "../monitor/MonitorManager";
 
 export class ErisClient extends Client {
   public commandManager: CommandManager;
   public listenerManager: ListenerManager;
+  public monitorManager: MonitorManager;
   public modules: Set<Module> = new Set();
   readonly botAdmins: string[];
   constructor(opts: Partial<ErisClientOptions> = {}) {
@@ -17,6 +19,7 @@ export class ErisClient extends Client {
     this.botAdmins = opts.botAdmins || [];
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);
+    this.monitorManager = new MonitorManager(this);
     this.registerModule(CommandParserModule);
   }
 
@@ -43,6 +46,9 @@ export class ErisClient extends Client {
     mod.processCommands
       .bind(mod)()
       .forEach(c => this.commandManager.add(c));
+    mod.processMonitors
+      .bind(mod)()
+      .forEach(c => this.monitorManager.add(c));
     this.modules.add(mod);
     return this;
   }

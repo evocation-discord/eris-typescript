@@ -14,6 +14,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
+    "types": ["discord.js"],
+
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@lib/*": ["lib/*"],
