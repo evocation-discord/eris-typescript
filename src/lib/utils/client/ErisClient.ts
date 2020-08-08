@@ -15,7 +15,7 @@ export class ErisClient extends Client {
   public modules: Set<Module> = new Set();
   readonly botAdmins: string[];
   constructor(opts: Partial<ErisClientOptions> = {}) {
-    super({});
+    super({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
     this.botAdmins = opts.botAdmins || [];
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);

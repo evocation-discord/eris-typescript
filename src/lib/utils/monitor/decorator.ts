@@ -1,11 +1,18 @@
 import { Module } from "../modules/Module";
+import { ClientEvents } from "discord.js";
+import { MessageAttachment } from "discord.js";
 
 export interface IMonitorDecoratorMeta {
   id: string,
-  func: Function
+  func: Function,
+  events: (keyof ClientEvents)[]
 }
 
-export function monitor() {
+export interface IMonitorDecoratorOptions {
+  events: (keyof ClientEvents)[]
+}
+
+export function monitor(opts: IMonitorDecoratorOptions) {
   return function (
     target: Module,
     propertyKey: string,
@@ -26,7 +33,8 @@ export function monitor() {
 
     monitorsMeta.push({
       id: propertyKey,
-      func: Reflect.get(target, propertyKey)
+      func: Reflect.get(target, propertyKey),
+      events: opts.events
     });
 
     Reflect.defineMetadata(

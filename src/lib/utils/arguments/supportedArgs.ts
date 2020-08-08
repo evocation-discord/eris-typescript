@@ -1,12 +1,12 @@
 import * as discord from "discord.js";
 
-export type GuildMemberOrUserID = string;
-
 // All supported arguments.
-export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof String | typeof Number | GuildMemberOrUserID;
+export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof String | typeof Number;
 
 // Defines all parsers.
 export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
+
+const USER_REGEXP = /^(?:<@!?)?(\d{17,19})>?$/;
 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
@@ -40,13 +40,27 @@ allParsers.set(discord.GuildMember, guildMemberParser);
 
 // Used to parse a user.
 const userParser = async (arg: string, msg: discord.Message): Promise<discord.User> => {
-  const possibleMention = trimIdWaffle(arg);
-  try {
-    const x = await msg.client.users.fetch(possibleMention);
-    if (!x) throw new Error();
-    return x;
-  } catch (_) {
-    throw new Error("Could not find the user.");
+  const resUser = await resolveUser(arg, msg.guild);
+  if (resUser) return resUser;
+
+  const results = [];
+  const reg = new RegExp(regExpEsc(arg), "i");
+  for (const member of msg.guild.members.cache.values()) {
+    if (reg.test(member.user.username)) results.push(member.user);
+  }
+
+  let querySearch;
+  if (results.length > 0) {
+    const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
+    const filtered = results.filter(user => regWord.test(user.username));
+    querySearch = filtered.length > 0 ? filtered : results;
+  } else {
+    querySearch = results;
+  }
+
+  switch (querySearch.length) {
+  case 0: throw new Error("Could not find the user.");
+  default: return querySearch[0];
   }
 };
 allParsers.set(discord.User, userParser);
@@ -65,3 +79,19 @@ allParsers.set(discord.Guild, guildParser);
 
 // Handle string parsing.
 allParsers.set(String, async x => x);
+
+const resolveUser = async (query: string | discord.User, guild: discord.Guild): Promise<discord.User> => {
+  if (query instanceof discord.User) return query;
+  if (typeof query === "string") {
+    if (USER_REGEXP.test(query)) return guild.client.users.fetch(USER_REGEXP.exec(query)[1]);
+    if (/\w{1,32}#\d{4}/.test(query)) {
+      const res = guild.members.cache.find(member => member.user.tag === query);
+      return res ? res.user : null;
+    }
+  }
+  return null;
+};
+
+const regExpEsc = (str: string): string => {
+  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};

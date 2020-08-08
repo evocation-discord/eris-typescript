@@ -56,6 +56,7 @@ export class Module {
           func: Reflect.get(this, meta.id),
           id: `${this.constructor.name}/${meta.id}`,
           module: this,
+          events: meta.events
         } as Monitor)
     );
     return monitors;

@@ -25,5 +25,5 @@
   "_moduleAliases": {
     "@lib": "dist/lib",
     "@modules": "dist/modules"
-	}
+  }
 }

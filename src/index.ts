@@ -7,6 +7,7 @@ import { ErisClient } from "@lib/utils";
 import UtilCommandModule from "@modules/UtilCommands";
 import DonationCommandsModule from "@modules/DonationCommands";
 import DirectMessageModule from "@modules/DirectMessageModule";
+import ListenerMonitorInit from "@modules/ListenerMonitorInit";
 dotenv.config();
 
 const client = new ErisClient({
@@ -17,6 +18,7 @@ const client = new ErisClient({
 });
 
 client
+  .registerModule(ListenerMonitorInit)
   .registerModule(EventModule)
   .registerModule(UtilCommandModule)
   .registerModule(DonationCommandsModule)
