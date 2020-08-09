@@ -5,10 +5,10 @@ import { TextChannel } from "discord.js";
 
 export default class UtilCommandModule extends Module {
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [new Remainder(String)] })
-  echo(msg: Message, args: string): void {
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [TextChannel, new Remainder(String)] })
+  send(msg: Message, channel: TextChannel, args: string): void {
     msg.delete();
-    msg.channel.send(args, { allowedMentions: { parse: [], users: [], roles: [] } });
+    channel.send(args, { allowedMentions: { parse: [], users: [], roles: [] } });
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String] })

@@ -1,12 +1,14 @@
 import * as discord from "discord.js";
+import { TextChannel } from "discord.js";
 
 // All supported arguments.
-export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof String | typeof Number;
+export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number;
 
 // Defines all parsers.
 export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
 
 const USER_REGEXP = /^(?:<@!?)?(\d{17,19})>?$/;
+const CHANNEL_REGEXP = /^(?:<#)?(\d{17,19})>?$/;
 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
@@ -77,6 +79,32 @@ const guildParser = async (arg: string, msg: discord.Message): Promise<discord.G
 };
 allParsers.set(discord.Guild, guildParser);
 
+const textChannelParser = async (arg: string, msg: discord.Message): Promise<discord.TextChannel> => {
+  const resChannel = resolveChannel(arg, msg.guild);
+  if (resChannel) return resChannel;
+
+  const results = [];
+  const reg = new RegExp(regExpEsc(arg), "i");
+  for (const channel of msg.guild.channels.cache.values()) {
+    if (reg.test(channel.name)) results.push(channel);
+  }
+
+  let querySearch;
+  if (results.length > 0) {
+    const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
+    const filtered = results.filter(channel => regWord.test(channel.name) && channel.type === "text");
+    querySearch = filtered.length > 0 ? filtered : results;
+  } else {
+    querySearch = results;
+  }
+
+  switch (querySearch.length) {
+  case 0: throw new Error("Could not find the channel.");
+  default: return querySearch[0];
+  }
+};
+allParsers.set(discord.TextChannel, textChannelParser);
+
 // Handle string parsing.
 allParsers.set(String, async x => x);
 
@@ -88,6 +116,16 @@ const resolveUser = async (query: string | discord.User, guild: discord.Guild): 
       const res = guild.members.cache.find(member => member.user.tag === query);
       return res ? res.user : null;
     }
+  }
+  return null;
+};
+
+const resolveChannel = (query: string | discord.Channel | discord.Message, guild: discord.Guild): discord.TextChannel => {
+  if (query instanceof discord.Channel && query.type === "text") return guild.channels.cache.has(query.id) ? query as TextChannel : null;
+  if (query instanceof discord.Message) return query.guild.id === guild.id ? query.channel as TextChannel : null;
+  if (typeof query === "string" && CHANNEL_REGEXP.test(query)) {
+    const ch = guild.channels.cache.get(CHANNEL_REGEXP.exec(query)[1]) as discord.TextChannel;
+    return ch.type === "text" ? ch : null;
   }
   return null;
 };
