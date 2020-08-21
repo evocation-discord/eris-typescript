@@ -8,6 +8,7 @@ import UtilCommandModule from "@modules/UtilCommands";
 import DonationCommandsModule from "@modules/DonationCommands";
 import DirectMessageModule from "@modules/DirectMessageModule";
 import ListenerMonitorInit from "@modules/ListenerMonitorInit";
+import PermissionsModule from "@modules/PermissionsModule";
 dotenv.config();
 
 const client = new ErisClient({
@@ -23,4 +24,5 @@ client
   .registerModule(UtilCommandModule)
   .registerModule(DonationCommandsModule)
   .registerModule(DirectMessageModule)
+  .registerModule(PermissionsModule)
   .login(process.env.DISCORD_TOKEN);
