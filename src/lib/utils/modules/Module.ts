@@ -14,7 +14,7 @@ export class Module {
   }
   processListeners(): Listener[] {
     const listenersMeta: IListenerDecoratorMeta[] =
-      Reflect.getMetadata("cookiecord:listenerMetas", this) || [];
+      Reflect.getMetadata("eris:listenerMetas", this) || [];
 
     return listenersMeta.map(
       meta =>
@@ -28,7 +28,7 @@ export class Module {
   }
   processCommands(): Command[] {
     const targetMetas: ICommandDecorator[] =
-      Reflect.getMetadata("cookiecord:commandMetas", this) || [];
+      Reflect.getMetadata("eris:commandMetas", this) || [];
     const cmds = targetMetas.map(
       meta =>
         ({
@@ -36,6 +36,7 @@ export class Module {
           func: Reflect.get(this, meta.id),
           id: `${this.constructor.name}/${meta.id}`,
           args: meta.args,
+          group: meta.group,
           triggers: [meta.id, ...meta.aliases].map(id =>
             id.toLowerCase()
           ),
@@ -49,7 +50,7 @@ export class Module {
 
   processMonitors(): Monitor[] {
     const targetMetas: IMonitorDecoratorMeta[] =
-      Reflect.getMetadata("cookiecord:monitorMetas", this) || [];
+      Reflect.getMetadata("eris:monitorMetas", this) || [];
     const monitors = targetMetas.map(
       meta =>
         ({

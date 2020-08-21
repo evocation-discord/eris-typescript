@@ -12,5 +12,6 @@ export interface Command {
     description?: string,
     module: Module,
     inhibitors: Inhibitor[],
+    group: string,
     onError: (msg: Message, error: Error) => void
 }

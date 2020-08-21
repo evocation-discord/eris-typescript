@@ -27,7 +27,7 @@ export function listener(opts: IListenerDecoratorOptions) {
       );
 
     const listenersMeta: IListenerDecoratorMeta[] =
-      Reflect.getMetadata("cookiecord:listenerMetas", target) || [];
+      Reflect.getMetadata("eris:listenerMetas", target) || [];
 
     listenersMeta.push({
       event: opts.event,
@@ -36,7 +36,7 @@ export function listener(opts: IListenerDecoratorOptions) {
     });
 
     Reflect.defineMetadata(
-      "cookiecord:listenerMetas",
+      "eris:listenerMetas",
       listenersMeta,
       target
     );

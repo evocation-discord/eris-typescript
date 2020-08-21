@@ -8,6 +8,7 @@ export interface ICommandDecoratorOptions {
   description?: string,
   aliases: string[],
   inhibitors: Inhibitor[],
+  group: string,
   onError: (msg: Message, error: Error) => void,
   args: (supportedArgs | Greedy | Remainder | Optional)[]
 }
@@ -39,6 +40,7 @@ export function command(
       aliases: opts.aliases || [],
       description: opts.description,
       id: propertyKey,
+      group: opts.group || "General",
       args: opts.args,
       inhibitors: opts.inhibitors || [],
       onError:
@@ -49,8 +51,8 @@ export function command(
     };
 
     const targetMetas: ICommandDecorator[] =
-      Reflect.getMetadata("cookiecord:commandMetas", target) || [];
+      Reflect.getMetadata("eris:commandMetas", target) || [];
     targetMetas.push(newMeta);
-    Reflect.defineMetadata("cookiecord:commandMetas", targetMetas, target);
+    Reflect.defineMetadata("eris:commandMetas", targetMetas, target);
   };
 }

@@ -29,7 +29,7 @@ export function monitor(opts: IMonitorDecoratorOptions) {
       );
 
     const monitorsMeta: IMonitorDecoratorMeta[] =
-      Reflect.getMetadata("cookiecord:monitorMetas", target) || [];
+      Reflect.getMetadata("eris:monitorMetas", target) || [];
 
     monitorsMeta.push({
       id: propertyKey,
@@ -38,7 +38,7 @@ export function monitor(opts: IMonitorDecoratorOptions) {
     });
 
     Reflect.defineMetadata(
-      "cookiecord:monitorMetas",
+      "eris:monitorMetas",
       monitorsMeta,
       target
     );
