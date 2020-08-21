@@ -21,6 +21,6 @@ export default class LoggingModule extends Module {
     if (!cmd) return;
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
-    channel.send(`\`[${dayjs(new Date(), { utc: true })}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`) in ${msg.channel} (\`${msg.channel.id}\`).`);
+    channel.send(`\`[${dayjs(new Date(), { utc: true })}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
   }
 }
