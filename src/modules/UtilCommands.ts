@@ -7,13 +7,13 @@ import { inspect } from "util";
 
 export default class UtilCommandModule extends Module {
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [TextChannel, new Remainder(String)] })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [TextChannel, new Remainder(String)] })
   send(msg: Message, channel: TextChannel, args: string): void {
     msg.delete();
     channel.send(args, { allowedMentions: { parse: [], users: [], roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String] })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String] })
   setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message> {
     const discordStatus = status as PresenceStatusData;
     switch (discordStatus) {
@@ -43,7 +43,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(`**SUCCESS**: My status is now **${status}**.`);
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String, new Remainder(String)] })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)] })
   setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message> {
     switch (type) {
     case "listening":
@@ -61,7 +61,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(`**SUCCESS**: I'm now ${type}${type === "listening" ? " to" : ""} **${game}**.`);
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String, new Remainder(String)] })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)] })
   async edit(msg: Message, messageLink: string, newContent: string): Promise<Message> {
     let isError = false;
     const messageLinkRegex = /^(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(@me|\d+)\/(\d+)\/(\d+)$/g;
@@ -79,7 +79,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send("**SUCCESS**: Message has been edited.");
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands()] })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational" })
   about(msg: Message): Promise<Message> {
     return msg.channel.send(
       "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n\n" +
@@ -89,7 +89,7 @@ export default class UtilCommandModule extends Module {
     "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", { allowedMentions: { users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [new Remainder(String)], aliases: ["ev"] })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"] })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
