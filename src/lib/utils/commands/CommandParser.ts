@@ -4,6 +4,7 @@ import { ErisClient } from "../client/ErisClient";
 import { listener } from "../listener/decorator";
 import { getArgumentParser, Greedy } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
+import { escapeRegex } from "..";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -74,5 +75,3 @@ export class CommandParserModule extends Module {
     }
   }
 }
-
-const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

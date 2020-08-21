@@ -23,3 +23,5 @@ export * from "./monitor/decorator";
 export * from "./modules/Module";
 
 export * from "./constants";
+
+export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

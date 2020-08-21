@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, guildMemberParser, NEGOTATIONS } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS } from "@lib/utils";
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
@@ -10,11 +10,11 @@ export default class PermissionsModule extends Module {
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGOTATIONS.ART)) {
-        member.roles.remove(NEGOTATIONS.ART);
+      if (member.roles.cache.has(NEGATIONS.ART)) {
+        member.roles.remove(NEGATIONS.ART);
         removed.push(member);
       } else {
-        member.roles.add(NEGOTATIONS.ART);
+        member.roles.add(NEGATIONS.ART);
         added.push(member);
       }
     }
@@ -35,11 +35,11 @@ export default class PermissionsModule extends Module {
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGOTATIONS.REACTIONS)) {
-        member.roles.remove(NEGOTATIONS.REACTIONS);
+      if (member.roles.cache.has(NEGATIONS.REACTIONS)) {
+        member.roles.remove(NEGATIONS.REACTIONS);
         removed.push(member);
       } else {
-        member.roles.add(NEGOTATIONS.REACTIONS);
+        member.roles.add(NEGATIONS.REACTIONS);
         added.push(member);
       }
     }
@@ -60,11 +60,11 @@ export default class PermissionsModule extends Module {
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGOTATIONS.MEDIA)) {
-        member.roles.remove(NEGOTATIONS.MEDIA);
+      if (member.roles.cache.has(NEGATIONS.MEDIA)) {
+        member.roles.remove(NEGATIONS.MEDIA);
         removed.push(member);
       } else {
-        member.roles.add(NEGOTATIONS.MEDIA);
+        member.roles.add(NEGATIONS.MEDIA);
         added.push(member);
       }
     }
@@ -85,11 +85,12 @@ export default class PermissionsModule extends Module {
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGOTATIONS.EXPERIENCE)) {
-        member.roles.remove(NEGOTATIONS.EXPERIENCE);
+      if (member.roles.cache.has(NEGATIONS.EXPERIENCE)) {
+        member.roles.remove(NEGATIONS.EXPERIENCE);
         removed.push(member);
       } else {
-        member.roles.add(NEGOTATIONS.EXPERIENCE);
+        console.log(NEGATIONS);
+        member.roles.add(NEGATIONS.EXPERIENCE);
         added.push(member);
       }
     }

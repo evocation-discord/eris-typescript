@@ -2,6 +2,7 @@ import { Message, PermissionResolvable } from "discord.js";
 import humanizeDuration from "humanize-duration";
 import { ErisClient } from "../client/ErisClient";
 import { TextChannel } from "discord.js";
+import { ROLES } from "../constants";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   return async (msg, client) => {
@@ -48,7 +49,7 @@ const userCooldown = (ms: number): Inhibitor => {
 const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.member.roles.cache.has(process.env.MODERATION_ROLE)) return undefined;
+  if (msg.member.roles.cache.has(ROLES.MODERATION)) return undefined;
   return "You are not authorised to use this command.";
 };
 

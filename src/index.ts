@@ -1,7 +1,10 @@
+
+import dotenv from "dotenv";
+dotenv.config();
+
 import "module-alias/register";
 import "@lib/utils/types/discord";
 
-import dotenv from "dotenv";
 import EventModule from "@modules/EventModule";
 import { ErisClient } from "@lib/utils";
 import UtilCommandModule from "@modules/UtilCommands";
@@ -9,7 +12,7 @@ import DonationCommandsModule from "@modules/DonationCommands";
 import DirectMessageModule from "@modules/DirectMessageModule";
 import ListenerMonitorInit from "@modules/ListenerMonitorInit";
 import PermissionsModule from "@modules/PermissionsModule";
-dotenv.config();
+import LoggingModule from "@modules/LoggingModule";
 
 const client = new ErisClient({
   botAdmins: [
@@ -25,4 +28,5 @@ client
   .registerModule(DonationCommandsModule)
   .registerModule(DirectMessageModule)
   .registerModule(PermissionsModule)
+  .registerModule(LoggingModule)
   .login(process.env.DISCORD_TOKEN);
