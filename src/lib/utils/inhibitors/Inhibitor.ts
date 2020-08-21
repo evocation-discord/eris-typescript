@@ -45,7 +45,14 @@ const userCooldown = (ms: number): Inhibitor => {
   };
 };
 
-const canOnlyBeExecutedInBotCommands = (): Inhibitor =>
+const moderatorOnly: Inhibitor = async (msg, client) => {
+  const isNotGuild = await guildsOnly(msg, client);
+  if (isNotGuild) return isNotGuild;
+  if (msg.member.roles.cache.has(process.env.MODERATION_ROLE)) return undefined;
+  return "You are not authorised to use this command.";
+};
+
+const canOnlyBeExecutedInBotCommands =
   mergeInhibitors(guildsOnly, async (msg, client) => {
     if (client.botAdmins.includes(msg.author.id)) return undefined;
     console.log((msg.channel as TextChannel).name);
@@ -62,5 +69,6 @@ export const inhibitors = {
   guildsOnly,
   hasGuildPermission,
   userCooldown,
-  canOnlyBeExecutedInBotCommands
+  canOnlyBeExecutedInBotCommands,
+  moderatorOnly
 };
