@@ -2,6 +2,8 @@ import { Message } from "discord.js";
 import { command, Module, inhibitors, Remainder } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
+import { Client } from "discord.js";
+import { inspect } from "util";
 
 export default class UtilCommandModule extends Module {
 
@@ -76,4 +78,43 @@ export default class UtilCommandModule extends Module {
     if (isError) return msg.channel.send("**ERROR**: Something went wrong.");
     return msg.channel.send("**SUCCESS**: Message has been edited.");
   }
+
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands()] })
+  about(msg: Message): Promise<Message> {
+    return msg.channel.send(
+      "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n\n" +
+      "__**CONTRIBUTORS**__\n\n" +
+    "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>\n" +
+    "**DEVELOPER**: <@222073294419918848>\n" +
+    "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", { allowedMentions: { users: [] } });
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [new Remainder(String)], aliases: ["ev"] })
+  async eval(msg: Message, code: string): Promise<void> {
+    const client = msg.client;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const Discord = require("discord.js");
+    try {
+      const evaled = eval(code);
+      const clean = await codeclean(msg.client, evaled);
+      msg.channel.send(`\`\`EVAL\`\`\n\`\`\`xl\n${clean}\`\`\``);
+    }
+    catch (err) {
+      msg.channel.send(`\`ERROR\` \`\`\`xl\n${await codeclean(msg.client, err)}\n\`\`\``);
+    }
+  }
 }
+
+const codeclean = async (client: Client, text: string): Promise<string> => {
+  if (text && text.constructor.name === "Promise")
+    text = await text;
+  if (typeof text !== "string")
+    text = inspect(text, {
+      depth: 0
+    });
+  text = text
+    .replace(/`/g, `\`${String.fromCharCode(8203)}`)
+    .replace(/@/g, `@${String.fromCharCode(8203)}`)
+    .replace(client.token, "http://discord.com/developers");
+  return text;
+};

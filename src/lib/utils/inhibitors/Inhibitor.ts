@@ -1,6 +1,7 @@
 import { Message, PermissionResolvable } from "discord.js";
 import humanizeDuration from "humanize-duration";
 import { ErisClient } from "../client/ErisClient";
+import { TextChannel } from "discord.js";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   return async (msg, client) => {
@@ -22,7 +23,7 @@ const hasGuildPermission = (perm: PermissionResolvable): Inhibitor =>
   mergeInhibitors(guildsOnly, async msg =>
     msg.member.hasPermission(perm)
       ? undefined
-      : `You miss a discord permission:${  perm}`
+      : `You miss a discord permission:${perm}`
   );
 
 const userCooldown = (ms: number): Inhibitor => {
@@ -44,6 +45,14 @@ const userCooldown = (ms: number): Inhibitor => {
   };
 };
 
+const canOnlyBeExecutedInBotCommands = (): Inhibitor =>
+  mergeInhibitors(guildsOnly, async (msg, client) => {
+    if (client.botAdmins.includes(msg.author.id)) return undefined;
+    console.log((msg.channel as TextChannel).name);
+    if ((msg.channel as TextChannel).name !== "bot-commands") return "Request has been rejected. Please run this command in #bot-commands!";
+    return undefined;
+  });
+
 export type Inhibitor = (
   msg: Message,
   client: ErisClient
@@ -52,5 +61,6 @@ export const inhibitors = {
   botAdminsOnly,
   guildsOnly,
   hasGuildPermission,
-  userCooldown
+  userCooldown,
+  canOnlyBeExecutedInBotCommands
 };

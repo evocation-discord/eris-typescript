@@ -15,10 +15,10 @@ export default class DonationCommandsModule extends Module {
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
     if (member.roles.cache.has(process.env.WHITE_HALLOWS))
-      msg.channel.send(`**SUCCESS**: I have logged this donation; ${member.user} already has the <@&${process.env.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } });
+      msg.channel.send(`**SUCCESS**: I have logged this donation; ${member.user} already has the <@&${process.env.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     else {
       member.roles.add(process.env.WHITE_HALLOWS);
-      msg.channel.send(`**SUCCESS**: I have logged this donation and awarded ${member.user} with the <@&${process.env.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } });
+      msg.channel.send(`**SUCCESS**: I have logged this donation and awarded ${member.user} with the <@&${process.env.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     }
     (msg.guild.channels.resolve(process.env.DONATION_LOG) as TextChannel).send(`**\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**.`);
   }
