@@ -1,5 +1,6 @@
 import * as discord from "discord.js";
 import { TextChannel } from "discord.js";
+import { GuildMember } from "discord.js";
 
 // All supported arguments.
 export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number;
@@ -28,14 +29,29 @@ const trimIdWaffle = (arg: string): string => {
 };
 
 // Used to parse a guild member.
-const guildMemberParser = async (arg: string, msg: discord.Message): Promise<discord.GuildMember> => {
-  const possibleMention = trimIdWaffle(arg);
-  try {
-    const x = await msg.guild?.members.fetch(possibleMention);
-    if (!x) throw new Error();
-    return x;
-  } catch (_) {
-    throw new Error("Could not find the member.");
+export const guildMemberParser = async (arg: string, msg: discord.Message): Promise<discord.GuildMember> => {
+  const resMember = await resolveMember(arg, msg.guild);
+  if (resMember) return resMember;
+
+  const results: GuildMember[] = [];
+  const reg = new RegExp(regExpEsc(arg), "i");
+  for (const member of msg.guild.members.cache.values()) {
+    if (reg.test(member.user.username)) results.push(member);
+  }
+  console.log(results);
+
+  let querySearch: GuildMember[];
+  if (results.length > 0) {
+    const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
+    const filtered = results.filter(member => regWord.test(member.user.username));
+    querySearch = filtered.length > 0 ? filtered : results;
+  } else {
+    querySearch = results;
+  }
+
+  switch (querySearch.length) {
+  case 0: throw new Error("Could not find the user.");
+  default: return querySearch[0];
   }
 };
 allParsers.set(discord.GuildMember, guildMemberParser);
@@ -45,13 +61,13 @@ const userParser = async (arg: string, msg: discord.Message): Promise<discord.Us
   const resUser = await resolveUser(arg, msg.guild);
   if (resUser) return resUser;
 
-  const results = [];
+  const results: discord.User[] = [];
   const reg = new RegExp(regExpEsc(arg), "i");
   for (const member of msg.guild.members.cache.values()) {
     if (reg.test(member.user.username)) results.push(member.user);
   }
 
-  let querySearch;
+  let querySearch: discord.User[];
   if (results.length > 0) {
     const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
     const filtered = results.filter(user => regWord.test(user.username));
@@ -115,6 +131,19 @@ const resolveUser = async (query: string | discord.User, guild: discord.Guild): 
     if (/\w{1,32}#\d{4}/.test(query)) {
       const res = guild.members.cache.find(member => member.user.tag === query);
       return res ? res.user : null;
+    }
+  }
+  return null;
+};
+
+const resolveMember = async (query: string | discord.GuildMember | discord.User, guild: discord.Guild): Promise<discord.GuildMember> => {
+  if (query instanceof discord.GuildMember) return query;
+  if (query instanceof discord.User) return guild.members.fetch(query);
+  if (typeof query === "string") {
+    if (USER_REGEXP.test(query)) return guild.members.fetch(USER_REGEXP.exec(query)[1]);
+    if (/\w{1,32}#\d{4}/.test(query)) {
+      const res = guild.members.cache.find(member => member.user.tag === query);
+      return res || null;
     }
   }
   return null;
