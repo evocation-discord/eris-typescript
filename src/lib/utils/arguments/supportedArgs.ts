@@ -38,7 +38,6 @@ export const guildMemberParser = async (arg: string, msg: discord.Message): Prom
   for (const member of msg.guild.members.cache.values()) {
     if (reg.test(member.user.username)) results.push(member);
   }
-  console.log(results);
 
   let querySearch: GuildMember[];
   if (results.length > 0) {

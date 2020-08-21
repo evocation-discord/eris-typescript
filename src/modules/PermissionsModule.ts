@@ -89,7 +89,6 @@ export default class PermissionsModule extends Module {
         member.roles.remove(NEGATIONS.EXPERIENCE);
         removed.push(member);
       } else {
-        console.log(NEGATIONS);
         member.roles.add(NEGATIONS.EXPERIENCE);
         added.push(member);
       }

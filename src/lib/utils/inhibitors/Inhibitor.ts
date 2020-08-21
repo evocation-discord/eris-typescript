@@ -56,7 +56,6 @@ const moderatorOnly: Inhibitor = async (msg, client) => {
 const canOnlyBeExecutedInBotCommands =
   mergeInhibitors(guildsOnly, async (msg, client) => {
     if (client.botAdmins.includes(msg.author.id)) return undefined;
-    console.log((msg.channel as TextChannel).name);
     if ((msg.channel as TextChannel).name !== "bot-commands") return "Request has been rejected. Please run this command in #bot-commands!";
     return undefined;
   });
