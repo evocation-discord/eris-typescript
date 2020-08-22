@@ -38,6 +38,7 @@ export class Module {
           args: meta.args,
           group: meta.group,
           staff: meta.staff,
+          admin: meta.admin,
           triggers: [meta.id, ...meta.aliases].map(id =>
             id.toLowerCase()
           ),

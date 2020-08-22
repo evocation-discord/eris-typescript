@@ -22,7 +22,7 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
 
-    if (cmd.staff) return channel.send(`\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${msg.client.emojis.resolve(emotes.LOGGING.ADMINISTRATIVE_AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
+    if (cmd.staff || cmd.admin) return channel.send(`\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${msg.client.emojis.resolve(emotes.LOGGING.ADMINISTRATIVE_AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
     return channel.send(`\`[${timeFormatter()}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
   }
 }

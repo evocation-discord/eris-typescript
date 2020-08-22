@@ -11,6 +11,7 @@ export interface ICommandDecoratorOptions {
   group: string,
   onError: (msg: Message, error: Error) => void,
   staff?: boolean,
+  admin?: boolean,
   args: (supportedArgs | Greedy | Remainder | Optional)[]
 }
 
@@ -39,6 +40,7 @@ export function command(
       );
     const newMeta: ICommandDecorator = {
       staff: opts.staff || false,
+      admin: opts.admin || false,
       aliases: opts.aliases || [],
       description: opts.description,
       id: propertyKey,
