@@ -103,6 +103,12 @@ export default class UtilCommandModule extends Module {
       msg.channel.send(`\`ERROR\` \`\`\`xl\n${await codeclean(msg.client, err)}\n\`\`\``);
     }
   }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill"], admin: true })
+  async shutdown(msg: Message): Promise<void> {
+    await msg.channel.send("**SUCCESS**: I can feel my Drearian Spirit fading...");
+    process.exit(0);
+  }
 }
 
 const codeclean = async (client: Client, text: string): Promise<string> => {
