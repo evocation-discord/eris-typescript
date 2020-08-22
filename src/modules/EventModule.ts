@@ -1,5 +1,6 @@
-import { listener, Module, ErisClient } from "@lib/utils";
-import { Guild } from "discord.js";
+import { listener, Module, ErisClient, monitor } from "@lib/utils";
+import { Guild, Message } from "discord.js";
+import fetch from "node-fetch";
 
 export default class EventModule extends Module {
   constructor(client: ErisClient) {
@@ -16,5 +17,21 @@ export default class EventModule extends Module {
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }
 
-  
+  @monitor({ events: ["message"] })
+  async onAnnouncementMessage(message: Message): Promise<void> {
+    const { options: { http } } = this.client;
+    if (message.channel.type === "news") {
+      await fetch(
+        `${http.api}/v${http.version}/channels/${message.channel.id}/messages/${message.id}/crosspost`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bot ${process.env.DISCORD_TOKEN}`,
+          },
+        },
+      );
+    }
+  }
+
+
 }
