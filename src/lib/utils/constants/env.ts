@@ -16,3 +16,5 @@ export const NEGATIONS = {
   REACTIONS: process.env.NEGATION_REACTIONS,
   ART: process.env.NEGATION_ART,
 };
+
+export const MAIN_GUILD_ID = process.env.MAIN_GUILD_ID;
