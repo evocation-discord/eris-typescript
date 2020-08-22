@@ -13,5 +13,6 @@ export interface Command {
     module: Module,
     inhibitors: Inhibitor[],
     group: string,
+    staff?: boolean,
     onError: (msg: Message, error: Error) => void
 }

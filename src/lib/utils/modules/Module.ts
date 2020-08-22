@@ -37,6 +37,7 @@ export class Module {
           id: `${this.constructor.name}/${meta.id}`,
           args: meta.args,
           group: meta.group,
+          staff: meta.staff,
           triggers: [meta.id, ...meta.aliases].map(id =>
             id.toLowerCase()
           ),

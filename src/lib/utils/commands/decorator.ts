@@ -10,6 +10,7 @@ export interface ICommandDecoratorOptions {
   inhibitors: Inhibitor[],
   group: string,
   onError: (msg: Message, error: Error) => void,
+  staff?: boolean,
   args: (supportedArgs | Greedy | Remainder | Optional)[]
 }
 
@@ -37,6 +38,7 @@ export function command(
         `Decorator needs to be applied to a Method. (${targetConstructorName}#${descriptor.value.name} was ${descriptor.value.constructor.name})`
       );
     const newMeta: ICommandDecorator = {
+      staff: opts.staff || false,
       aliases: opts.aliases || [],
       description: opts.description,
       id: propertyKey,

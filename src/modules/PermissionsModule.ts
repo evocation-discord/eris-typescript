@@ -2,7 +2,7 @@ import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS } 
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["na"] })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["na"], staff: true })
   async negateart(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
@@ -27,7 +27,7 @@ export default class PermissionsModule extends Module {
     await msg.channel.send(["**SUCCESS**: Art negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["nr"] })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["nr"], staff: true })
   async negatereaction(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
@@ -52,7 +52,7 @@ export default class PermissionsModule extends Module {
     await msg.channel.send(["**SUCCESS**: Reaction negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["nm"] })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["nm"], staff: true })
   async negatemedia(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
@@ -77,7 +77,7 @@ export default class PermissionsModule extends Module {
     await msg.channel.send(["**SUCCESS**: Media negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["ne"] })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Negations", args: [new Remainder(String)], aliases: ["ne"], staff: true })
   async negateexperience(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];

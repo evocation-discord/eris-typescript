@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 export default class LoggingModule extends Module {
   @monitor({ events: ["message"] })
-  async onCommand(msg: Message): Promise<void> {
+  async onCommand(msg: Message): Promise<Message> {
     if (msg.author && msg.author.bot) return;
 
     const prefix = process.env.PREFIX;
@@ -21,6 +21,23 @@ export default class LoggingModule extends Module {
     if (!cmd) return;
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
-    channel.send(`\`[${dayjs(new Date(), { utc: true })}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
+
+    if (cmd.staff) return channel.send(`\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${msg.client.emojis.resolve(emotes.LOGGING.ADMINISTRATIVE_AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
+    return channel.send(`\`[${timeFormatter()}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
   }
 }
+
+const timeFormatter = () => {
+  const date = new Date();
+  const _hour = `0${date.getUTCHours()}`;
+  const _minutes = `0${date.getUTCMinutes()}`;
+  const _day = `0${date.getUTCDate()}`;
+  const _month = `0${date.getUTCMonth() + 1}`;
+  const year = date.getUTCFullYear();
+
+  const hour = _hour.slice(-2);
+  const minutes = _minutes.slice(-2);
+  const day = _day.slice(-2);
+  const month = _month.slice(-2);
+  return `${hour}:${minutes} ${day}/${month}/${year} UTC`;
+};
