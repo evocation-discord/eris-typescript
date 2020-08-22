@@ -6,7 +6,8 @@ export const ROLES = {
 export const CHANNELS = {
   DONATION_LOG: process.env.DONATION_LOG,
   DIRECT_MESSAGE_LOG: process.env.DIRECT_MESSAGE_LOG,
-  ERIS_LOG: process.env.ERIS_LOG
+  ERIS_LOG: process.env.ERIS_LOG,
+  PERIPHERAL_ANNOUNCEMENTS: process.env.PERIPHERAL_ANNOUNCEMENTS
 };
 
 export const NEGATIONS = {

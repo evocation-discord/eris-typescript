@@ -1,8 +1,8 @@
-import { Module, command, inhibitors, Remainder, listener, CHANNELS, ROLES } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, listener, CHANNELS, ROLES, monitor } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationCommandsModule extends Module {
-  @listener({ event: "guildMemberUpdate" })
+  @monitor({ events: ["guildMemberUpdate"] })
   async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
     if (!oldMember.roles.cache.has(ROLES.WHITE_HALLOWS) && newMember.roles.cache.has(ROLES.WHITE_HALLOWS)) {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });

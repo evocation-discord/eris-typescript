@@ -13,6 +13,7 @@ import DirectMessageModule from "@modules/DirectMessageModule";
 import ListenerMonitorInit from "@modules/ListenerMonitorInit";
 import PermissionsModule from "@modules/PermissionsModule";
 import LoggingModule from "@modules/LoggingModule";
+import EmojiModule from "@modules/EmojiModule";
 
 const client = new ErisClient({
   botAdmins: [
@@ -29,4 +30,5 @@ client
   .registerModule(DirectMessageModule)
   .registerModule(PermissionsModule)
   .registerModule(LoggingModule)
+  .registerModule(EmojiModule)
   .login(process.env.DISCORD_TOKEN);

@@ -1,17 +1,17 @@
 import { Message } from "discord.js";
 import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
-import { listener } from "../listener/decorator";
 import { getArgumentParser, Greedy } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
 import { escapeRegex } from "..";
+import { monitor } from "../monitor/decorator";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
     super(client);
   }
 
-  @listener({ event: "message" })
+  @monitor({ events: ["message"] })
   async onMessage(msg: Message): Promise<Message|void> {
     if (msg.author && msg.author.bot) return;
 
