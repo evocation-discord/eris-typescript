@@ -14,7 +14,8 @@ export default class DirectMessageModule extends Module {
       .setColor(colors.DM_SEND_MESSAGE)
       .setFooter(`Message ID: ${message.id}`)
       .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setDescription(`${message.content}${message.attachments.size > 0 ? `\n\n__Attachments__\n${message.attachments.map(attachment => attachment.url).join("\n")}` : ""}`);
+      .setDescription(message.content);
+    if (message.attachments.size > 0) embed.addField("Attachments", message.attachments.map(attachment => attachment.url).join("\n"));
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} DIRECT MESSAGE RECEIVED**`, embed);
   }
 
@@ -28,9 +29,9 @@ export default class DirectMessageModule extends Module {
       .setColor(colors.DM_EDITED_MESSAGE)
       .setFooter(`Message ID: ${newMsg.id}`)
       .setAuthor(`${newMsg.author.tag} (${newMsg.author.id})`, newMsg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setDescription(`${newMsg.attachments.size > 0 ? `\n\n__Attachments__\n${newMsg.attachments.map(attachment => attachment.url).join("\n")}` : ""}`)
       .addField("Original Message", oldMsg.content || "Old Message content couldn't be fetched")
       .addField("Edited Message", newMsg.content);
+    if (newMsg.attachments.size > 0) embed.addField("Attachments", newMsg.attachments.map(attachment => attachment.url).join("\n"));
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_EDIT)} DIRECT MESSAGE EDITED**`, embed);
   }
 
@@ -44,11 +45,12 @@ export default class DirectMessageModule extends Module {
       .setColor(colors.DM_DELETED_MESSAGE)
       .setFooter(`Message ID: ${msg.id}`)
       .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setDescription(`${msg.content}${msg.attachments.size > 0 ? `\n\n__Attachments__\n${msg.attachments.map(attachment => attachment.proxyURL).join("\n")}` : ""}`);
+      .setDescription(msg.content);
+    if (msg.attachments.size > 0) embed.addField("Attachments", msg.attachments.map(attachment => attachment.proxyURL).join("\n"));
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_DELETION)} DIRECT MESSAGE DELETED**`, embed);
   }
 
-  @command({ aliases: ["dm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)] })
+  @command({ aliases: ["dm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true })
   async directmessage(message: Message, user: User, content: string): Promise<void> {
     const msg = await user.send(content);
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
