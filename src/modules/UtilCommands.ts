@@ -104,7 +104,7 @@ export default class UtilCommandModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill"], admin: true })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill", "die"], admin: true })
   async shutdown(msg: Message): Promise<void> {
     await msg.channel.send("**SUCCESS**: I can feel my Drearian Spirit fading...");
     process.exit(0);
