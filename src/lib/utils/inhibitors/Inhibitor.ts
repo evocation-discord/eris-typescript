@@ -49,7 +49,7 @@ const userCooldown = (ms: number): Inhibitor => {
 const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.member.roles.cache.has(ROLES.MODERATION)) return undefined;
+  if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
   return "You are not authorised to use this command.";
 };
 
