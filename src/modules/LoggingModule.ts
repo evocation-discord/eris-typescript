@@ -1,6 +1,5 @@
 import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES } from "@lib/utils";
 import { Message, TextChannel } from "discord.js";
-import tall from "tall";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 
 export default class LoggingModule extends Module {
@@ -29,6 +28,7 @@ export default class LoggingModule extends Module {
   @monitor({ events: ["message"] })
   async onLink(msg: Message): Promise<Message> {
     if (msg.author && msg.author.bot) return;
+    if (msg.channel.type === "dm") return;
     if (isStaff(msg)) return;
     const links = msg.content.match(linkRegex) || [];
     const channel = await this.client.channels.fetch(CHANNELS.MODERATION_LOG) as TextChannel;
