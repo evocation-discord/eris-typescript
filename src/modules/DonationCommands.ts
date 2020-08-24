@@ -11,7 +11,8 @@ export default class DonationCommandsModule extends Module {
         newMember.roles.remove(ROLES.WHITE_HALLOWS, "[FORCED REVOCATION] Authenticity cannot be verified.");
     }
   }
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Server Administrator", args: [GuildMember, new Remainder(String)], aliases: ["ld"] })
+  // TODO: Make Administrator perm
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Server Administrator", args: [GuildMember, new Remainder(String)], aliases: ["ld"], staff: true })
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
     if (member.roles.cache.has(ROLES.WHITE_HALLOWS))
