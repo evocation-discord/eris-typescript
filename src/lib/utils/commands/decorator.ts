@@ -6,6 +6,7 @@ import { supportedArgs } from "../arguments/supportedArgs";
 
 export interface ICommandDecoratorOptions {
   description?: string,
+  usage?: string,
   aliases: string[],
   inhibitors: Inhibitor[],
   group: string,
@@ -46,6 +47,7 @@ export function command(
       id: propertyKey,
       group: opts.group || "General",
       args: opts.args,
+      usage: opts.usage,
       inhibitors: opts.inhibitors || [],
       onError:
         opts.onError ||

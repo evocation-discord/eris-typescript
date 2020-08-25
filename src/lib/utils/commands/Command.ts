@@ -10,6 +10,7 @@ export interface Command {
     triggers: string[],
     id: string,
     description?: string,
+    usage?: string,
     module: Module,
     inhibitors: Inhibitor[],
     group: string,

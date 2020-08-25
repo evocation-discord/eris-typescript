@@ -33,6 +33,7 @@ export class Module {
       meta =>
         ({
           description: meta.description,
+          usage: meta.usage,
           func: Reflect.get(this, meta.id),
           id: `${this.constructor.name}/${meta.id}`,
           args: meta.args,

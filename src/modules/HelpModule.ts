@@ -10,7 +10,7 @@ const commandGroupsWithEmojis = {
 
 export default class HelpModule extends Module {
 
-  @command({ group: "Informational", args: [new Optional(String)] })
+  @command({ group: "Informational", args: [new Optional(String)], usage: "[command:string]" })
   async help(msg: Message, command?: string): Promise<void|Message> {
     const commands = Array.from(this.client.commandManager.cmds);
     if (!command) {
@@ -37,9 +37,9 @@ export default class HelpModule extends Module {
       const cmdName = triggers.shift();
       const message = [
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
-        `**SYNTACTIC USAGE**: \`${"boo"}\``,
-        `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``) || "No aliases"}`,
-        `**COMMAND DESCRIPTION**: ${"boo"}`
+        `**SYNTACTIC USAGE**: \`${cmd.usage || "No arguments need to be either mandatorily or optionally provided for this command."}\``,
+        `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``) : "No aliases exist for this command."}`,
+        `**COMMAND DESCRIPTION**: ${cmd.description || "No description"}`
       ];
       return msg.channel.send(message.join("\n"));
     } else {
