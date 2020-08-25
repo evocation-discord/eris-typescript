@@ -28,7 +28,7 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Node Negations", args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>" })
-  async negatereaction(msg: Message, _members: string): Promise<void> {
+  async negatereactions(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
