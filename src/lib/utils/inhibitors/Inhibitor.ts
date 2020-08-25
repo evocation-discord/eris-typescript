@@ -15,7 +15,7 @@ export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
 const botAdminsOnly: Inhibitor = async (
   msg: Message,
   client: ErisClient
-) => (client.botAdmins.includes(msg.author.id) ? undefined : "You are not authorised to use this command.");
+) => (client.botAdmins.includes(msg.author.id) ? undefined : "You do not satisfy the predefined criteria to be able to perform this command..");
 
 const guildsOnly: Inhibitor = async msg =>
   msg.member ? undefined : "You are not in a guild.";
@@ -50,7 +50,7 @@ const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
   if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  return "You are not authorised to use this command.";
+  return "You do not satisfy the predefined criteria to be able to perform this command..";
 };
 
 const canOnlyBeExecutedInBotCommands =

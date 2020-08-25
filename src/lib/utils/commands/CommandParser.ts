@@ -3,7 +3,7 @@ import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
 import { getArgumentParser, Greedy } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
-import { escapeRegex } from "..";
+import { escapeRegex, emotes } from "..";
 import { monitor } from "../monitor/decorator";
 
 export class CommandParserModule extends Module {
@@ -31,7 +31,7 @@ export class CommandParserModule extends Module {
       const reason = await inhibitor(msg, this.client);
       if (reason) {
         // It inhibited
-        msg.channel.send(`${msg.author} | **COMMAND INHIBITED**: ${reason}`);
+        msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: ${reason}`);
         return;
       }
     }
