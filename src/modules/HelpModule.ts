@@ -39,7 +39,7 @@ export default class HelpModule extends Module {
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
         `**SYNTACTIC USAGE**: \`${cmd.usage || "No arguments need to be either mandatorily or optionally provided for this command."}\``,
         `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``) : "No aliases exist for this command."}`,
-        `**COMMAND DESCRIPTION**: ${cmd.description || "No description"}`
+        `**DESCRIPTION**: ${cmd.description || "No description"}`
       ];
       return msg.channel.send(message.join("\n"));
     } else {
