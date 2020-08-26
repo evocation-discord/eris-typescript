@@ -14,6 +14,10 @@ export default class DonationCommandsModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], group: "Server Administrator", args: [GuildMember, new Remainder(String)], aliases: ["ld"], staff: true, usage: "<member:member|snowflake> <item:...string>" })
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
+    if (msg.author.bot) {
+      msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.`)
+      return;
+    }
     if (member.roles.cache.has(ROLES.WHITE_HALLOWS))
       msg.channel.send(RESPONSES.SUCCESS(msg, `I have logged this donation; ${member.user} already has the <@&${ROLES.WHITE_HALLOWS}> role.`), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     else {
