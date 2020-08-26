@@ -1,5 +1,5 @@
 import { Module } from "../modules/Module";
-import { ClientEvents } from "discord.js";
+import type { ClientEvents } from "discord.js";
 
 export interface IMonitorDecoratorMeta {
   id: string,
@@ -41,7 +41,5 @@ export function monitor(opts: IMonitorDecoratorOptions) {
       monitorsMeta,
       target
     );
-
-    
   };
 }
