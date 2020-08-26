@@ -20,6 +20,6 @@ export default class DonationCommandsModule extends Module {
       member.roles.add(ROLES.WHITE_HALLOWS);
       msg.channel.send(RESPONSES.SUCCESS(msg, `I have logged this donation and awarded ${member.user} with the <@&${ROLES.WHITE_HALLOWS}> role.`), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     }
-    (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(`**\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**.`);
+    (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(`**\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**. This donation was logged by **\`${msg.author.tag}\`** (\`${msg.author.id}\`).`);
   }
 }
