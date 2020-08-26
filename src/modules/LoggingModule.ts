@@ -1,4 +1,4 @@
-import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES } from "@lib/utils";
+import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, timeFormatter } from "@lib/utils";
 import { Message, TextChannel } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 
@@ -46,21 +46,6 @@ export default class LoggingModule extends Module {
 
   }
 }
-
-const timeFormatter = () => {
-  const date = new Date();
-  const _hour = `0${date.getUTCHours()}`;
-  const _minutes = `0${date.getUTCMinutes()}`;
-  const _day = `0${date.getUTCDate()}`;
-  const _month = `0${date.getUTCMonth() + 1}`;
-  const year = date.getUTCFullYear();
-
-  const hour = _hour.slice(-2);
-  const minutes = _minutes.slice(-2);
-  const day = _day.slice(-2);
-  const month = _month.slice(-2);
-  return `${hour}:${minutes} ${day}/${month}/${year} UTC`;
-};
 
 
 const isStaff = (msg: Message): boolean => msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id));

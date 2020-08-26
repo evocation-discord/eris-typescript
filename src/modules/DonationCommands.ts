@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, listener, CHANNELS, ROLES, monitor, RESPONSES } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, RESPONSES, timeFormatter, emotes } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationCommandsModule extends Module {
@@ -20,6 +20,6 @@ export default class DonationCommandsModule extends Module {
       member.roles.add(ROLES.WHITE_HALLOWS);
       msg.channel.send(RESPONSES.SUCCESS(msg, `I have logged this donation and awarded ${member.user} with the <@&${ROLES.WHITE_HALLOWS}> role.`), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     }
-    (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(`**\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**. This donation was logged by **\`${msg.author.tag}\`** (\`${msg.author.id}\`).`);
+    (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(`\`[${timeFormatter()}]\` ${this.client.emojis.resolve(emotes.LOGGING.DONATION)} **\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**. This donation was logged by **\`${msg.author.tag}\`** (\`${msg.author.id}\`).`);
   }
 }

@@ -25,3 +25,18 @@ export * from "./modules/Module";
 export * from "./constants";
 
 export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+export const timeFormatter = (): string => {
+  const date = new Date();
+  const _hour = `0${date.getUTCHours()}`;
+  const _minutes = `0${date.getUTCMinutes()}`;
+  const _day = `0${date.getUTCDate()}`;
+  const _month = `0${date.getUTCMonth() + 1}`;
+  const year = date.getUTCFullYear();
+
+  const hour = _hour.slice(-2);
+  const minutes = _minutes.slice(-2);
+  const day = _day.slice(-2);
+  const month = _month.slice(-2);
+  return `${hour}:${minutes} ${day}/${month}/${year} UTC`;
+};
