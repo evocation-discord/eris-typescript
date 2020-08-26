@@ -15,6 +15,7 @@ import PermissionsModule from "@modules/PermissionsModule";
 import LoggingModule from "@modules/LoggingModule";
 import EmojiModule from "@modules/EmojiModule";
 import HelpModule from "@modules/HelpModule";
+import { setupDatabase } from "@lib/utils/database";
 
 const client = new ErisClient({
   botAdmins: [
@@ -22,6 +23,8 @@ const client = new ErisClient({
     "369497100834308106", // Ace
   ],
 });
+
+setupDatabase();
 
 client
   .registerModule(ListenerMonitorInit)

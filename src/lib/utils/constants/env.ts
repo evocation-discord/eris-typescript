@@ -19,4 +19,11 @@ export const NEGATIONS = {
   ART: process.env.NEGATION_ART,
 };
 
+export const DATABASE_INFO = {
+  HOST: process.env.DB_HOST,
+  DATABASE: process.env.DB_DATABASE,
+  USERNAME: process.env.DB_USERNAME,
+  PASSWORD: process.env.DB_PASSWORD,
+};
+
 export const MAIN_GUILD_ID = process.env.MAIN_GUILD_ID;

@@ -12,9 +12,11 @@
     "dotenv": "^8.2.0",
     "humanize-duration": "^3.23.1",
     "module-alias": "^2.2.2",
+    "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
     "reflect-metadata": "^0.1.13",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "typeorm": "^0.2.25"
   },
   "devDependencies": {
     "@types/humanize-duration": "^3.18.0",
@@ -29,6 +31,7 @@
   },
   "_moduleAliases": {
     "@lib": "dist/lib",
-    "@modules": "dist/modules"
+    "@modules": "dist/modules",
+    "@models": "dist/lib/utils/database/models"
   }
 }

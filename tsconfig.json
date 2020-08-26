@@ -19,7 +19,8 @@
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@lib/*": ["lib/*"],
-      "@modules/*": ["modules/*"]
+      "@modules/*": ["modules/*"],
+      "@models/*": ["lib/utils/database/models/*"]
     }
   },
   "include": [
