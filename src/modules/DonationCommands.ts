@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, listener, CHANNELS, ROLES, monitor } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, listener, CHANNELS, ROLES, monitor, RESPONSES } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationCommandsModule extends Module {
@@ -15,10 +15,10 @@ export default class DonationCommandsModule extends Module {
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
     if (member.roles.cache.has(ROLES.WHITE_HALLOWS))
-      msg.channel.send(`**SUCCESS**: I have logged this donation; ${member.user} already has the <@&${ROLES.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
+      msg.channel.send(RESPONSES.SUCCESS(msg, `I have logged this donation; ${member.user} already has the <@&${ROLES.WHITE_HALLOWS}> role.`), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     else {
       member.roles.add(ROLES.WHITE_HALLOWS);
-      msg.channel.send(`**SUCCESS**: I have logged this donation and awarded ${member.user} with the <@&${ROLES.WHITE_HALLOWS}> role.`, { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
+      msg.channel.send(RESPONSES.SUCCESS(msg, `I have logged this donation and awarded ${member.user} with the <@&${ROLES.WHITE_HALLOWS}> role.`), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     }
     (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(`**\`${member.user.tag}\`** (\`${member.user.id}\`) donated **${item}**.`);
   }

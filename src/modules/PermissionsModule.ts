@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, RESPONSES } from "@lib/utils";
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
@@ -24,7 +24,7 @@ export default class PermissionsModule extends Module {
       ...removed.map(r => `- ${r.user.tag}`),
       "```"
     ].join("\n");
-    await msg.channel.send(["**SUCCESS**: Art negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
+    await msg.channel.send([RESPONSES.SUCCESS(msg, "Art negations have been executed for the specified users."), codeblock].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Node Negations", args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>" })
@@ -49,7 +49,7 @@ export default class PermissionsModule extends Module {
       ...removed.map(r => `- ${r.user.tag}`),
       "```"
     ].join("\n");
-    await msg.channel.send(["**SUCCESS**: Reaction negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
+    await msg.channel.send([RESPONSES.SUCCESS(msg, "Reaction negations have been executed for the specified users."), codeblock].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Node Negations", args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>" })
@@ -74,7 +74,7 @@ export default class PermissionsModule extends Module {
       ...removed.map(r => `- ${r.user.tag}`),
       "```"
     ].join("\n");
-    await msg.channel.send(["**SUCCESS**: Media negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
+    await msg.channel.send([RESPONSES.SUCCESS(msg, "Media negations have been executed for the specified users."), codeblock].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: "Permission Node Negations", args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>" })
@@ -99,6 +99,6 @@ export default class PermissionsModule extends Module {
       ...removed.map(r => `- ${r.user.tag}`),
       "```"
     ].join("\n");
-    await msg.channel.send(["**SUCCESS**: Experience negations have been executed for the specified users.", codeblock].join("\n"), { split: true });
+    await msg.channel.send([RESPONSES.SUCCESS(msg, "Experience negations have been executed for the specified users."), codeblock].join("\n"), { split: true });
   }
 }

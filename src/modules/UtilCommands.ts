@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { command, Module, inhibitors, Remainder } from "@lib/utils";
+import { command, Module, inhibitors, Remainder, RESPONSES } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
 import { Client } from "discord.js";
@@ -40,7 +40,7 @@ export default class UtilCommandModule extends Module {
       return msg.channel.send("**ERROR**: Status needs to be `online`, `dnd`, `idle` or `invisible`.");
 
     }
-    return msg.channel.send(`**SUCCESS**: My status is now **${status}**.`);
+    return msg.channel.send(RESPONSES.SUCCESS(msg, `My status is now **${status}**.`));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>" })
@@ -58,7 +58,7 @@ export default class UtilCommandModule extends Module {
     default:
       return msg.channel.send("**ERROR**: Type needs to be `watching`, `playing` or `listening`.");
     }
-    return msg.channel.send(`**SUCCESS**: I'm now ${type}${type === "listening" ? " to" : ""} **${game}**.`);
+    return msg.channel.send(RESPONSES.SUCCESS(msg, `I'm now ${type}${type === "listening" ? " to" : ""} **${game}**.`));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>" })
@@ -76,7 +76,7 @@ export default class UtilCommandModule extends Module {
     if (!message) return msg.channel.send(`**ERROR**: Message with ID ${messageId} was not found.`);
     await message.edit(newContent).catch(_ => isError = true);
     if (isError) return msg.channel.send("**ERROR**: Something went wrong.");
-    return msg.channel.send("**SUCCESS**: Message has been edited.");
+    return msg.channel.send(RESPONSES.SUCCESS(msg, "Message has been edited."));
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", usage: "No usage" })
@@ -106,7 +106,7 @@ export default class UtilCommandModule extends Module {
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill", "die"], admin: true })
   async shutdown(msg: Message): Promise<void> {
-    await msg.channel.send("**SUCCESS**: I can feel my Drearian Spirit fading...");
+    await msg.channel.send(RESPONSES.SUCCESS(msg, "I can feel my Drearian Spirit fading..."));
     process.exit(0);
   }
 }

@@ -1,4 +1,4 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, emotes, CHANNELS } from "@lib/utils";
+import { Module, monitor, command, inhibitors, Remainder, colors, emotes, CHANNELS, RESPONSES } from "@lib/utils";
 import { Message, TextChannel, MessageEmbed, User } from "discord.js";
 
 export default class DirectMessageModule extends Module {
@@ -61,6 +61,6 @@ export default class DirectMessageModule extends Module {
       .setFooter(`Message ID: ${msg.id}`)
       .setDescription(msg.content);
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command, forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
-    message.channel.send(`**SUCCESS**: Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${msg.content}**.`);
+    message.channel.send(RESPONSES.SUCCESS(msg, `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${msg.content}**.`));
   }
 }
