@@ -50,7 +50,14 @@ const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
   if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  return "You do not satisfy the predefined criteria to be able to perform this command..";
+  return "You do not satisfy the predefined criteria to be able to perform this command.";
+};
+
+const adminOnly: Inhibitor = async (msg, client) => {
+  const isNotGuild = await guildsOnly(msg, client);
+  if (isNotGuild) return isNotGuild;
+  if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
+  return "You do not satisfy the predefined criteria to be able to perform this command.";
 };
 
 const canOnlyBeExecutedInBotCommands =
@@ -70,5 +77,6 @@ export const inhibitors = {
   hasGuildPermission,
   userCooldown,
   canOnlyBeExecutedInBotCommands,
-  moderatorOnly
+  moderatorOnly,
+  adminOnly
 };
