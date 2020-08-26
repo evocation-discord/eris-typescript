@@ -3,7 +3,7 @@ import { Message, TextChannel, MessageEmbed, User } from "discord.js";
 
 export default class DirectMessageModule extends Module {
 
-  @monitor({ events: ["message"] })
+  @monitor({ event: "message" })
   async DM_receiver(message: Message): Promise<void> {
     if (message.author.bot) return;
     if (message.partial) message = await message.fetch();
@@ -19,7 +19,7 @@ export default class DirectMessageModule extends Module {
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} DIRECT MESSAGE RECEIVED**`, embed);
   }
 
-  @monitor({ events: ["messageUpdate"] })
+  @monitor({ event: "messageUpdate" })
   async DM_receiver_on_edit(oldMsg: Message, newMsg: Message): Promise<void> {
     if (newMsg.partial) newMsg = await newMsg.fetch();
     if (newMsg.channel.type !== "dm") return;
@@ -35,7 +35,7 @@ export default class DirectMessageModule extends Module {
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_EDIT)} DIRECT MESSAGE EDITED**`, embed);
   }
 
-  @monitor({ events: ["messageDelete"] })
+  @monitor({ event: "messageDelete" })
   async DM_receiver_on_delete(msg: Message): Promise<void> {
     if (msg.partial) return;
     if (msg.channel.type !== "dm") return;

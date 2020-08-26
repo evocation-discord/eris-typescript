@@ -5,5 +5,5 @@ export interface Monitor {
     id: string,
     module: Module,
     func: Function,
-    events: (keyof ClientEvents)[]
+    event: (keyof ClientEvents)
 }

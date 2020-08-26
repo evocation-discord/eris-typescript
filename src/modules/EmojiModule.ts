@@ -6,21 +6,21 @@ export default class EmojiModule extends Module {
     super(client);
   }
 
-  @monitor({ events: ["emojiCreate"] })
+  @monitor({ event: "emojiCreate" })
   async emojiCreate(emoji: GuildEmoji): Promise<void> {
     if (emoji.guild.id !== MAIN_GUILD_ID) return;
     const channel = await this.client.channels.fetch(CHANNELS.PERIPHERAL_ANNOUNCEMENTS) as TextChannel;
     channel.send(`${this.client.emojis.cache.get(emotes.UNCATEGORISED.ENTER)} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``);
   }
 
-  @monitor({ events: ["emojiUpdate"] })
+  @monitor({ event: "emojiUpdate" })
   async emojiUpdate(oldEmoji: GuildEmoji, newEmoji: GuildEmoji): Promise<void> {
     if (newEmoji.guild.id !== MAIN_GUILD_ID) return;
     const channel = await this.client.channels.fetch(CHANNELS.PERIPHERAL_ANNOUNCEMENTS) as TextChannel;
     channel.send(`${this.client.emojis.cache.get(emotes.UNCATEGORISED.ENTER)} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``);
   }
 
-  @monitor({ events: ["emojiDelete"] })
+  @monitor({ event: "emojiDelete" })
   async emojiDelete(emoji: GuildEmoji): Promise<void> {
     if (emoji.guild.id !== MAIN_GUILD_ID) return;
     const channel = await this.client.channels.fetch(CHANNELS.PERIPHERAL_ANNOUNCEMENTS) as TextChannel;

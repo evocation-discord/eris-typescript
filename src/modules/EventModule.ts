@@ -17,7 +17,7 @@ export default class EventModule extends Module {
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }
 
-  @monitor({ events: ["message"] })
+  @monitor({ event: "message" })
   async onAnnouncementMessage(message: Message): Promise<void> {
     const { options: { http } } = this.client;
     if (message.channel.type === "news") {

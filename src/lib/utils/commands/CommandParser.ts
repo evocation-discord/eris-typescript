@@ -11,7 +11,7 @@ export class CommandParserModule extends Module {
     super(client);
   }
 
-  @monitor({ events: ["message"] })
+  @monitor({ event: "message" })
   async onMessage(msg: Message): Promise<Message|void> {
     if (msg.author && msg.author.bot) return;
 
