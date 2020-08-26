@@ -7,7 +7,7 @@ export default class DonationCommandsModule extends Module {
     if (!oldMember.roles.cache.has(ROLES.WHITE_HALLOWS) && newMember.roles.cache.has(ROLES.WHITE_HALLOWS)) {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
       const firstEntry = auditLogs.entries.first();
-      if (!(firstEntry.changes[0].key === "$add" && firstEntry.executor.id === this.client.user.id))
+      if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
         newMember.roles.remove(ROLES.WHITE_HALLOWS, "[FORCED REVOCATION] Authenticity cannot be verified.");
     }
   }
