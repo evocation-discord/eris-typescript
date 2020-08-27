@@ -1,5 +1,5 @@
 import { createConnection } from "typeorm";
-import TypeormEntities from "./models/TypeormEntities";
+import TypeormEntities from "./models";
 import { DATABASE_INFO } from "../constants";
 
 export const setupDatabase = (): void => {
