@@ -52,6 +52,7 @@ export default class DirectMessageModule extends Module {
 
   @command({ aliases: ["dm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>" })
   async directmessage(message: Message, user: User, content: string): Promise<void> {
+    await message.delete();
     const msg = await user.send(content);
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
     const embed = new MessageEmbed()
