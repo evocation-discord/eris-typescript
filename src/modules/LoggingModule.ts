@@ -1,5 +1,5 @@
 import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, timeFormatter } from "@lib/utils";
-import { Message, TextChannel } from "discord.js";
+import { Message, TextChannel, User } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 
 export default class LoggingModule extends Module {
@@ -45,23 +45,13 @@ export default class LoggingModule extends Module {
     }
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onUsernameUpdate(msg: Message): Promise<Message> {
-    if (msg.author && msg.author.bot) return;
-    if (msg.channel.type === "dm") return;
-    if (isStaff(msg)) return;
-    const links = msg.content.match(linkRegex) || [];
-    const channel = await this.client.channels.fetch(CHANNELS.MODERATION_LOG) as TextChannel;
-    if (links.length) {
-      for await (const _link of links) {
-        const link = await linkResolver(_link);
-        if (link === _link) continue;
-        channel.send(
-          `\`[${timeFormatter()}]\` **\`[LINK REDIRECT RESOLVER]\`** ${msg.client.emojis.resolve(emotes.LOGGING.LINK_RESOLVER)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) sent a message (\`${msg.id}\`) containing a redirection-based link in ${msg.channel} (\`${msg.channel.id}\`).\n\n` +
-          `**UNRESOLVED LINK**: <${_link}>\n` +
-          `**RESOLVED LINK**: <${link}>\n\n` +
-          "No automatic action has been taken against their account or the message itself. Please review the above to ensure that the link is not violative of Evocation's regulations..");
-      }
+  @monitor({ event: "userUpdate" })
+  async onUsernameUpdate(oldUser: User, newUser: User): Promise<Message> {
+    if (newUser.bot) return;
+    if (oldUser.username !== newUser.username) {
+      const msg = `\`[${timeFormatter()}]\` ${newUser.client.emojis.resolve(emotes.LOGGING.NAME_UPDATE)} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`;
+      const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
+      channel.send(msg, { allowedMentions: { users: [] } });
     }
   }
 }

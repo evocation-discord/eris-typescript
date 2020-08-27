@@ -9,7 +9,8 @@ const EventArray: (keyof ClientEvents)[] = [
   "emojiCreate",
   "emojiDelete",
   "emojiUpdate",
-  "guildMemberUpdate"
+  "guildMemberUpdate",
+  "userUpdate"
 ];
 
 export default class ListenerMonitorInit extends Module {
