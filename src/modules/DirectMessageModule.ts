@@ -61,7 +61,7 @@ export default class DirectMessageModule extends Module {
       .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setFooter(`Message ID: ${msg.id}`)
       .setDescription(msg.content);
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command, forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
+    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
     message.channel.send(RESPONSES.SUCCESS(msg, `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${msg.content}**.`));
   }
 }
