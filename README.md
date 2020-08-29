@@ -1,2 +1,2 @@
 # @evocation/Eris
-Eris is a discord bot made for a server named Evocation on Discord.
+Eris is a Discord bot developed for use by a server named Evocation. Its functionalities and modules are proportionate to the server's vision.
