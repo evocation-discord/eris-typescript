@@ -2,6 +2,7 @@ import * as discord from "discord.js";
 import { TextChannel } from "discord.js";
 import { GuildMember } from "discord.js";
 import Duration from "./Duration";
+import { regExpEsc } from "..";
 
 // All supported arguments.
 export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
@@ -10,6 +11,7 @@ export type supportedArgs = typeof discord.GuildMember | typeof discord.User | t
 export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
 
 const USER_REGEXP = /^(?:<@!?)?(\d{17,19})>?$/;
+const ROLE_REGEXP = /^(?:<@&)?(\d{17,19})>?$/;
 const CHANNEL_REGEXP = /^(?:<#)?(\d{17,19})>?$/;
 
 // Used to parse a number.
@@ -121,7 +123,7 @@ allParsers.set(discord.TextChannel, textChannelParser);
 // Handle string parsing.
 allParsers.set(String, async x => x);
 
-const resolveUser = async (query: string | discord.User, guild: discord.Guild): Promise<discord.User> => {
+export const resolveUser = async (query: string | discord.User, guild: discord.Guild): Promise<discord.User> => {
   if (query instanceof discord.User) return query;
   if (typeof query === "string") {
     if (USER_REGEXP.test(query)) return guild.client.users.fetch(USER_REGEXP.exec(query)[1]);
@@ -156,6 +158,8 @@ const resolveChannel = (query: string | discord.Channel | discord.Message, guild
   return null;
 };
 
-const regExpEsc = (str: string): string => {
-  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+export const resolveRole = async (query: string | discord.Role, msg: discord.Message) => {
+  if (query instanceof discord.Role) return query;
+  if (typeof query === "string" && ROLE_REGEXP.test(query)) return msg.guild.roles.resolve(ROLE_REGEXP.exec(query)[1]);
+  return null;
 };

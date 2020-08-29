@@ -73,3 +73,7 @@ export const getDuration = (duration: number): string => {
   if (data.length === 0) return "**0** seconds";
   return `${data.reverse().slice(0, 2).join(" and ")}`;
 };
+
+export const regExpEsc = (str: string): string => {
+  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};

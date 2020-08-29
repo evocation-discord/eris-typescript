@@ -5,6 +5,7 @@ import { getArgumentParser, Greedy } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
 import { escapeRegex, emotes } from "..";
 import { monitor } from "../monitor/decorator";
+import { Blacklist } from "../database/models";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -26,6 +27,12 @@ export class CommandParserModule extends Module {
     const cmdTrigger = noPrefix.split(" ")[0].toLowerCase();
     const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
     if (!cmd) return;
+
+    // blacklists, woohoo
+    const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
+    const userBlacklists = await Blacklist.find({ where: { type: "user" } });
+    if (userBlacklists.find(u => u.id === msg.author.id)) return;
+    if (roleBlacklists.find(r => msg.member.roles.cache.has(r.id))) return;
 
     for (const inhibitor of cmd.inhibitors) {
       const reason = await inhibitor(msg, this.client);

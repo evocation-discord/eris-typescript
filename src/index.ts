@@ -17,6 +17,7 @@ import EmojiModule from "@modules/EmojiModule";
 import HelpModule from "@modules/HelpModule";
 import { setupDatabase } from "@lib/utils/database";
 import GiveawayModule from "@modules/GiveawayModule";
+import ExclusionsModule from "@modules/ExclusionsModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -38,4 +39,5 @@ client
   .registerModule(EmojiModule)
   .registerModule(HelpModule)
   .registerModule(GiveawayModule)
+  .registerModule(ExclusionsModule)
   .login(process.env.DISCORD_TOKEN);
