@@ -1,9 +1,10 @@
 import * as discord from "discord.js";
 import { TextChannel } from "discord.js";
 import { GuildMember } from "discord.js";
+import Duration from "./Duration";
 
 // All supported arguments.
-export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number;
+export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
 
 // Defines all parsers.
 export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
@@ -19,14 +20,11 @@ const numberParser = async (arg: string): Promise<number> => {
 };
 allParsers.set(Number, numberParser);
 
-// Trims all ID related waffle.
-const trimIdWaffle = (arg: string): string => {
-  if (arg.startsWith("<@") && arg.endsWith(">")) {
-    arg = arg.slice(2, -1);
-    if (arg.startsWith("!")) arg = arg.slice(1);
-  }
-  return arg;
+// Used to parse a duration.
+const durationParser = async (arg: string): Promise<Duration> => {
+  return new Duration(arg);
 };
+allParsers.set(Duration, durationParser);
 
 // Used to parse a guild member.
 export const guildMemberParser = async (arg: string, msg: discord.Message): Promise<discord.GuildMember> => {

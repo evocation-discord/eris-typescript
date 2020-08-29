@@ -6,8 +6,14 @@ export class Giveaway extends BaseEntity {
   @PrimaryGeneratedColumn({ name: "giveaway_id" })
   id: string;
 
-  @Column("int", { name: "end_time", nullable: true })
+  @Column()
   duration: number;
+
+  @Column()
+  startTime: Date;
+
+  @Column()
+  endTime: Date;
 
   @Column("bigint", { name: "message_id" })
   messageId: string;
@@ -18,9 +24,15 @@ export class Giveaway extends BaseEntity {
   @Column("boolean", { default: false })
   ended: boolean;
 
-  @Column("simple-array", { default: [] })
+  @Column("simple-array")
   participants: Snowflake[];
 
-  @Column({ nullable: true })
-  winner: Snowflake;
+  @Column()
+  winners: number;
+
+  @Column("text")
+  prize: string;
+
+  @Column("bigint")
+  startedBy: Snowflake;
 }

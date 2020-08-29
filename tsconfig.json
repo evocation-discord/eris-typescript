@@ -20,7 +20,7 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@modules/*": ["modules/*"],
-      "@models/*": ["lib/utils/database/models/*"]
+      "@database/*": ["lib/utils/database/*"]
     }
   },
   "include": [

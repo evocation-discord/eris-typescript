@@ -72,6 +72,7 @@ export class Optional {
   }
 }
 
+
 export const getArgumentParser = (arg: supportedArgs | Greedy | Remainder | Optional): ((parser: ArgTextProcessor, msg: discord.Message) => Promise<unknown[]>) => {
   // Return the parser.
   if (arg instanceof Greedy || arg instanceof Remainder || arg instanceof Optional) return async (parser: ArgTextProcessor, msg: discord.Message) => arg.parse.bind(arg)(parser, msg);

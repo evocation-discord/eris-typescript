@@ -1,5 +1,6 @@
-import { listener, Module, ErisClient, monitor } from "@lib/utils";
-import { Guild, Message } from "discord.js";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { listener, Module, ErisClient, monitor, scheduler, CHANNELS } from "@lib/utils";
+import { Guild, Message, MessageEmbed, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 
 export default class EventModule extends Module {
@@ -13,8 +14,42 @@ export default class EventModule extends Module {
 
   @listener({ event: "ready" })
   onReady(): void {
+    scheduler.loadEvents();
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
+
+    const embed = new MessageEmbed()
+      .setTitle("Connected")
+      .setColor("#4acf56")
+      // @ts-ignore: Private property so typing for it does not exist
+      .addField("Gateway Version", `v${this.client.options.ws.version}`)
+      // @ts-ignore
+      .addField("Session ID", this.client.ws.shards.first().sessionID);
+
+    this.sendControlMessage(embed);
+  }
+
+  @listener({ event: "shardResume" })
+  onResume(id: number, replayed: number): void {
+    const embed = new MessageEmbed()
+      .setTitle("Resumed")
+      .setColor("#ffb347")
+      .addField("Replayed Events", replayed);
+
+    this.sendControlMessage(embed);
+  }
+
+  @listener({ event: "shardReconnecting" })
+  onReconnect(): void {
+    const embed = new MessageEmbed()
+      .setTitle("Reconnected")
+      .setColor("#ffb347")
+      // @ts-ignore: Private property so typing for it does not exist
+      .addField("Gateway Version", `v${this.client.options.ws.version}`)
+      // @ts-ignore
+      .addField("Session ID", this.client.ws.shards.first().sessionID);
+
+    this.sendControlMessage(embed);
   }
 
   @monitor({ event: "message" })
@@ -33,5 +68,14 @@ export default class EventModule extends Module {
     }
   }
 
+  async sendControlMessage(data: MessageEmbed): Promise<void> {
+    const embed = new MessageEmbed(data)
+      .setFooter(`Eris ${process.env.PRODUCTION ? "Production" : "Testing"}`)
+      .setTimestamp();
+
+    if (!embed.color) embed.setColor("#779ecb");
+    const channel = await this.client.channels.fetch(CHANNELS.ERIS_SYSTEM_LOG) as TextChannel;
+    channel.send({ embed });
+  }
 
 }
