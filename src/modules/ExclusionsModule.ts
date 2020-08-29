@@ -30,7 +30,7 @@ export default class ExclusionsModule extends Module {
         id: user.id
       }).save();
       msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Executed exclusions for the specified user.`);
-    } else return msg.channel.send("Incorrect command usage: `e!exclude [user|role] [ID/mention]`");
+    } else return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclude [user|role] [ID/mention]\``);
   }
   @command({ inhibitors: [inhibitors.adminOnly], group: "Server Administrator", args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true })
   async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message> {
@@ -42,10 +42,10 @@ export default class ExclusionsModule extends Module {
         .addField("Role Exclusions", roleBlacklists.map(r => `→ **<@&${r.id}>** (\`${r.id}\`)`).join("\n") || "→ No roles excluded.");
       return msg.channel.send(embed);
     }
-    if (!["remove", "clear"].includes(what)) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Wrong command usage. \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
+    if (!["remove", "clear"].includes(what)) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
 
     if (what === "remove") {
-      if (!type || !["user", "role"].includes(type) || !id) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Wrong command usage. \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
+      if (!type || !["user", "role"].includes(type) || !id) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
       if (type === "role") {
         const blacklist = await Blacklist.findOne({ where: { id: id, type: "role" } });
         if (!blacklist) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: This role is not excluded.`);
