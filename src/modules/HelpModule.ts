@@ -4,6 +4,7 @@ import { command, Module, inhibitors, Optional, Command, ROLES, emotes } from "@
 const commandGroupsWithEmojis = {
   "Bot Owner": "<:settings:747497421457588236> **BOT OWNER**",
   "Informational": "<:information:747497420954534050> **INFORMATIONAL**",
+  "Giveaways": "<:donation:748230750805164032> **GIVEAWAYS**",
   "Server Administrator": "<:admin:747497421399130220> **SERVER ADMINISTRATOR**",
   "Permission Node Negations": "<:denial:747497421327695902> **PERMISSION NODE NEGATIONS**"
 };
@@ -20,7 +21,7 @@ export default class HelpModule extends Module {
       for await (const commandGroup of commandGroups) {
         const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter(cmd => cmd.group === commandGroup)));
         if (cmds.length === 0) continue;
-        messageArray.push(`${commandGroupsWithEmojis[commandGroup]}\n${cmds.map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
+        messageArray.push(`${commandGroupsWithEmojis[commandGroup] || "Unknown category"}\n${cmds.map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(`To get more information about a specific command, run \`${process.env.PREFIX}help [command]\`.`);
       msg.channel.send(messageArray.join("\n"));

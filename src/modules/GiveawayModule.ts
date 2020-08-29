@@ -11,7 +11,7 @@ export default class GiveawayModule extends Module {
   }
 
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)] })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)], group: "Giveaways" })
   async start(msg: Message, duration: Duration, winners: number, prize: string): Promise<void> {
     msg.delete();
     const giveawayMsg = await msg.channel.send("Loading...");
@@ -39,7 +39,7 @@ export default class GiveawayModule extends Module {
     });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)] })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: "Giveaways" })
   async reroll(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: That is not a valid message ID! Try running this command without a message ID to reroll the winner of the most recent giveaway in this channel.`);
@@ -85,7 +85,7 @@ export default class GiveawayModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)] })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: "Giveaways" })
   async end(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: That is not a valid message ID! Try running without an ID to use the most recent giveaway in this channel.`);
@@ -112,7 +112,7 @@ export default class GiveawayModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly] })
+  @command({ inhibitors: [inhibitors.adminOnly], group: "Giveaways" })
   async list(msg: Message): Promise<void|Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const messageArray = [
@@ -128,7 +128,7 @@ export default class GiveawayModule extends Module {
     await msg.channel.send(messageArray.join("\n\n"), { allowedMentions: { users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly] })
+  @command({ inhibitors: [inhibitors.adminOnly], group: "Giveaways" })
   async endall(msg: Message): Promise<void|Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const endedGiveaways = [`${this.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)} **ENDED GIVEAWAYS**`];
