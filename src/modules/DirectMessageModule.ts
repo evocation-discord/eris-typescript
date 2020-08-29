@@ -64,4 +64,23 @@ export default class DirectMessageModule extends Module {
     channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
     message.channel.send(RESPONSES.SUCCESS(msg, `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${msg.content}**.`));
   }
+  @command({ aliases: ["deletedm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>" })
+  async deletedirectmessage(message: Message, user: User, messageId: string): Promise<void> {
+    await message.delete();
+    const dmchannel = await user.createDM();
+    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const dmMessage = await dmchannel.messages.fetch(messageId);
+    // TODO
+    if (!dmMessage) return;
+
+    await dmMessage.delete();
+    const embed = new MessageEmbed()
+      .setTimestamp()
+      .setColor(colors.DM_SEND_MESSAGE)
+      .setAuthor(`${dmMessage.author.tag} (${dmMessage.author.id})`, dmMessage.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setFooter(`Message ID: ${dmMessage.id}`)
+      .setDescription(dmMessage.content);
+    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_DELETION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to delete a Direct Message that was previously sent to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
+    message.channel.send(RESPONSES.SUCCESS(message, "Direct Message has been deleted."));
+  }
 }
