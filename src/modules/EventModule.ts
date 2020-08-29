@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { listener, Module, ErisClient, monitor, scheduler, CHANNELS } from "@lib/utils";
+import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, timeFormatter } from "@lib/utils";
 import { Guild, Message, MessageEmbed, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 
@@ -65,6 +65,8 @@ export default class EventModule extends Module {
           },
         },
       );
+      const channel = await this.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
+      channel.send(`\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>>`);
     }
   }
 
