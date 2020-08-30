@@ -22,7 +22,7 @@ export default class HelpModule extends Module {
       for await (const commandGroup of commandGroups) {
         const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter(cmd => cmd.group === commandGroup)));
         if (cmds.length === 0) continue;
-        messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
+        messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(strings.modules.help.specificCommandHelp);
       msg.channel.send(messageArray.join("\n"));
@@ -39,7 +39,7 @@ export default class HelpModule extends Module {
       const cmdName = triggers.shift();
       const message = [
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
-        `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded }`,
+        `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded }`  ,
         `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``) : strings.modules.help.noAliases}`,
         `**DESCRIPTION**: ${cmd.description || strings.modules.help.noDescription}`
       ];
