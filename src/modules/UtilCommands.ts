@@ -155,11 +155,6 @@ export default class UtilCommandModule extends Module {
       .setDescription(disabledcommands.map(strings.modules.util.disabledCommandMap).join("\n") || strings.modules.util.noDisabledCommands);
     return msg.channel.send(embed);
   }
-
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA"]), inhibitors.userCooldown(30000)], group: "Purchasable Role Limitation", description: commandDescriptions.muse })
-  async muse(message: Message): Promise<void> {
-    message.channel.send(strings.modules.util.museCommand[Math.floor(Math.random() * strings.modules.util.museCommand.length)]);
-  }
 }
 
 const codeclean = async (client: Client, text: string): Promise<string> => {

@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { command, Module, inhibitors, Optional, Command, ROLES, emotes } from "@lib/utils";
+import { command, Module, Optional, Command, ROLES } from "@lib/utils";
 import { strings, commandDescriptions } from "@lib/utils/messages";
 
 const commandGroupsWithEmojis = {
@@ -8,7 +8,7 @@ const commandGroupsWithEmojis = {
   "Giveaways": "<:donation:748230750805164032> **GIVEAWAYS**",
   "Server Administrator": "<:admin:747497421399130220> **SERVER ADMINISTRATOR**",
   "Permission Node Negations": "<:denial:747497421327695902> **PERMISSION NODE NEGATIONS**",
-  "Purchasable Role Limitation": "**PURCHASABLE ROLE LIMITATION**"
+  "Purchasable Role Limitation": "<:creditcard:749642425454166078> **PURCHASABLE ROLE LIMITATION**"
 };
 
 export default class HelpModule extends Module {

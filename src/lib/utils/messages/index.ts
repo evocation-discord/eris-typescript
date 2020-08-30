@@ -186,6 +186,8 @@ export const strings = {
       disabledCommandsEmbedHeader: "Disabled Commands",
       disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
       noDisabledCommands: "There are no disabled commands.",
+    },
+    purchaseableroles: {
       museCommand: [
         "You and I are seekers of the cosmos. The infinite is aglow with frequencies. Will is the driver of potentiality. Have you found your mission? It can be difficult to know where to begin. The quantum cycle is calling to you via ultrasonic energy. Can you hear it? Illusion is born in the gap where consciousness has been excluded. Only a child of the quantum matrix may release this reimagining of love. Where there is illusion, joy cannot thrive.",
         "Although you may not realize it, you are amazing. The planet is calling to you via frequencies. Can you hear it? Have you found your path?",
@@ -198,7 +200,8 @@ export const strings = {
         "Imagine an awakening of what could be.",
         "We must heal ourselves and bless others. This circuit never ends. It is time to take intuition to the next level.",
         "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
-      ]
+      ],
+      auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     }
   },
   commandGroups: {}
