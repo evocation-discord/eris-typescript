@@ -161,3 +161,27 @@ export const strings = {
   },
   commandGroups: {  }
 };
+
+
+export const commandDescriptions = {
+  send: "Forces Eris to send a message based on the second syntactic parameter. All mentions are forcibly escaped.",
+  setstatus: "Updates Eris' status.",
+  setgame: "Updates Eris' game.",
+  edit: "Edits any message sent by Eris. She must have the 'Send Messages' permission node in the corresponding channel to be able to edit messages within it.",
+  eval: "Eris will evaluate the input provided by the Bot Owner.",
+  shutdown: "Forcibly restarts Eris.",
+  directmessage: "Sends a Direct Message to the user provided.",
+  deletedirectmessage: "Deletes a Direct Message sent by Eris.",
+  about: "Returns information about the bot, its conception and contributors.",
+  help: "Returns information about available commands.",
+  logdonation: "Logs a donation and awards the 'White Hallows' role to the specified user, if they don't already have it.",
+  negateart: "Appends/removes the '[NEGATION] Art' role to/from the specified user(s).",
+  negatereaction: "Appends/removes the '[NEGATION] Reactions' role to/from the specified user(s).",
+  negatemedia: "Appends/removes the '[NEGATION] Media' role to/from the specified user(s).",
+  negateexperience: "Appends/removes the '[NEGATION] Experience' role to/from the specified user(s).",
+  start: "Starts a giveaway in the channel in which this command is performed.",
+  reroll: "Forces Eris to redetermine the winner of a giveaway. If no arguments are supplied, the most recent giveaway's winner will be rerolled.",
+  end: "Ends a giveaway. If a message ID isn't supplied, the most recent active giveaway in the channel in which the command is being run in will be ended.",
+  list: "Returns a list of all active giveaways on the server.",
+  endall: "Forcibly ends all active giveaways on the server."
+};
