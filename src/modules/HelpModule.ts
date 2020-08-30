@@ -12,7 +12,7 @@ const commandGroupsWithEmojis = {
 
 export default class HelpModule extends Module {
 
-  @command({ group: "Informational", args: [new Optional(String)], usage: "[command:string]", description: commandDescriptions.help})
+  @command({ group: "Informational", args: [new Optional(String)], usage: "[command:string]", description: commandDescriptions.help })
   async help(msg: Message, command?: string): Promise<void|Message> {
     const commands = Array.from(this.client.commandManager.cmds);
     if (!command) {
@@ -39,7 +39,7 @@ export default class HelpModule extends Module {
       const cmdName = triggers.shift();
       const message = [
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
-        `**SYNTACTIC USAGE**: \`${cmd.usage || strings.modules.help.noArgumentsNeeded}\``,
+        `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded }`,
         `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``) : strings.modules.help.noAliases}`,
         `**DESCRIPTION**: ${cmd.description || strings.modules.help.noDescription}`
       ];
