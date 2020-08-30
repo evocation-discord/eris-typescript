@@ -90,6 +90,16 @@ export default class UtilCommandModule extends Module {
     await message.edit(strings.modules.util.pingResponse(message.createdTimestamp - msg.createdTimestamp));
   }
 
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", description: commandDescriptions.privacypolicy, aliases: ["privacy"] })
+  async privacypolicy(msg: Message): Promise<void> {
+    try {
+      await msg.author.send(strings.modules.util.privacypolicy.message1);
+      await msg.author.send(strings.modules.util.privacypolicy.message2);
+    } catch (e) {
+      msg.channel.send(strings.general.error(strings.modules.util.privacypolicy.error));
+    }
+  }
+
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
