@@ -24,6 +24,10 @@ export * from "./monitor/Monitor";
 export * from "./monitor/MonitorManager";
 export * from "./monitor/decorator";
 
+export * from "./cron/Cron";
+export * from "./cron/CronManager";
+export * from "./cron/decorator";
+
 export * from "./modules/Module";
 
 export * from "./scheduler/Scheduler";

@@ -6,6 +6,8 @@ import { ICommandDecorator } from "../commands/decorator";
 import { Command } from "../commands/Command";
 import { Monitor } from "../monitor/Monitor";
 import { IMonitorDecoratorMeta } from "../monitor/decorator";
+import { Cron } from "../cron/Cron";
+import { ICronDecoratorMeta } from "../cron/decorator";
 
 export class Module {
   public client: ErisClient;
@@ -49,6 +51,21 @@ export class Module {
         } as Command)
     );
     return cmds;
+  }
+
+  processCrons(): Cron[] {
+    const targetMetas: ICronDecoratorMeta[] =
+    Reflect.getMetadata("eris:cronMetas", this) || [];
+    const crons = targetMetas.map(
+      meta =>
+        ({
+          func: Reflect.get(this, meta.id),
+          id: `${this.constructor.name}/${meta.id}`,
+          module: this,
+          cronTime: meta.cronTime
+        } as Cron)
+    );
+    return crons;
   }
 
   processMonitors(): Monitor[] {

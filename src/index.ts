@@ -19,6 +19,7 @@ import { setupDatabase } from "@lib/utils/database";
 import GiveawayModule from "@modules/GiveawayModule";
 import ExclusionsModule from "@modules/ExclusionsModule";
 import PurchaseableRolesModule from "@modules/PurchaseableRolesModule";
+import CronModule from "@modules/CronModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -42,4 +43,5 @@ client
   .registerModule(GiveawayModule)
   .registerModule(ExclusionsModule)
   .registerModule(PurchaseableRolesModule)
+  .registerModule(CronModule)
   .login(process.env.DISCORD_TOKEN);

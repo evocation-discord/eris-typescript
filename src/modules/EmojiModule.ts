@@ -25,6 +25,6 @@ export default class EmojiModule extends Module {
   async emojiDelete(emoji: GuildEmoji): Promise<void> {
     if (emoji.guild.id !== MAIN_GUILD_ID) return;
     const channel = await this.client.channels.fetch(CHANNELS.PERIPHERAL_ANNOUNCEMENTS) as TextChannel;
-    channel.send(strings.modules.emojis.emojiAdded(emoji));
+    channel.send(strings.modules.emojis.emojiDeleted(emoji));
   }
 }

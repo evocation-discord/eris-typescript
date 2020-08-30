@@ -67,7 +67,7 @@ const experiencecapsules = {
 };
 
 const uncategorised = {
-  "enter": "<:enter:715555522463400036>",
+  "enter": "<:enter:746813302113435770>",
   "fantasyregulations": "<:fantasyregulations:739758249213165598>",
   "leave": "<:leave:746817814459056208>",
   "regulations": "<:regulations:739751088932257842>",
