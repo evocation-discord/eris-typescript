@@ -1,8 +1,5 @@
-import { Message } from "discord.js";
-import { command, Module, inhibitors, Remainder, messageLinkRegex, Embed } from "@lib/utils";
-import { PresenceStatusData } from "discord.js";
-import { TextChannel } from "discord.js";
-import { Client } from "discord.js";
+import { Message, TextChannel, PresenceStatusData, Client } from "discord.js";
+import { command, Module, inhibitors, Remainder, messageLinkRegex, Embed, emotes } from "@lib/utils";
 import { inspect } from "util";
 import { strings, commandDescriptions } from "@lib/utils/messages";
 import { DisabledCommand } from "@lib/utils/database/models";
@@ -154,6 +151,24 @@ export default class UtilCommandModule extends Module {
       .setAuthor(strings.modules.util.disabledCommandsEmbedHeader)
       .setDescription(disabledcommands.map(strings.modules.util.disabledCommandMap).join("\n") || strings.modules.util.noDisabledCommands);
     return msg.channel.send(embed);
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", admin: true, description: commandDescriptions.channels })
+  async channels(message: Message): Promise<void> {
+    if ((message.channel as TextChannel).name !== "administrator-bot-commands") return;
+    const channels = message.guild.channels.cache.array();
+    const categories = channels.filter(c => c.type === "category").sort((a, b) => a.rawPosition - b.rawPosition);
+    const list: string[] = [];
+    for await (const category of categories) {
+      list.push(`${list.length > 0 ? "\n" : ""}${emotes.uncategorised.expandedcategory} **${category.name.toUpperCase()}**`);
+      const channelsInCategory = channels.filter(c => c.parentID === category.id);
+      for await (const channel of channelsInCategory) {
+        if (channel.type === "voice") list.push(`${channel.permissionOverwrites.find(overwrite => overwrite.deny.has("VIEW_CHANNEL") || overwrite.deny.has("CONNECT")) ? emotes.uncategorised.privatevoicechannel : emotes.uncategorised.voicechannel} ${channel.name} (\`${channel.id}\`)`);
+        if (channel.type === "news") list.push(`${channel.permissionOverwrites.find(overwrite => overwrite.deny.has("VIEW_CHANNEL")) ? emotes.uncategorised.privateannouncementchannel : emotes.uncategorised.announcementchannel} ${channel.name} (\`${channel.id}\`)`);
+        if (channel.type === "text") list.push(`${channel.permissionOverwrites.find(overwrite => overwrite.deny.has("VIEW_CHANNEL")) ? emotes.uncategorised.privatetextchannel : emotes.uncategorised.textchannel} ${channel.name} (\`${channel.id}\`)`);
+      }
+    }
+    await message.channel.send(list.join("\n"), { split: true });
   }
 }
 

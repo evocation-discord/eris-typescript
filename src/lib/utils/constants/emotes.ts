@@ -71,7 +71,14 @@ const uncategorised = {
   "fantasyregulations": "<:fantasyregulations:739758249213165598>",
   "leave": "<:leave:746817814459056208>",
   "regulations": "<:regulations:739751088932257842>",
-  "creditcard": "<:creditcard:749642425454166078>"
+  "creditcard": "<:creditcard:749642425454166078>",
+  "voicechannel": "<:voicechannel:749706276006658260>",
+  "privatevoicechannel": "<:privatevoicechannel:749706275780296866>",
+  "textchannel": "<:textchannel:749706275788685353>",
+  "privatetextchannel": "<:privatetextchannel:749706275935223848>",
+  "announcementchannel": "<:announcementchannel:749706275859726336>",
+  "privateannouncementchannel": "<:privateannouncementchannel:749706275864182865>",
+  "expandedcategory": "<:expandedcategory:749711722130178089>"
 };
 
 
