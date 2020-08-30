@@ -184,4 +184,6 @@ export const commandDescriptions = {
   end: "Ends a giveaway. If a message ID isn't supplied, the most recent active giveaway in the channel in which the command is being run in will be ended.",
   list: "Returns a list of all active giveaways on the server.",
   endall: "Forcibly ends all active giveaways on the server."
+  exclude: "Excludes a user or role from being able to interact with Eris."
+  exclusions: "Returns a list of active bot exclusions."
 };
