@@ -22,6 +22,7 @@ export default class DirectMessageModule extends Module {
 
   @monitor({ event: "messageUpdate" })
   async DM_receiver_on_edit(oldMsg: Message, newMsg: Message): Promise<void> {
+    if (newMsg.author.bot) return;
     if (newMsg.partial) newMsg = await newMsg.fetch();
     if (newMsg.channel.type !== "dm") return;
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
@@ -38,6 +39,7 @@ export default class DirectMessageModule extends Module {
 
   @monitor({ event: "messageDelete" })
   async DM_receiver_on_delete(msg: Message): Promise<void> {
+    if (msg.author.bot) return;
     if (msg.partial) return;
     if (msg.channel.type !== "dm") return;
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
@@ -77,7 +79,7 @@ export default class DirectMessageModule extends Module {
     await dmMessage.delete();
     const embed = new MessageEmbed()
       .setTimestamp()
-      .setColor(colors.DM_SEND_MESSAGE)
+      .setColor(colors.DM_DELETED_MESSAGE)
       .setAuthor(`${dmMessage.author.tag} (${dmMessage.author.id})`, dmMessage.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setFooter(strings.modules.directmessages.embedFooter(dmMessage.id))
       .setDescription(dmMessage.content);
