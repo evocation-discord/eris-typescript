@@ -46,7 +46,7 @@ export const strings = {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
     notInGuild: "You are not in a guild.",
     missingDiscordPermission: (permission: PermissionResolvable) => `You miss a discord permission: ${permission}`,
-    cooldown: (cooldown: string) => `You must wait ${cooldown} to run this command!`,
+    cooldown: (cooldown: string) => `You must wait **${cooldown}** to run this command!`,
     requestRejected: "Request has been rejected. Please run this command in #bot-commands!"
   },
   modules: {
@@ -185,7 +185,20 @@ export const strings = {
       undisabledcommand: "This command is enabled again.",
       disabledCommandsEmbedHeader: "Disabled Commands",
       disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
-      noDisabledCommands: "There are no disabled commands."
+      noDisabledCommands: "There are no disabled commands.",
+      museCommand: [
+        "You and I are seekers of the cosmos. The infinite is aglow with frequencies. Will is the driver of potentiality. Have you found your mission? It can be difficult to know where to begin. The quantum cycle is calling to you via ultrasonic energy. Can you hear it? Illusion is born in the gap where consciousness has been excluded. Only a child of the quantum matrix may release this reimagining of love. Where there is illusion, joy cannot thrive.",
+        "Although you may not realize it, you are amazing. The planet is calling to you via frequencies. Can you hear it? Have you found your path?",
+        "Our conversations with other seekers have led to an unveiling of pseudo-joyous consciousness. Humankind has nothing to lose. Wellbeing requires exploration. By condensing, we self-actualize. Guidance is a constant. Throughout history, humans have been interacting with the multiverse via vibrations. We are in the midst of a sublime maturing of love that will give us access to the quantum soup itself. Reality has always been buzzing with dreamweavers whose essences are enveloped in transcendence.",
+        "This life is nothing short of a maturing vector of enlightened peace. To follow the path is to become one with it. We exist as ultrasonic energy.",
+        "It can be difficult to know where to begin. How should you navigate this quantum dreamscape? Although you may not realize it, you are sentient. Eons from now, we entities will heal like never before as we are guided by the stratosphere. We must heal ourselves and bless others. The universe is approaching a tipping point. Soon there will be an evolving of coherence the likes of which the stratosphere has never seen. It is time to take understanding to the next level. Shiva will enable us to access divine potentiality.",
+        "The temporal differential we call wakefulness is the cosmic interaction of subatomic particles operating in the quantum field, the (quantum)leap represents a fundamental universal constant that we can only speculate upon in the macro scale of wave form frequencies.",
+        "We dream, we vibrate, we are reborn.",
+        "Inspiration is a constant. Balance requires exploration.",
+        "Imagine an awakening of what could be.",
+        "We must heal ourselves and bless others. This circuit never ends. It is time to take intuition to the next level.",
+        "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
+      ]
     }
   },
   commandGroups: {}
@@ -219,5 +232,6 @@ export const commandDescriptions = {
   privacypolicy: "Returns Eris' Privacy Policy. The response to this command will be sent to the invoking user via Direct Messages to avoid any potentiality for spam.",
   disablecmd: "Forcibly disables a command to all users, regardless of defaulted permission inhibitors.",
   enablecmd: "Enables a previously-disabled command, forcing restoration of default inhibitors.",
-  listdisabledcmds: "Lists all disabled commands."
+  listdisabledcmds: "Lists all disabled commands.",
+  muse: "Eris returns what's on her mind - take that as you will."
 };

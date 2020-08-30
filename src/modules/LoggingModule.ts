@@ -55,4 +55,4 @@ export default class LoggingModule extends Module {
 }
 
 
-const isStaff = (msg: Message): boolean => msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id));
+const isStaff = (msg: Message): boolean => msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id));

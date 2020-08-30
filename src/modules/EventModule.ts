@@ -78,6 +78,7 @@ export default class EventModule extends Module {
 
     if (!embed.color) embed.setColor("#779ecb");
     const channel = await this.client.channels.fetch(CHANNELS.ERIS_SYSTEM_LOG) as TextChannel;
+    if (!channel) return;
     channel.send({ embed });
   }
 

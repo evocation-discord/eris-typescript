@@ -48,7 +48,7 @@ const userCooldown = (ms: number): Inhibitor => {
 const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
+  if (msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -57,6 +57,22 @@ const adminOnly: Inhibitor = async (msg, client) => {
   if (isNotGuild) return isNotGuild;
   if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
+};
+
+const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
+  return async msg => {
+    if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+    if (roles.includes("STAFF") && await roleValidation(msg, ROLES.STAFF)) return undefined;
+    if (roles.includes("SCIONS OF ELYSIUM") && await roleValidation(msg, ROLES.SCIONS_OF_ELYSIUM)) return undefined;
+    if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, ROLES.SENTRIES_OF_DESCENSUS)) return undefined;
+    if (roles.includes("WISTERIA") && await roleValidation(msg, ROLES.WISTERIA)) return undefined;
+    return strings.inhibitors.noPermission;
+  };
+};
+
+const roleValidation = async (msg: Message, roleID: string): Promise<boolean> => {
+  if (!msg.member) return false;
+  return msg.member.roles.cache.has(roleID);
 };
 
 const canOnlyBeExecutedInBotCommands =
@@ -77,5 +93,8 @@ export const inhibitors = {
   userCooldown,
   canOnlyBeExecutedInBotCommands,
   moderatorOnly,
-  adminOnly
+  adminOnly,
+  onlySomeRolesCanExecute
 };
+
+type PermissionRole = "STAFF" | "WISTERIA" | "SCIONS OF ELYSIUM" | "SENTRIES OF DESCENSUS";

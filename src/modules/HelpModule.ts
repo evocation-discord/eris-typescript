@@ -7,7 +7,8 @@ const commandGroupsWithEmojis = {
   "Informational": "<:information:747497420954534050> **INFORMATIONAL**",
   "Giveaways": "<:donation:748230750805164032> **GIVEAWAYS**",
   "Server Administrator": "<:admin:747497421399130220> **SERVER ADMINISTRATOR**",
-  "Permission Node Negations": "<:denial:747497421327695902> **PERMISSION NODE NEGATIONS**"
+  "Permission Node Negations": "<:denial:747497421327695902> **PERMISSION NODE NEGATIONS**",
+  "Purchasable Role Limitation": "**PURCHASABLE ROLE LIMITATION**"
 };
 
 export default class HelpModule extends Module {
@@ -32,7 +33,7 @@ export default class HelpModule extends Module {
         if (!this.client.botAdmins.includes(msg.author.id)) return msg.channel.send(strings.general.error(strings.modules.help.noPermission));
       } else {
         if (cmd.staff) {
-          if (!msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return msg.channel.send(strings.general.error(strings.modules.help.noPermission));
+          if (!msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return msg.channel.send(strings.general.error(strings.modules.help.noPermission));
         }
       }
       const triggers = [...cmd.triggers];
@@ -66,7 +67,7 @@ export default class HelpModule extends Module {
 
     commands.forEach(command => {
       if (command.staff) {
-        if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) cmds.push(command);
+        if (msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) cmds.push(command);
       } else cmds.push(command);
     });
 
