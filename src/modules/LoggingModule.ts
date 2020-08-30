@@ -2,6 +2,7 @@ import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, timeF
 import { Message, TextChannel, User } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 import { strings } from "@lib/utils/messages";
+import { DisabledCommand } from "@lib/utils/database/models";
 
 export default class LoggingModule extends Module {
   @monitor({ event: "message" })
@@ -22,6 +23,7 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
 
+    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return channel.send(strings.modules.logging.disabledCommand(msg, cmdTrigger, stringArgs));
     if (cmd.staff || cmd.admin) return channel.send(strings.modules.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
     return channel.send(strings.modules.logging.command(msg, cmdTrigger, stringArgs));
   }

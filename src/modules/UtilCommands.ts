@@ -1,10 +1,11 @@
 import { Message } from "discord.js";
-import { command, Module, inhibitors, Remainder, messageLinkRegex } from "@lib/utils";
+import { command, Module, inhibitors, Remainder, messageLinkRegex, Embed } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
 import { Client } from "discord.js";
 import { inspect } from "util";
 import { strings, commandDescriptions } from "@lib/utils/messages";
+import { DisabledCommand } from "@lib/utils/database/models";
 
 export default class UtilCommandModule extends Module {
 
@@ -120,6 +121,39 @@ export default class UtilCommandModule extends Module {
   async shutdown(msg: Message): Promise<void> {
     await msg.channel.send(strings.general.success(strings.modules.util.shutdown));
     process.exit(0);
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: "Bot Owner", admin: true, description: commandDescriptions.disablecmd })
+  async disablecmd(msg: Message, cmd: string): Promise<Message> {
+    if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return msg.channel.send(strings.general.error(strings.modules.util.cantdisablecommands));
+    const command = this.client.commandManager.getByTrigger(cmd);
+    const commandName = command.triggers[0];
+    if (await DisabledCommand.findOne({ where: { commandName: commandName } })) return msg.channel.send(strings.general.error(strings.modules.util.alreadydisabled));
+    await DisabledCommand.create({
+      disabledBy: msg.author.id,
+      commandName: cmd
+    }).save();
+    return msg.channel.send(strings.general.success(strings.modules.util.disabledcommand));
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: "Bot Owner", admin: true, description: commandDescriptions.enablecmd })
+  async enablecmd(msg: Message, cmd: string): Promise<Message> {
+    const command = this.client.commandManager.getByTrigger(cmd);
+    const commandName = command.triggers[0];
+    if (await DisabledCommand.findOne({ where: { commandName: commandName } })) {
+      const disabled = await DisabledCommand.findOne({ where: { commandName: commandName } });
+      await disabled.remove();
+      return msg.channel.send(strings.general.success(strings.modules.util.undisabledcommand));
+    } else return msg.channel.send(strings.general.error(strings.modules.util.notdisabledcommand));
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["ldc"], admin: true, description: commandDescriptions.listdisabledcmds })
+  async listdisabledcmds(msg: Message): Promise<Message> {
+    const disabledcommands = await DisabledCommand.find();
+    const embed = Embed
+      .setAuthor(strings.modules.util.disabledCommandsEmbedHeader)
+      .setDescription(disabledcommands.map(strings.modules.util.disabledCommandMap).join("\n") || strings.modules.util.noDisabledCommands);
+    return msg.channel.send(embed);
   }
 }
 

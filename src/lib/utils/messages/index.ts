@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji } from "discord.js";
-import { Blacklist, Giveaway } from "../database/models";
+import { Blacklist, Giveaway, DisabledCommand } from "../database/models";
 
 export const strings = {
   general: {
-    success: (text: string) => `${emotes.commandresponses.success} **SUCCES**: ${text}`,
+    success: (text: string) => `${emotes.commandresponses.success} **SUCCESS**: ${text}`,
     error: (text: string) => `${emotes.commandresponses.denial} **COMMAND INHIBITED**: ${text}`,
     commandSyntax: (text: string) => `Syntactic fallacy detected. **COMMAND SYNTAX**: \`${text}\``,
-    somethingWentWrong: "Something went wrong."
+    somethingWentWrong: "Something went wrong.",
+    commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`)."
   },
   giveaway: {
     embed: {
@@ -128,6 +129,7 @@ export const strings = {
     logging: {
       administrativeCommand: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${emotes.logging.administrativeaudit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
       command: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
+      disabledCommand: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed a disabled command \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
       linkResolver: (msg: Message, link: string, resLink: string) => [
         `\`[${timeFormatter()}]\` **\`[LINK REDIRECT RESOLVER]\`** ${emotes.logging.linkresolver} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) sent a message (\`${msg.id}\`) containing a redirection-based link in ${msg.channel} (\`${msg.channel.id}\`).\n`,
         `**UNRESOLVED LINK**: <${link}>`,
@@ -175,7 +177,15 @@ export const strings = {
           "__**ERASURE OF DATA**__",
           "Leaving the server will not result in any of your data being deleted. Instead, it will be saved so that it can be accessed again should you decide to re-join. You may request for the perpetual erasure of data that is directly associated with your account. To facilitate this, please send a Direct Message to <@747105315840983212>. You may only request one data deletion request per thirty days. No exceptional anomalies will be allowed within the scope of possibility."
         ].join("\n\n")
-      }
+      },
+      cantdisablecommands: "This command cannot be disabled.",
+      disabledcommand: "This command is now disabled.",
+      notdisabledcommand: "This command is not disabled.",
+      alreadydisabled: "This command is already disabled.",
+      undisabledcommand: "This command is enabled again.",
+      disabledCommandsEmbedHeader: "Disabled Commands",
+      disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
+      noDisabledCommands: "There are no disabled commands."
     }
   },
   commandGroups: {}
@@ -206,5 +216,8 @@ export const commandDescriptions = {
   exclude: "Excludes a user or role from being able to interact with Eris.",
   exclusions: "Returns a list of active bot exclusions.",
   ping: "Returns Eris' command latency.",
-  privacypolicy: "Returns Eris' Privacy Policy. The response to this command will be sent to the invoking user via Direct Messages to avoid any potentiality for spam."
+  privacypolicy: "Returns Eris' Privacy Policy. The response to this command will be sent to the invoking user via Direct Messages to avoid any potentiality for spam.",
+  disablecmd: "Forcibly disables a command to all users, regardless of defaulted permission inhibitors.",
+  enablecmd: "Enables a previously-disabled command, forcing restoration of default inhibitors.",
+  listdisabledcmds: "Lists all disabled commands."
 };
