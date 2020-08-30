@@ -18,7 +18,7 @@ export const strings = {
       giveawayEndedHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY ENDED** ${emotes.giveaway.giftmessage}`,
       giveawayHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY** ${emotes.giveaway.giftmessage}`,
       winners: (winners: string) => [
-        "**WINNER(S)**",
+        "This giveaway was won by:",
         winners,
         "\nIf there are any complications in the delivery of the prize or an illegitimacy was identified, this prize may be rerolled."
       ].join("\n"),
