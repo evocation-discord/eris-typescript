@@ -200,6 +200,7 @@ export const strings = {
         "Imagine an awakening of what could be.",
         "We must heal ourselves and bless others. This circuit never ends. It is time to take intuition to the next level.",
         "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
+        "That that is, is. That that is not, is not. That is it, is it not?"
       ],
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     }
