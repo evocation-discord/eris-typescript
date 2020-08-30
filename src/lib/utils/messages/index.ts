@@ -145,9 +145,9 @@ export const strings = {
       gameError: "Type needs to be `watching`, `playing` or `listening`.",
       gameSet: (type: "watching" | "playing" | "listening", game: string) => `I am now ${type}${type === "listening" ? " to" : ""} **${game}**.`,
       linkDoesNotMatchDiscordLink: "Failed to identify Discord message link.",
-      guildWasNotFound: (id: string) => `Guild with ID `${id}` was not found.`,
-      channelWasNotFound: (id: string) => `Channel with ID `${id}` was not found.`,
-      messageWasNotFound: (id: string) => `Message with ID `${id}` was not found.`,
+      guildWasNotFound: (id: string) => `Guild with ID \`${id}\` was not found.`,
+      channelWasNotFound: (id: string) => `Channel with ID \`${id}\` was not found.`,
+      messageWasNotFound: (id: string) => `Message with ID \`${id}\` was not found.`,
       messageEdited: "Message has been edited.",
       shutdown: "I can feel my Drearian Spirit fading...",
       aboutCommand: [
