@@ -79,9 +79,15 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.util.messageEdited));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", usage: "No usage", description: commandDescriptions.about })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", description: commandDescriptions.about })
   about(msg: Message): Promise<Message> {
     return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
+  }
+
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", description: commandDescriptions.ping })
+  async ping(msg: Message): Promise<void> {
+    const message = await msg.channel.send(strings.modules.util.pinging);
+    await message.edit(strings.modules.util.pingResponse(message.createdTimestamp - msg.createdTimestamp));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval })

@@ -156,7 +156,9 @@ export const strings = {
         "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>",
         "**DEVELOPER**: <@222073294419918848>",
         "**CHARACTER CONCEPTUALIST**: <@369497100834308106>"
-      ].join("\n")
+      ].join("\n"),
+      pinging: `${emotes.commandresponses.server} Pinging...`,
+      pingResponse: (ms: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds.`
     }
   },
   commandGroups: {  }
@@ -185,5 +187,6 @@ export const commandDescriptions = {
   list: "Returns a list of all active giveaways on the server.",
   endall: "Forcibly ends all active giveaways on the server.",
   exclude: "Excludes a user or role from being able to interact with Eris.",
-  exclusions: "Returns a list of active bot exclusions."
+  exclusions: "Returns a list of active bot exclusions.",
+  ping: "Returns Eris' command latency."
 };

@@ -57,6 +57,7 @@ const commandresponses = {
   "information": "<:information:747497420954534050>",
   "settings": "<:settings:747497421457588236>",
   "success": "<:success:747743173501124618>",
+  "server": "<:server:749562562227732572>"
 };
 
 const experiencecapsules = {
