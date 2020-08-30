@@ -4,17 +4,17 @@ import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
 import { Client } from "discord.js";
 import { inspect } from "util";
-import { strings } from "@lib/utils/messages";
+import { strings, commandDescriptions } from "@lib/utils/messages";
 
 export default class UtilCommandModule extends Module {
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [TextChannel, new Remainder(String)], admin: true, usage: "<channel:textchannel|snowflake> <content:...string>" })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [TextChannel, new Remainder(String)], admin: true, usage: "<channel:textchannel|snowflake> <content:...string>", description: commandDescriptions.send })
   send(msg: Message, channel: TextChannel, args: string): void {
     msg.delete();
     channel.send(args, { allowedMentions: { parse: [], users: [], roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>" })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>", description: commandDescriptions.setstatus })
   setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message> {
     const discordStatus = status as PresenceStatusData;
     switch (discordStatus) {
@@ -44,7 +44,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.util.statusSet(status)));
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>" })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>", description: commandDescriptions.setgame })
   setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message> {
     switch (type) {
     case "listening":
@@ -62,7 +62,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.util.gameSet(type, game)));
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>" })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit })
   async edit(msg: Message, messageLink: string, newContent: string): Promise<Message> {
     let isError = false;
     const executedRegex = messageLinkRegex.exec(messageLink);
@@ -79,12 +79,12 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.util.messageEdited));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", usage: "No usage" })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", usage: "No usage", description: commandDescriptions.about })
   about(msg: Message): Promise<Message> {
     return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>" })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>",, description: commandDescriptions.eval })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -99,7 +99,7 @@ export default class UtilCommandModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill", "die"], admin: true })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill", "die"], admin: true, description: commandDescriptions.shutdown })
   async shutdown(msg: Message): Promise<void> {
     await msg.channel.send(strings.general.success(strings.modules.util.shutdown));
     process.exit(0);

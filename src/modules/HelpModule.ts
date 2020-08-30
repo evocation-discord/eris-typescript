@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { command, Module, inhibitors, Optional, Command, ROLES, emotes } from "@lib/utils";
-import { strings } from "@lib/utils/messages";
+import { strings, commandDescriptions } from "@lib/utils/messages";
 
 const commandGroupsWithEmojis = {
   "Bot Owner": "<:settings:747497421457588236> **BOT OWNER**",
@@ -12,7 +12,7 @@ const commandGroupsWithEmojis = {
 
 export default class HelpModule extends Module {
 
-  @command({ group: "Informational", args: [new Optional(String)], usage: "[command:string]" })
+  @command({ group: "Informational", args: [new Optional(String)], usage: "[command:string]", description: commandDescriptions.help})
   async help(msg: Message, command?: string): Promise<void|Message> {
     const commands = Array.from(this.client.commandManager.cmds);
     if (!command) {
