@@ -3,6 +3,7 @@ import humanizeDuration from "humanize-duration";
 import { ErisClient } from "../client/ErisClient";
 import { TextChannel } from "discord.js";
 import { ROLES } from "../constants";
+import { strings } from "../messages";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   return async (msg, client) => {
@@ -12,19 +13,19 @@ export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   };
 }
 
-const botAdminsOnly: Inhibitor = async (
-  msg: Message,
-  client: ErisClient
-) => (client.botAdmins.includes(msg.author.id) ? undefined : "You do not satisfy the predefined criteria to be able to perform this command..");
+const botAdminsOnly: Inhibitor = async (msg: Message) => {
+  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  return strings.inhibitors.noPermission;
+};
 
 const guildsOnly: Inhibitor = async msg =>
-  msg.member ? undefined : "You are not in a guild.";
+  msg.member ? undefined : strings.inhibitors.notInGuild;
 
 const hasGuildPermission = (perm: PermissionResolvable): Inhibitor =>
   mergeInhibitors(guildsOnly, async msg =>
     msg.member.hasPermission(perm)
       ? undefined
-      : `You miss a discord permission:${perm}`
+      : strings.inhibitors.missingDiscordPermission(perm)
   );
 
 const userCooldown = (ms: number): Inhibitor => {
@@ -35,9 +36,7 @@ const userCooldown = (ms: number): Inhibitor => {
         map.set(msg.author.id, Date.now() + ms);
         return undefined;
       } else {
-        return `You must wait ${humanizeDuration(
-          Date.now() - (map.get(msg.author.id) || 0)
-        )} to run this command!`;
+        return strings.inhibitors.cooldown(humanizeDuration(Date.now() - (map.get(msg.author.id) || 0)));
       }
     } else {
       map.set(msg.author.id, Date.now() + ms);
@@ -50,20 +49,20 @@ const moderatorOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
   if (msg.member.roles.cache.some(role => [ROLES.MODERATION, ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  return "You do not satisfy the predefined criteria to be able to perform this command.";
+  return strings.inhibitors.noPermission;
 };
 
 const adminOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
   if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  return "You do not satisfy the predefined criteria to be able to perform this command.";
+  return strings.inhibitors.noPermission;
 };
 
 const canOnlyBeExecutedInBotCommands =
   mergeInhibitors(guildsOnly, async (msg, client) => {
     if (client.botAdmins.includes(msg.author.id)) return undefined;
-    if ((msg.channel as TextChannel).name !== "bot-commands") return "Request has been rejected. Please run this command in #bot-commands!";
+    if ((msg.channel as TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejected;
     return undefined;
   });
 

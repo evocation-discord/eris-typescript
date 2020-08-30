@@ -1,11 +1,10 @@
 import { Snowflake } from "discord.js";
 import { Giveaway } from "../database/models";
 import { scheduler, Embed, ROLES, getDuration } from "..";
-import { MessageEmbed } from "discord.js";
-import fetch from "node-fetch";
 import { client } from "../../..";
 import { TextChannel } from "discord.js";
 import { emotes } from "../constants";
+import { strings } from "../messages";
 
 export interface GiveawayArgs {
   startTime: number,
@@ -57,15 +56,15 @@ export default async (args: GiveawayArgs): Promise<void> => {
 const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
   const embed = Embed
     .setColor("#36393F")
-    .setFooter(`${giveaway.winners} Winner(s) | Ended on`)
-    .setDescription(`${client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **EXECUTION FAILURE**: A winner was not able to be determined.`);
+    .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners))
+    .setDescription(strings.giveaway.embed.noWinner);
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
   const guild = await channel.guild.fetch();
   const message = await channel.messages.fetch(giveaway.messageId);
 
-  await channel.send(`Nobody won **${giveaway.prize}**. Maybe next time...`);
+  await channel.send(strings.giveaway.noWinner(giveaway.prize));
 
-  await message.edit(`${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)} **GIVEAWAY ENDED** ${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)}`, { embed: embed });
+  await message.edit(strings.giveaway.embed.giveawayEndedHeader, { embed: embed });
 };
 
 export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
@@ -74,7 +73,7 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
   const guild = await channel.guild.fetch();
   const message = await channel.messages.fetch(giveaway.messageId);
-  const reaction = message.reactions.resolve(emotes.GIVEAWAYS.GIFT_REACTION);
+  const reaction = message.reactions.resolve(emotes.giveaway.giftreactionid);
   const __users = await reaction.users.fetch();
   const users = __users
     .filter(u => u.bot === false)
@@ -88,16 +87,13 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
 
   if (users.length === 0) return handleNoWinner(args, giveaway);
 
-  embed.setDescription([
-    "**WINNER(S)**",
-    users.map(user => `→ ${user} (\`${user.id}\`)`).join("\n"),
-    "\nIf there are any complications in the delivery of the prize or an illegitimacy was identified, this prize may be rerolled."
-  ].join("\n"));
-  embed.setFooter(`${giveaway.winners} Winner(s) | Ended on`);
+  embed
+    .setDescription(strings.giveaway.embed.winners(users.map(user => `→ ${user} (\`${user.id}\`)`).join("\n")))
+    .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners));
 
-  await message.edit(`${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)} **GIVEAWAY ENDED** ${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)}`, { embed: embed });
+  await message.edit(strings.giveaway.embed.giveawayEndedHeader, { embed: embed });
 
-  await channel.send(`Congratulations ${users.map(user => user).join(", ")}! You have won **${giveaway.prize}**. Please send a Direct Message to <@747105315840983212> with this message link to redeem your prize: <https://discord.com/channels/${guild.id}/${channel.id}/${message.id}>. If we do not hear from you within **24** hours of this message being sent, the prize will be rerolled.`);
+  await channel.send(strings.giveaway.winners(users.map(user => user).join(", "), giveaway.prize, `https://discord.com/channels/${guild.id}/${channel.id}/${message.id}`));
 };
 
 const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway) => {
@@ -106,15 +102,10 @@ const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway) => {
   // Create the embed.
   const embed = Embed
     .setAuthor(giveaway.prize)
-    .setDescription([
-      "React with <:giftreaction:737019540495663276> to enter!\n",
-      `**TIME REMAINING**: ${getDuration(args.startTime + giveaway.duration - Date.now())}\n`,
-
-      `You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being Level 3 or above, your entrance will be nullified.`
-    ].join("\n"))
-    .setFooter(`${giveaway.winners} Winner(s) | Ends at`)
+    .setDescription(strings.giveaway.embed.description(getDuration(args.startTime + giveaway.duration - Date.now())))
+    .setFooter(strings.giveaway.embed.footer(giveaway.winners))
     .setTimestamp(new Date(args.startTime + giveaway.duration));
 
   // Edit the message.
-  await message.edit(`${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)} **GIVEAWAY** ${message.client.emojis.resolve(emotes.GIVEAWAYS.GIFT_MESSAGE)}`, { embed: embed });
+  await message.edit(strings.giveaway.embed.giveawayHeader, { embed: embed });
 };

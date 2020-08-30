@@ -1,5 +1,6 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, emotes, CHANNELS, RESPONSES } from "@lib/utils";
+import { Module, monitor, command, inhibitors, Remainder, colors, emotes, CHANNELS } from "@lib/utils";
 import { Message, TextChannel, MessageEmbed, User } from "discord.js";
+import { strings } from "@lib/utils/messages";
 
 export default class DirectMessageModule extends Module {
 
@@ -12,11 +13,11 @@ export default class DirectMessageModule extends Module {
     const embed = new MessageEmbed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
-      .setFooter(`Message ID: ${message.id}`)
-      .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setFooter(strings.modules.directmessages.embedFooter(message.id))
+      .setAuthor(strings.modules.directmessages.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setDescription(message.content);
-    if (message.attachments.size > 0) embed.addField("Attachments", message.attachments.map(attachment => attachment.url).join("\n"));
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} DIRECT MESSAGE RECEIVED**`, embed);
+    if (message.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, message.attachments.map(attachment => attachment.url).join("\n"));
+    channel.send(strings.modules.directmessages.directMessageReceived, embed);
   }
 
   @monitor({ event: "messageUpdate" })
@@ -27,12 +28,12 @@ export default class DirectMessageModule extends Module {
     const embed = new MessageEmbed()
       .setTimestamp()
       .setColor(colors.DM_EDITED_MESSAGE)
-      .setFooter(`Message ID: ${newMsg.id}`)
-      .setAuthor(`${newMsg.author.tag} (${newMsg.author.id})`, newMsg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .addField("Original Message", oldMsg.content || "Old Message content couldn't be fetched")
-      .addField("Edited Message", newMsg.content);
-    if (newMsg.attachments.size > 0) embed.addField("Attachments", newMsg.attachments.map(attachment => attachment.url).join("\n"));
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_EDIT)} DIRECT MESSAGE EDITED**`, embed);
+      .setFooter(strings.modules.directmessages.embedFooter(newMsg.id))
+      .setAuthor(strings.modules.directmessages.embedAuthor(newMsg), newMsg.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .addField(strings.modules.directmessages.originalMessage, oldMsg.content || strings.modules.directmessages.orignalContentError)
+      .addField(strings.modules.directmessages.editedMessage, newMsg.content);
+    if (newMsg.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, newMsg.attachments.map(attachment => attachment.url).join("\n"));
+    channel.send(strings.modules.directmessages.directMessageEdited, embed);
   }
 
   @monitor({ event: "messageDelete" })
@@ -43,11 +44,11 @@ export default class DirectMessageModule extends Module {
     const embed = new MessageEmbed()
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
-      .setFooter(`Message ID: ${msg.id}`)
-      .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setFooter(strings.modules.directmessages.embedFooter(msg.id))
+      .setAuthor(strings.modules.directmessages.embedAuthor(msg), msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setDescription(msg.content);
-    if (msg.attachments.size > 0) embed.addField("Attachments", msg.attachments.map(attachment => attachment.proxyURL).join("\n"));
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_DELETION)} DIRECT MESSAGE DELETED**`, embed);
+    if (msg.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, msg.attachments.map(attachment => attachment.proxyURL).join("\n"));
+    channel.send(strings.modules.directmessages.directMessageDeleted, embed);
   }
 
   @command({ aliases: ["dm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>" })
@@ -59,10 +60,10 @@ export default class DirectMessageModule extends Module {
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
       .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setFooter(`Message ID: ${msg.id}`)
+      .setFooter(strings.modules.directmessages.embedFooter(msg.id))
       .setDescription(msg.content);
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_CREATION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
-    message.channel.send(RESPONSES.SUCCESS(msg, `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${msg.content}**.`));
+    channel.send(strings.modules.directmessages.commands.directMessageSentExecution(message, user), embed);
+    message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageSent(user, msg.content)));
   }
   @command({ aliases: ["deletedm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>" })
   async deletedirectmessage(message: Message, user: User, messageId: string): Promise<void> {
@@ -78,9 +79,9 @@ export default class DirectMessageModule extends Module {
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
       .setAuthor(`${dmMessage.author.tag} (${dmMessage.author.id})`, dmMessage.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setFooter(`Message ID: ${dmMessage.id}`)
+      .setFooter(strings.modules.directmessages.embedFooter(dmMessage.id))
       .setDescription(dmMessage.content);
-    channel.send(`**${this.client.emojis.resolve(emotes.LOGGING.MESSAGE_DELETION)} \`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to delete a Direct Message that was previously sent to **\`${user.tag}\`** (\`${user.id}\`).`, embed);
-    message.channel.send(RESPONSES.SUCCESS(message, "Direct Message has been deleted."));
+    channel.send(strings.modules.directmessages.commands.directMessageDeleteExecution(message, user), embed);
+    message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageDeleted(user, dmMessage.content)));
   }
 }

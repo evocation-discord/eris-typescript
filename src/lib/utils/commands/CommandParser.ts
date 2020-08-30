@@ -1,11 +1,12 @@
 import { Message } from "discord.js";
 import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
-import { getArgumentParser, Greedy } from "../arguments/Arguments";
+import { getArgumentParser } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
 import { escapeRegex, emotes } from "..";
 import { monitor } from "../monitor/decorator";
 import { Blacklist } from "../database/models";
+import { strings } from "../messages";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -38,7 +39,7 @@ export class CommandParserModule extends Module {
       const reason = await inhibitor(msg, this.client);
       if (reason) {
         // It inhibited
-        msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: ${reason}`);
+        msg.channel.send(strings.general.error(reason));
         return;
       }
     }
@@ -49,7 +50,7 @@ export class CommandParserModule extends Module {
       try {
         // Process the argument.
         const p = await parser(processor, msg);
-        if (p.length === 1 && !(cmdArg instanceof Greedy)) args.push(p[0]);
+        if (p.length === 1) args.push(p[0]);
         else if (p.length === 0) args.push(undefined);
         else args.push(p);
       } catch (err) {

@@ -8,7 +8,7 @@ import "@lib/utils/types/discord";
 import EventModule from "@modules/EventModule";
 import { ErisClient } from "@lib/utils";
 import UtilCommandModule from "@modules/UtilCommands";
-import DonationCommandsModule from "@modules/DonationCommands";
+import DonationModule from "@modules/DonationModule";
 import DirectMessageModule from "@modules/DirectMessageModule";
 import ListenerMonitorInit from "@modules/ListenerMonitorInit";
 import PermissionsModule from "@modules/PermissionsModule";
@@ -32,7 +32,7 @@ client
   .registerModule(ListenerMonitorInit)
   .registerModule(EventModule)
   .registerModule(UtilCommandModule)
-  .registerModule(DonationCommandsModule)
+  .registerModule(DonationModule)
   .registerModule(DirectMessageModule)
   .registerModule(PermissionsModule)
   .registerModule(LoggingModule)

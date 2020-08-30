@@ -1,3 +1,5 @@
+export * from "./constants";
+
 import { ErisClient } from "./client/ErisClient";
 import { Command } from "./commands/Command";
 import { CommandManager } from "./commands/CommandManager";
@@ -24,7 +26,6 @@ export * from "./monitor/decorator";
 
 export * from "./modules/Module";
 
-export * from "./constants";
 export * from "./scheduler/Scheduler";
 
 export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

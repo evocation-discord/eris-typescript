@@ -1,4 +1,5 @@
 import * as discord from "discord.js";
+import { strings } from "../messages";
 
 class ArgConstructor {
   parts: string[];
@@ -56,33 +57,11 @@ export default class ArgTextProcessor {
     }
   }
 
-  // Handle greedy argument parsing.
-  async greedy(parser: (arg: string, msg: discord.Message) => Promise<unknown>, msg: discord.Message): Promise<unknown[]> {
-    const a: unknown[] = [];
-    for (; ;) {
-      const argString = this.getArgumentString();
-      if (!argString) return a;
-      try {
-        // Get the item.
-        const r = await parser(argString.result, msg);
-
-        // Add it to the array.
-        a.push(r);
-      } catch (err) {
-        // We should re-add the parts used to construct the argument into the beginning of the array.
-        this.unusedArgs = argString.parts.concat(this.unusedArgs);
-
-        // Return the parsed array.
-        return a;
-      }
-    }
-  }
-
   // Get one argument.
   async one(parser: (arg: string, msg: discord.Message) => Promise<unknown>, msg: discord.Message): Promise<unknown> {
     // Get the argument if we can.
     const x = this.getArgumentString();
-    if (!x) throw new Error("No argument was supplied.");
+    if (!x) throw new Error(strings.general.error(strings.arguments.noArgumentSupplied));
 
     try {
       // Attempt to parse this argument.

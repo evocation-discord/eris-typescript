@@ -1,6 +1,7 @@
 import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors } from "@lib/utils";
 import { Message, Role, User } from "discord.js";
 import { Blacklist } from "@database/models";
+import { strings } from "@lib/utils/messages";
 
 export default class ExclusionsModule extends Module {
   constructor(client: ErisClient) {
@@ -10,27 +11,27 @@ export default class ExclusionsModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(new Remainder(String))], group: "Server Administrator", staff: true })
   async exclude(msg: Message, type?: "user" | "role", id?: string): Promise<void | Message> {
     if (msg.channel.type === "dm") return;
-    if (!type || !id) return msg.channel.send("Incorrect command usage: `e!exclude <user|role> <ID/mention>`");
+    if (!type || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
     if (type === "role") {
       if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
       const role = await roleParser(id, msg);
-      if (typeof role === "string") return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: ${role}`);
-      if (msg.member.roles.cache.has(role.id)) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: You cannot add that role as an exclusion as it would constitute your exclusion, too.`);
+      if (typeof role === "string") return msg.channel.send(strings.general.error(role));
+      if (msg.member.roles.cache.has(role.id)) return msg.channel.send(strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
       await Blacklist.create({
         type: "role",
         id: role.id
       }).save();
-      msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Executed exclusions for the specified role.`);
+      msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("role")));
     } else if (type === "user") {
       const user = await userParser(id, msg);
-      if (typeof user === "string") return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: ${user}`);
-      if (user.id === msg.author.id) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: You cannot execute that command on yourself.`);
+      if (typeof user === "string") return msg.channel.send(strings.general.error(user));
+      if (user.id === msg.author.id) return msg.channel.send(strings.general.error(strings.modules.exclusions.cantExcludeYourself));
       await Blacklist.create({
         type: "user",
         id: user.id
       }).save();
-      msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Executed exclusions for the specified user.`);
-    } else return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclude [user|role] [ID/mention]\``);
+      msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("user")));
+    } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
   }
   @command({ inhibitors: [inhibitors.adminOnly], group: "Server Administrator", args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true })
   async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message> {
@@ -38,29 +39,29 @@ export default class ExclusionsModule extends Module {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
       const userBlacklists = await Blacklist.find({ where: { type: "user" } });
       const embed = Embed
-        .addField("User Exclusion", userBlacklists.map(u => `→ <@${u.id}> (\`${u.id}\`)`).join("\n") || "→ No users excluded.")
-        .addField("Role Exclusions", roleBlacklists.map(r => `→ **<@&${r.id}>** (\`${r.id}\`)`).join("\n") || "→ No roles excluded.");
+        .addField(strings.modules.exclusions.exclusionEmbedName("User"), userBlacklists.map(u => strings.modules.exclusions.exclusionMapping(u)).join("\n") || strings.modules.exclusions.noUsersExcluded)
+        .addField(strings.modules.exclusions.exclusionEmbedName("Role"), roleBlacklists.map(r => strings.modules.exclusions.exclusionMapping(r)).join("\n") || strings.modules.exclusions.noRolesExcluded);
       return msg.channel.send(embed);
     }
-    if (!["remove", "clear"].includes(what)) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
+    if (!["remove", "clear"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
 
     if (what === "remove") {
-      if (!type || !["user", "role"].includes(type) || !id) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: Syntactic fallacy detected. **COMMAND SYNTAX**: \`e!exclusions [remove|clear] [user|role] [ID/mention]\``);
+      if (!type || !["user", "role"].includes(type) || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
       if (type === "role") {
         const blacklist = await Blacklist.findOne({ where: { id: id, type: "role" } });
-        if (!blacklist) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: This role is not excluded.`);
+        if (!blacklist) return msg.channel.send(strings.general.error(strings.modules.exclusions.roleNotExcluded));
         blacklist.remove();
-        msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Updated exclusions for the specified role.`);
+        msg.channel.send(strings.general.success(strings.modules.exclusions.updatedExclusionsForRole));
       } else if (type === "user") {
         const blacklist = await Blacklist.findOne({ where: { id: id, type: "user" } });
-        if (!blacklist) return msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.DENIAL)} **COMMAND INHIBITED**: This role is not excluded.`);
+        if (!blacklist) return msg.channel.send(strings.general.error(strings.modules.exclusions.userNotExcluded));
         blacklist.remove();
-        msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Updated exclusions for the specified user.`);
+        msg.channel.send(strings.general.success(strings.modules.exclusions.updatedExclusionsForUser));
       }
     } else if (what === "clear") {
       const blacklists = await Blacklist.find();
       blacklists.forEach(b => b.remove());
-      msg.channel.send(`${this.client.emojis.resolve(emotes.UNCATEGORISED.SUCCESS)} **SUCCESS**: Removed all exclusions.`);
+      msg.channel.send(strings.general.success(strings.modules.exclusions.removedAllExclusions));
     }
   }
 }
@@ -83,7 +84,7 @@ const roleParser = async (arg: string, msg: Message) => {
     querySearch = results;
   }
 
-  if (querySearch.length === 0) return "Role was not able to be resolved.";
+  if (querySearch.length === 0) return strings.modules.exclusions.roleNotResolved;
   return querySearch[0];
 };
 
@@ -106,6 +107,6 @@ const userParser = async (arg: string, msg: Message) => {
     querySearch = results;
   }
 
-  if (querySearch.length === 0) return "User was not able to be resolved.";
+  if (querySearch.length === 0) return strings.modules.exclusions.userNotResolved;
   return querySearch[0];
 };

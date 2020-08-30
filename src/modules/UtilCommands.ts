@@ -1,9 +1,10 @@
 import { Message } from "discord.js";
-import { command, Module, inhibitors, Remainder, RESPONSES } from "@lib/utils";
+import { command, Module, inhibitors, Remainder, messageLinkRegex } from "@lib/utils";
 import { PresenceStatusData } from "discord.js";
 import { TextChannel } from "discord.js";
 import { Client } from "discord.js";
 import { inspect } from "util";
+import { strings } from "@lib/utils/messages";
 
 export default class UtilCommandModule extends Module {
 
@@ -37,10 +38,10 @@ export default class UtilCommandModule extends Module {
       break;
 
     default:
-      return msg.channel.send("**ERROR**: Status needs to be `online`, `dnd`, `idle` or `invisible`.");
+      return msg.channel.send(strings.general.error(strings.modules.util.statusError));
 
     }
-    return msg.channel.send(RESPONSES.SUCCESS(msg, `My status is now **${status}**.`));
+    return msg.channel.send(strings.general.success(strings.modules.util.statusSet(status)));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>" })
@@ -56,37 +57,31 @@ export default class UtilCommandModule extends Module {
       this.client.user.setActivity(game, { type: "PLAYING" });
       break;
     default:
-      return msg.channel.send("**ERROR**: Type needs to be `watching`, `playing` or `listening`.");
+      return msg.channel.send(strings.general.error(strings.modules.util.gameError));
     }
-    return msg.channel.send(RESPONSES.SUCCESS(msg, `I'm now ${type}${type === "listening" ? " to" : ""} **${game}**.`));
+    return msg.channel.send(strings.general.success(strings.modules.util.gameSet(type, game)));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>" })
   async edit(msg: Message, messageLink: string, newContent: string): Promise<Message> {
     let isError = false;
-    const messageLinkRegex = /^(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(@me|\d+)\/(\d+)\/(\d+)$/g;
     const executedRegex = messageLinkRegex.exec(messageLink);
-    if (!executedRegex) return msg.channel.send("**ERROR**: Link doesnt match a discord message link.");
+    if (!executedRegex) return msg.channel.send(strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
     const [, guildId, channelId, messageId] = executedRegex;
     const guild = this.client.guilds.resolve(guildId);
-    if (!guild) return msg.channel.send(`**ERROR**: Guild with ID ${guildId} was not found.`);
+    if (!guild) return msg.channel.send(strings.general.error(strings.modules.util.guildWasNotFound(guildId)));
     const channel = guild.channels.resolve(channelId) as TextChannel;
-    if (!channel) return msg.channel.send(`**ERROR**: Channel with ID ${channelId} was not found.`);
+    if (!channel) return msg.channel.send(strings.general.error(strings.modules.util.channelWasNotFound(channelId)));
     const message = await channel.messages.fetch(messageId);
-    if (!message) return msg.channel.send(`**ERROR**: Message with ID ${messageId} was not found.`);
+    if (!message) return msg.channel.send(strings.general.error(strings.modules.util.messageWasNotFound(messageId)));
     await message.edit(newContent).catch(_ => isError = true);
-    if (isError) return msg.channel.send("**ERROR**: Something went wrong.");
-    return msg.channel.send(RESPONSES.SUCCESS(msg, "Message has been edited."));
+    if (isError) return msg.channel.send(strings.general.error(strings.general.somethingWentWrong));
+    return msg.channel.send(strings.general.success(strings.modules.util.messageEdited));
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", usage: "No usage" })
   about(msg: Message): Promise<Message> {
-    return msg.channel.send(
-      "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n\n" +
-      "__**CONTRIBUTORS**__\n\n" +
-    "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>\n" +
-    "**DEVELOPER**: <@222073294419918848>\n" +
-    "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", { allowedMentions: { users: [] } });
+    return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>" })
@@ -106,7 +101,7 @@ export default class UtilCommandModule extends Module {
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", aliases: ["kill", "die"], admin: true })
   async shutdown(msg: Message): Promise<void> {
-    await msg.channel.send(RESPONSES.SUCCESS(msg, "I can feel my Drearian Spirit fading..."));
+    await msg.channel.send(strings.general.success(strings.modules.util.shutdown));
     process.exit(0);
   }
 }

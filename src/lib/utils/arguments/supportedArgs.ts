@@ -3,6 +3,7 @@ import { TextChannel } from "discord.js";
 import { GuildMember } from "discord.js";
 import Duration from "./Duration";
 import { regExpEsc } from "..";
+import { strings } from "../messages";
 
 // All supported arguments.
 export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
@@ -16,9 +17,8 @@ const CHANNEL_REGEXP = /^(?:<#)?(\d{17,19})>?$/;
 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
-  const n = Number(arg);
-  if (typeof n === "number") return n;
-  throw new Error("The argument must be a valid number.");
+  if (isInt(arg)) return parseInt(arg);
+  throw new Error(strings.general.error(strings.arguments.invalidNumber));
 };
 allParsers.set(Number, numberParser);
 
@@ -48,10 +48,8 @@ export const guildMemberParser = async (arg: string, msg: discord.Message): Prom
     querySearch = results;
   }
 
-  switch (querySearch.length) {
-  case 0: throw new Error("Could not find the user.");
-  default: return querySearch[0];
-  }
+  if (querySearch.length === 0) throw new Error(strings.general.error(strings.arguments.couldNotFindGuildMember));
+  return querySearch[0];
 };
 allParsers.set(discord.GuildMember, guildMemberParser);
 
@@ -75,10 +73,8 @@ const userParser = async (arg: string, msg: discord.Message): Promise<discord.Us
     querySearch = results;
   }
 
-  switch (querySearch.length) {
-  case 0: throw new Error("Could not find the user.");
-  default: return querySearch[0];
-  }
+  if (querySearch.length === 0) throw new Error(strings.general.error(strings.arguments.couldNotFindUser));
+  return querySearch[0];
 };
 allParsers.set(discord.User, userParser);
 
@@ -89,7 +85,7 @@ const guildParser = async (arg: string, msg: discord.Message): Promise<discord.G
     if (!x) throw new Error();
     return x;
   } catch (_) {
-    throw new Error("Could not find the guild.");
+    throw new Error(strings.general.error(strings.arguments.couldNotFindGuild));
   }
 };
 allParsers.set(discord.Guild, guildParser);
@@ -114,7 +110,7 @@ const textChannelParser = async (arg: string, msg: discord.Message): Promise<dis
   }
 
   switch (querySearch.length) {
-  case 0: throw new Error("Could not find the channel.");
+  case 0: throw new Error(strings.general.error(strings.arguments.couldNotFindTextChannel));
   default: return querySearch[0];
   }
 };
@@ -158,8 +154,16 @@ const resolveChannel = (query: string | discord.Channel | discord.Message, guild
   return null;
 };
 
-export const resolveRole = async (query: string | discord.Role, msg: discord.Message) => {
+export const resolveRole = async (query: string | discord.Role, msg: discord.Message): Promise<discord.Role> => {
   if (query instanceof discord.Role) return query;
   if (typeof query === "string" && ROLE_REGEXP.test(query)) return msg.guild.roles.resolve(ROLE_REGEXP.exec(query)[1]);
   return null;
+};
+
+const isInt = value => {
+  if (isNaN(value)) {
+    return false;
+  }
+  const x = parseFloat(value);
+  return (x | 0) === x;
 };

@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { Inhibitor } from "../inhibitors/Inhibitor";
 import { Module } from "../modules/Module";
-import { Remainder, Greedy, Optional } from "../arguments/Arguments";
+import { Remainder, Optional } from "../arguments/Arguments";
 import { supportedArgs } from "../arguments/supportedArgs";
 
 export interface ICommandDecoratorOptions {
@@ -13,7 +13,7 @@ export interface ICommandDecoratorOptions {
   onError: (msg: Message, error: Error) => void,
   staff?: boolean,
   admin?: boolean,
-  args: (supportedArgs | Greedy | Remainder | Optional)[]
+  args: (supportedArgs | Remainder | Optional)[]
 }
 
 interface ICommandDecoratorMeta {

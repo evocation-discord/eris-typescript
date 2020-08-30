@@ -1,6 +1,7 @@
 import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, timeFormatter } from "@lib/utils";
 import { Message, TextChannel, User } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
+import { strings } from "@lib/utils/messages";
 
 export default class LoggingModule extends Module {
   @monitor({ event: "message" })
@@ -21,8 +22,8 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
 
-    if (cmd.staff || cmd.admin) return channel.send(`\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${msg.client.emojis.resolve(emotes.LOGGING.ADMINISTRATIVE_AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
-    return channel.send(`\`[${timeFormatter()}]\` ${msg.client.emojis.resolve(emotes.LOGGING.AUDIT)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`);
+    if (cmd.staff || cmd.admin) return channel.send(strings.modules.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
+    return channel.send(strings.modules.logging.command(msg, cmdTrigger, stringArgs));
   }
 
   @monitor({ event: "message" })
@@ -36,11 +37,7 @@ export default class LoggingModule extends Module {
       for await (const _link of links) {
         const link = await linkResolver(_link);
         if (link === _link) continue;
-        channel.send(
-          `\`[${timeFormatter()}]\` **\`[LINK REDIRECT RESOLVER]\`** ${msg.client.emojis.resolve(emotes.LOGGING.LINK_RESOLVER)} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) sent a message (\`${msg.id}\`) containing a redirection-based link in ${msg.channel} (\`${msg.channel.id}\`).\n\n` +
-          `**UNRESOLVED LINK**: <${_link}>\n` +
-          `**RESOLVED LINK**: <${link}>\n\n` +
-          "No automatic action has been taken against their account or the message itself. Please review the above to ensure that the link is not violative of Evocation's regulations..");
+        channel.send(strings.modules.logging.linkResolver(msg, _link, link));
       }
     }
   }
@@ -49,9 +46,8 @@ export default class LoggingModule extends Module {
   async onUsernameUpdate(oldUser: User, newUser: User): Promise<Message> {
     if (newUser.bot) return;
     if (oldUser.username !== newUser.username) {
-      const msg = `\`[${timeFormatter()}]\` ${newUser.client.emojis.resolve(emotes.LOGGING.NAME_UPDATE)} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`;
       const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
-      channel.send(msg, { allowedMentions: { users: [] } });
+      channel.send(strings.modules.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
     }
   }
 }
