@@ -84,7 +84,7 @@ export default class UtilCommandModule extends Module {
     return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>",, description: commandDescriptions.eval })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
