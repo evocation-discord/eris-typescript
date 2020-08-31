@@ -161,7 +161,7 @@ export default class UtilCommandModule extends Module {
     const list: string[] = [];
     for await (const category of categories) {
       list.push(`${list.length > 0 ? "\n" : ""}${emotes.uncategorised.expandedcategory} **${category.name.toUpperCase()}**`);
-      const channelsInCategory = channels.filter(c => c.parentID === category.id);
+      const channelsInCategory = channels.filter(c => c.parentID === category.id).sort((a, b) => a.rawPosition - b.rawPosition);
       for await (const channel of channelsInCategory) {
         if (channel.type === "voice") list.push(`${channel.permissionOverwrites.find(overwrite => overwrite.deny.has("VIEW_CHANNEL") || overwrite.deny.has("CONNECT")) ? emotes.uncategorised.privatevoicechannel : emotes.uncategorised.voicechannel} ${channel.name} (\`${channel.id}\`)`);
         if (channel.type === "news") list.push(`${channel.permissionOverwrites.find(overwrite => overwrite.deny.has("VIEW_CHANNEL")) ? emotes.uncategorised.privateannouncementchannel : emotes.uncategorised.announcementchannel} ${channel.name} (\`${channel.id}\`)`);
