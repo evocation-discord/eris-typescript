@@ -13,8 +13,8 @@ export const strings = {
   },
   giveaway: {
     embed: {
-      footerEnded: (winnerAmount: number) => `${winnerAmount} Winner(s) | Ended on`,
-      footer: (winnerAmount: number) => `${winnerAmount} Winner(s) | Ends on`,
+      footerEnded: (winnerAmount: number) => `${winnerAmount} Winner(s) | Ended`,
+      footer: (winnerAmount: number) => `${winnerAmount} Winner(s) | Ends`,
       noWinner: `${emotes.commandresponses.denial} **EXECUTION FAILURE**: A winner was not able to be determined.`,
       giveawayEndedHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY ENDED** ${emotes.giveaway.giftmessage}`,
       giveawayHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY** ${emotes.giveaway.giftmessage}`,
@@ -26,28 +26,28 @@ export const strings = {
       description: (duration: string) => [
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
-        `You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being Level 3 or above, your entrance will be nullified.`
+        `You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **Level 3** or above, your entrance will be nullified.`
       ].join("\n")
     },
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
     winners: (winners: string, name: string, messageLink: string) => `Congratulations ${winners}! You have won **${name}**. Please send a Direct Message to <@747105315840983212> with this message link to redeem your prize: <${messageLink}>. If we do not hear from you within **24** hours of this message being sent, the prize will be rerolled.`
   },
   arguments: {
-    noArgumentSupplied: "No argument was supplied.",
+    noArgumentSupplied: "No argument(s) was/were supplied.",
     remainderBlank: "Remainder of the command is blank.",
     invalidDuration: "Invalid duration.",
-    invalidNumber: "The argument must be a valid number.",
-    couldNotFindGuildMember: "Could not find the GuildMember.",
-    couldNotFindUser: "Could not find the User.",
-    couldNotFindGuild: "Could not find the Guild.",
-    couldNotFindTextChannel: "Could not find the TextChannel."
+    invalidNumber: "Could not identify number within syntactic parameters.",
+    couldNotFindGuildMember: "Could not find that guild member.",
+    couldNotFindUser: "Could not find that user.",
+    couldNotFindGuild: "Could not find that guild.",
+    couldNotFindTextChannel: "Could not find that text channel."
   },
   inhibitors: {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
     notInGuild: "You are not in a guild.",
-    missingDiscordPermission: (permission: PermissionResolvable) => `You miss a discord permission: ${permission}`,
+    missingDiscordPermission: (permission: PermissionResolvable) => `You do not satisfy a Discord permission node: **${permission}**.`,
     cooldown: (cooldown: string) => `You must wait **${cooldown}** to run this command!`,
-    requestRejected: "Request has been rejected. Please run this command in #bot-commands!"
+    requestRejected: "Request has been rejected. Please run this command in <#528598988673253376>!"
   },
   modules: {
     directmessages: {
@@ -110,8 +110,8 @@ export const strings = {
       ].join("\n"),
       noRecentGiveawaysFound: "I couldn't find any recent giveaways in this channel.",
       giveawayAlreadyEnded: "Giveaway has already ended.",
-      mostRecentGiveawayAlreadyEnded: "The most recent giveaway in this channel has already ended",
-      noCurrentActiveGiveaway: "There are currently no active giveaways on the server",
+      mostRecentGiveawayAlreadyEnded: "The most recent giveaway in this channel has already ended.",
+      noCurrentActiveGiveaway: "There are currently no active giveaways on the server.",
       giveawayListMap: (index: number, giveaway: Giveaway) => `\`${index + 1}.\` **\`[CREATION]\`** \`[${timeFormatter(giveaway.startTime)}]\` **${giveaway.prize}** in <#${giveaway.channelId}> (\`${giveaway.channelId}\`). Started by **<@${giveaway.startedBy}>** (\`${giveaway.startedBy}\`). Ends at \`${timeFormatter(giveaway.endTime)}\`.`,
       giveawayEndedMap: (index: number, giveaway: Giveaway) => `\`${index + 1}.\` **\`[CREATION]\`** \`[${timeFormatter(giveaway.startTime)}]\` **${giveaway.prize}** in <#${giveaway.channelId}> (\`${giveaway.channelId}\`). Started by **<@${giveaway.startedBy}>** (\`${giveaway.startedBy}\`). Ended at \`${timeFormatter()}\`.`,
       activeGiveaways: `${emotes.giveaway.giftmessage} **ACTIVE GIVEAWAYS**`,
@@ -124,7 +124,7 @@ export const strings = {
       noCommandFound: "No command exists with that name or alias. Please reinspect its spelling, as that may be a potential factor as to why it cannot be resolved.",
       noArgumentsNeeded: "No arguments need to be either mandatorily or optionally provided for this command.",
       noAliases: "No aliases exist for this command.",
-      noDescription: "No description found."
+      noDescription: "A description has not been specified for this command."
     },
     logging: {
       administrativeCommand: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${emotes.logging.administrativeaudit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
@@ -178,11 +178,11 @@ export const strings = {
           "Leaving the server will not result in any of your data being deleted. Instead, it will be saved so that it can be accessed again should you decide to re-join. You may request for the perpetual erasure of data that is directly associated with your account. To facilitate this, please send a Direct Message to <@747105315840983212>. You may only request one data deletion request per thirty days. No exceptional anomalies will be allowed within the scope of possibility."
         ].join("\n\n")
       },
-      cantdisablecommands: "This command cannot be disabled.",
-      disabledcommand: "This command is now disabled.",
-      notdisabledcommand: "This command is not disabled.",
-      alreadydisabled: "This command is already disabled.",
-      undisabledcommand: "This command is enabled again.",
+      cantdisablecommands: "Command cannot be disabled.",
+      disabledcommand: "Command is now disabled.",
+      notdisabledcommand: "Command is not disabled.",
+      alreadydisabled: "Command is alread disabled.",
+      undisabledcommand: "Command enabled.",
       disabledCommandsEmbedHeader: "Disabled Commands",
       disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
       noDisabledCommands: "There are no disabled commands.",
