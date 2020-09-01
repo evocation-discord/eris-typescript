@@ -1,5 +1,5 @@
 import { Message, TextChannel, PresenceStatusData, Client } from "discord.js";
-import { command, Module, inhibitors, Remainder, messageLinkRegex, Embed, emotes } from "@lib/utils";
+import { command, Module, inhibitors, Remainder, messageLinkRegex, Embed, emotes, monitor, ROLES } from "@lib/utils";
 import { inspect } from "util";
 import { strings, commandDescriptions } from "@lib/utils/messages";
 import { DisabledCommand } from "@lib/utils/database/models";
@@ -96,6 +96,14 @@ export default class UtilCommandModule extends Module {
       await msg.delete();
     } catch (e) {
       msg.channel.send(strings.general.error(strings.modules.util.privacypolicy.error));
+    }
+  }
+
+  @monitor({ event: "message" })
+  onErisMessage(message: Message): void {
+    if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
+    if (["thanks eris", "thanks, eris", "thanks eris!", "thanks, eris!"].includes(message.content.toLowerCase())) {
+      message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
     }
   }
 

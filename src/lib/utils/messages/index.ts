@@ -212,7 +212,15 @@ export const strings = {
         "That that is, is. That that is not, is not. That is it, is it not?"
       ],
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
-    }
+    },
+    erisThanksMessage: [
+      "Anytime! Well, as long as it’s convenient for me, that is.",
+      "Pas de probleme.",
+      "De rien.",
+      "I'm happy to be of service.",
+      "Happy to be of help!",
+      "Don't mention it."
+    ]
   },
   commandGroups: {}
 };
