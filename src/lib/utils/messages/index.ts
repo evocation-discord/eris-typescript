@@ -237,6 +237,6 @@ export const commandDescriptions = {
   disablecmd: "Forcibly disables a command to all users, regardless of defaulted permission inhibitors.",
   enablecmd: "Enables a previously-disabled command, forcing restoration of default inhibitors.",
   listdisabledcmds: "Lists all disabled commands.",
-  muse: "Eris returns what's on her mind - take that as you will.",
-  channels: "Returns a list of all existing text channels within the server. For maintenance of confidentiality, this command can only be run in a super secret channel™️."
+  muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
+  channels: "Returns a list of all existing channels within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands."
 };
