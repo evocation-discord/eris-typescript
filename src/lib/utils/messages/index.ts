@@ -185,7 +185,7 @@ export const strings = {
       cantdisablecommands: "Command cannot be disabled.",
       disabledcommand: "Command is now disabled.",
       notdisabledcommand: "Command is not disabled.",
-      alreadydisabled: "Command is alread disabled.",
+      alreadydisabled: "Command is already disabled.",
       undisabledcommand: "Command enabled.",
       disabledCommandsEmbedHeader: "Disabled Commands",
       disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
