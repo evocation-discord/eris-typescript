@@ -99,6 +99,11 @@ export default class UtilCommandModule extends Module {
     }
   }
 
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: "Informational", description: commandDescriptions.datamine })
+  async datamine(msg: Message): Promise<void> {
+    msg.channel.send(strings.modules.util.datamine);
+  }
+
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: "Bot Owner", args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;

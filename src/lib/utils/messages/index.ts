@@ -190,6 +190,11 @@ export const strings = {
       disabledCommandsEmbedHeader: "Disabled Commands",
       disabledCommandMap: (cmd: DisabledCommand) => `→ **${cmd.commandName}** - Disabled by <@${cmd.disabledBy}>`,
       noDisabledCommands: "There are no disabled commands.",
+      datamine: [
+        "Datamining is achieved through comparing the JavaScript files served to the Discord Canary client which have different hashes per build change.",
+        "Please remember that a lot of build changes feature variable renaming, new tabs, newlines, etc., which usually do not change anything for the end user. With that in mind, do not take channel entries to be of definitive nature for upcoming features/releases.",
+        "You can access all entries through the GitHub repository: https://github.com/DJScias/Discord-Datamining." 
+      ].join("\n\n")
     },
     purchaseableroles: {
       museCommand: [
@@ -242,5 +247,6 @@ export const commandDescriptions = {
   enablecmd: "Enables a previously-disabled command, forcing restoration of default inhibitors.",
   listdisabledcmds: "Lists all disabled commands.",
   muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
-  channels: "Returns a list of all existing channels within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands."
+  channels: "Returns a list of all existing channels within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands.",
+  datamine: "Returns information about the server's `<#749717793070514226<` channel, its purpose and functionality."
 };
