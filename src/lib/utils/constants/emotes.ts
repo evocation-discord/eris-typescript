@@ -6,6 +6,7 @@ const giveaway = {
 };
 
 const logging = {
+  "anonymisedaudit": "<:anonymisedaudit:750260814879129601>",
   "administrativeaudit": "<:administrativeaudit:737291912389853457>",
   "audit": "<:audit:737289964420726806>",
   "linkresolver": "<:linkresolver:747001085490626650>",

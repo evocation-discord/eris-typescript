@@ -23,6 +23,7 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
 
+    if (msg.channel.id === "528598741565833246") return channel.send(strings.modules.logging.anonymisedAudit(cmdTrigger, stringArgs));
     if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return channel.send(strings.modules.logging.disabledCommand(msg, cmdTrigger, stringArgs));
     if (cmd.staff || cmd.admin) return channel.send(strings.modules.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
     return channel.send(strings.modules.logging.command(msg, cmdTrigger, stringArgs));
