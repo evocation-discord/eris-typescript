@@ -248,5 +248,5 @@ export const commandDescriptions = {
   listdisabledcmds: "Lists all disabled commands.",
   muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
   channels: "Returns a list of all existing channels within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands.",
-  datamine: "Returns information about the server's `<#749717793070514226<` channel, its purpose and functionality."
+  datamine: "Returns information about the server's \`#datamining-feed\` channel, its purpose and functionality."
 };
