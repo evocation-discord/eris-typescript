@@ -80,6 +80,9 @@ export const strings = {
       emojiAdded: (emoji: GuildEmoji) => `${emotes.uncategorised.enter} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
       emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.uncategorised.enter} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
       emojiDeleted: (emoji: GuildEmoji) => `${emotes.uncategorised.leave} **EMOJI REMOVED**: \`:${emoji.name}:\``,
+      animatedEmojiAdded: (emoji: GuildEmoji) => `${emotes.uncategorised.enter} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.uncategorised.enter} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      animatedEmojiDeleted: (emoji: GuildEmoji) => `${emotes.uncategorised.leave} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
     },
     events: {
       announcementMessages: (message: Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
