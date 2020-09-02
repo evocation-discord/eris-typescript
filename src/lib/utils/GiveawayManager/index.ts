@@ -56,6 +56,7 @@ export default async (args: GiveawayArgs): Promise<void> => {
 const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
   const embed = Embed
     .setColor("#36393F")
+    .setAuthor(giveaway.prize)
     .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners))
     .setDescription(strings.giveaway.embed.noWinner);
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
