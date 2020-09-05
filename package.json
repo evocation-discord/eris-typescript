@@ -37,5 +37,8 @@
     "@lib": "dist/lib",
     "@modules": "dist/modules",
     "@database": "dist/lib/utils/database"
+  },
+  "scripts": {
+    "build": "tsc"
   }
 }
