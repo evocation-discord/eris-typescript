@@ -1,5 +1,5 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions } from "@lib/utils";
-import { Message, TextChannel, MessageEmbed, User } from "discord.js";
+import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions, Embed } from "@lib/utils";
+import { Message, TextChannel, User } from "discord.js";
 
 export default class DirectMessageModule extends Module {
 
@@ -9,7 +9,7 @@ export default class DirectMessageModule extends Module {
     if (message.partial) message = await message.fetch();
     if (message.channel.type !== "dm") return;
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
       .setFooter(strings.modules.directmessages.embedFooter(message.id))
@@ -25,7 +25,7 @@ export default class DirectMessageModule extends Module {
     if (newMsg.author.bot) return;
     if (newMsg.channel.type !== "dm") return;
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_EDITED_MESSAGE)
       .setFooter(strings.modules.directmessages.embedFooter(newMsg.id))
@@ -42,7 +42,7 @@ export default class DirectMessageModule extends Module {
     if (msg.author.bot) return;
     if (msg.channel.type !== "dm") return;
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
       .setFooter(strings.modules.directmessages.embedFooter(msg.id))
@@ -57,7 +57,7 @@ export default class DirectMessageModule extends Module {
     await message.delete();
     const msg = await user.send(content);
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
       .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
@@ -75,7 +75,7 @@ export default class DirectMessageModule extends Module {
     if (!dmMessage) return;
 
     await dmMessage.delete();
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
       .setAuthor(`${dmMessage.author.tag} (${dmMessage.author.id})`, dmMessage.author.displayAvatarURL({ dynamic: true, format: "png" }))

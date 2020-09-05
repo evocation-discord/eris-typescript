@@ -5,7 +5,7 @@ import { Command } from "./commands/Command";
 import { CommandManager } from "./commands/CommandManager";
 import { CommandParserModule } from "./commands/CommandParser";
 import { GiveawayArgs } from "./GiveawayManager";
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, MessageEmbedOptions } from "discord.js";
 
 export { ErisClient, Command, CommandManager, CommandParserModule, GiveawayArgs };
 
@@ -51,8 +51,6 @@ export const timeFormatter = (date?: Date): string => {
   return `${hour}:${minutes} ${day}/${month}/${year} UTC`;
 };
 
-export const Embed = new MessageEmbed().setColor("#EECC41");
-
 export const getDuration = (duration: number): string => {
   const data = [];
   duration /= 1000;
@@ -84,3 +82,10 @@ export const getDuration = (duration: number): string => {
 export const regExpEsc = (str: string): string => {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
+
+
+export class Embed extends MessageEmbed {
+  constructor(data?: MessageEmbed | MessageEmbedOptions) {
+    super({ color: "EECC41", ...data });
+  }
+}

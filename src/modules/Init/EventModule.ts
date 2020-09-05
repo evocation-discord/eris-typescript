@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, timeFormatter, strings } from "@lib/utils";
-import { Guild, Message, MessageEmbed, TextChannel } from "discord.js";
+import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed } from "@lib/utils";
+import { Guild, Message, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 
 export default class EventModule extends Module {
@@ -19,7 +19,7 @@ export default class EventModule extends Module {
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
 
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTitle("Connected")
       .setColor("#4acf56")
       // @ts-ignore: Private property so typing for it does not exist
@@ -32,7 +32,7 @@ export default class EventModule extends Module {
 
   @listener({ event: "shardResume" })
   onResume(id: number, replayed: number): void {
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTitle("Resumed")
       .setColor("#ffb347")
       .addField("Replayed Events", replayed);
@@ -42,7 +42,7 @@ export default class EventModule extends Module {
 
   @listener({ event: "shardReconnecting" })
   onReconnect(): void {
-    const embed = new MessageEmbed()
+    const embed = new Embed()
       .setTitle("Reconnected")
       .setColor("#ffb347")
       // @ts-ignore: Private property so typing for it does not exist
@@ -71,8 +71,8 @@ export default class EventModule extends Module {
     }
   }
 
-  async sendControlMessage(data: MessageEmbed): Promise<void> {
-    const embed = new MessageEmbed(data)
+  async sendControlMessage(data: Embed): Promise<void> {
+    const embed = new Embed(data)
       .setFooter(`Eris ${process.env.PRODUCTION ? "Production" : "Testing"}`)
       .setTimestamp();
 

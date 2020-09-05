@@ -54,7 +54,7 @@ export default async (args: GiveawayArgs): Promise<void> => {
 };
 
 const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
-  const embed = Embed
+  const embed = new Embed()
     .setColor("#36393F")
     .setAuthor(giveaway.prize)
     .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners))
@@ -69,7 +69,7 @@ const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
 };
 
 export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
-  const embed = Embed
+  const embed = new Embed()
     .setColor("#36393F");
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
   const guild = await channel.guild.fetch();
@@ -101,7 +101,7 @@ const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway) => {
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
   const message = await channel.messages.fetch(giveaway.messageId);
   // Create the embed.
-  const embed = Embed
+  const embed = new Embed()
     .setAuthor(giveaway.prize)
     .setDescription(strings.giveaway.embed.description(getDuration(args.startTime + giveaway.duration - Date.now())))
     .setFooter(strings.giveaway.embed.footer(giveaway.winners))

@@ -37,7 +37,7 @@ export default class ExclusionsModule extends Module {
     if (!what) {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
       const userBlacklists = await Blacklist.find({ where: { type: "user" } });
-      const embed = Embed
+      const embed = new Embed()
         .addField(strings.modules.exclusions.exclusionEmbedName("User"), userBlacklists.map(u => strings.modules.exclusions.exclusionMapping(u)).join("\n") || strings.modules.exclusions.noUsersExcluded)
         .addField(strings.modules.exclusions.exclusionEmbedName("Role"), roleBlacklists.map(r => strings.modules.exclusions.exclusionMapping(r)).join("\n") || strings.modules.exclusions.noRolesExcluded);
       return msg.channel.send(embed);

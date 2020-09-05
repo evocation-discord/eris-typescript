@@ -125,7 +125,7 @@ export default class BotOwner extends Module {
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], aliases: ["ldc"], admin: true, description: commandDescriptions.listdisabledcmds })
   async listdisabledcmds(msg: Message): Promise<Message> {
     const disabledcommands = await DisabledCommand.find();
-    const embed = Embed
+    const embed = new Embed()
       .setAuthor(strings.modules.util.disabledCommandsEmbedHeader)
       .setDescription(disabledcommands.map(strings.modules.util.disabledCommandMap).join("\n") || strings.modules.util.noDisabledCommands);
     return msg.channel.send(embed);

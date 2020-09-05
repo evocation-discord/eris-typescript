@@ -18,15 +18,18 @@ services:
       MYSQL_USER: eris
       MYSQL_PASSWORD: eris
   bot:
-    image: https://docker.pkg.github.com/evocation-discord/eris/eris:stable
+    build: .
     depends_on:
       - mysql
       - redis
     environment: 
-      DB_HOST: eris
+      DB_HOST: mysql
       DB_USERNAME: eris
       DB_PASSWORD: eris
       DB_DATABASE: eris
+      REDIS_HOST: redis
+    env_file:
+      - .env
 volumes:
   redis-persistence:
     driver: local
