@@ -21,6 +21,6 @@ jobs:
         with:
           name: evocation-discord/eris/eris
           username: ${{ github.actor }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           tags: 'latest,stable'
           registry: docker.pkg.github.com
