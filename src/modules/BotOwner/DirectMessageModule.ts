@@ -1,4 +1,4 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings } from "@lib/utils";
+import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions } from "@lib/utils";
 import { Message, TextChannel, MessageEmbed, User } from "discord.js";
 
 export default class DirectMessageModule extends Module {

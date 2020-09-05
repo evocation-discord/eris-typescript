@@ -27,6 +27,7 @@ export default class UtilCommandModule extends Module {
 
   @monitor({ event: "message" })
   onErisMessage(message: Message): void {
+    if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
     if (["thanks eris", "thanks, eris", "thanks eris!", "thanks, eris!"].includes(message.content.toLowerCase())) {
