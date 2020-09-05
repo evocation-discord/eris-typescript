@@ -72,7 +72,6 @@ export default class DirectMessageModule extends Module {
     const dmchannel = await user.createDM();
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
     const dmMessage = await dmchannel.messages.fetch(messageId);
-    // TODO
     if (!dmMessage) return;
 
     await dmMessage.delete();

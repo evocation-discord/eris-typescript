@@ -98,7 +98,7 @@ export default class BotOwner extends Module {
     process.exit(0);
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.disablecmd })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>" })
   async disablecmd(msg: Message, cmd: string): Promise<Message> {
     if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return msg.channel.send(strings.general.error(strings.modules.util.cantdisablecommands));
     const command = this.client.commandManager.getByTrigger(cmd);
@@ -111,7 +111,7 @@ export default class BotOwner extends Module {
     return msg.channel.send(strings.general.success(strings.modules.util.disabledcommand));
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.enablecmd })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.enablecmd, usage: "<command:string>" })
   async enablecmd(msg: Message, cmd: string): Promise<Message> {
     const command = this.client.commandManager.getByTrigger(cmd);
     const commandName = command.triggers[0];
