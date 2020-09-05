@@ -30,6 +30,8 @@ export * from "./cron/decorator";
 
 export * from "./modules/Module";
 
+export * from "./messages";
+
 export * from "./scheduler/Scheduler";
 
 export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

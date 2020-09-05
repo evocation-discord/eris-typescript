@@ -5,21 +5,21 @@ dotenv.config();
 import "module-alias/register";
 import "@lib/utils/types/discord";
 
-import EventModule from "@modules/EventModule";
+import EventModule from "@modules/Init/EventModule";
 import { ErisClient } from "@lib/utils";
-import UtilCommandModule from "@modules/UtilCommands";
-import DonationModule from "@modules/DonationModule";
-import DirectMessageModule from "@modules/DirectMessageModule";
-import ListenerMonitorInit from "@modules/ListenerMonitorInit";
-import PermissionsModule from "@modules/PermissionsModule";
-import LoggingModule from "@modules/LoggingModule";
-import EmojiModule from "@modules/EmojiModule";
+import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
+import { setupDatabase } from "@database/index";
+import BotOwner from "@modules/BotOwner/BotOwner";
+import DirectMessageModule from "@modules/BotOwner/DirectMessageModule";
+import EmojiModule from "@modules/Logging/EmojiModule";
+import LoggingModule from "@modules/Logging/LoggingModule";
+import DonationModule from "@modules/ServerAdministrator/DonationModule";
+import ExclusionsModule from "@modules/ServerAdministrator/ExclusionsModule";
+import GiveawayModule from "@modules/ServerAdministrator/GiveawayModule";
+import PermissionsModule from "@modules/Staff/PermissionsModule";
 import HelpModule from "@modules/HelpModule";
-import { setupDatabase } from "@lib/utils/database";
-import GiveawayModule from "@modules/GiveawayModule";
-import ExclusionsModule from "@modules/ExclusionsModule";
 import PurchaseableRolesModule from "@modules/PurchaseableRolesModule";
-import CronModule from "@modules/CronModule";
+import UtilCommandModule from "@modules/UtilCommands";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -33,15 +33,20 @@ setupDatabase();
 client
   .registerModule(ListenerMonitorInit)
   .registerModule(EventModule)
-  .registerModule(UtilCommandModule)
-  .registerModule(DonationModule)
+  // Bot Owner Modules
+  .registerModule(BotOwner)
   .registerModule(DirectMessageModule)
-  .registerModule(PermissionsModule)
-  .registerModule(LoggingModule)
+  // Logging Modules
   .registerModule(EmojiModule)
-  .registerModule(HelpModule)
-  .registerModule(GiveawayModule)
+  .registerModule(LoggingModule)
+  // Server Administrator Modules
+  .registerModule(DonationModule)
   .registerModule(ExclusionsModule)
+  .registerModule(GiveawayModule)
+  // Staff Modules
+  .registerModule(PermissionsModule)
+  // Other Modules
+  .registerModule(HelpModule)
   .registerModule(PurchaseableRolesModule)
-  .registerModule(CronModule)
+  .registerModule(UtilCommandModule)
   .login(process.env.DISCORD_TOKEN);

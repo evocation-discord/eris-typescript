@@ -1,6 +1,5 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, emotes, CHANNELS } from "@lib/utils";
+import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings } from "@lib/utils";
 import { Message, TextChannel, MessageEmbed, User } from "discord.js";
-import { strings, commandDescriptions } from "@lib/utils/messages";
 
 export default class DirectMessageModule extends Module {
 
@@ -53,7 +52,7 @@ export default class DirectMessageModule extends Module {
     channel.send(strings.modules.directmessages.directMessageDeleted, embed);
   }
 
-  @command({ aliases: ["dm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage })
+  @command({ aliases: ["dm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage })
   async directmessage(message: Message, user: User, content: string): Promise<void> {
     await message.delete();
     const msg = await user.send(content);
@@ -67,7 +66,7 @@ export default class DirectMessageModule extends Module {
     channel.send(strings.modules.directmessages.commands.directMessageSentExecution(message, user), embed);
     message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageSent(user, msg.content)));
   }
-  @command({ aliases: ["deletedm"], group: "Bot Owner", inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage })
+  @command({ aliases: ["deletedm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage })
   async deletedirectmessage(message: Message, user: User, messageId: string): Promise<void> {
     await message.delete();
     const dmchannel = await user.createDM();

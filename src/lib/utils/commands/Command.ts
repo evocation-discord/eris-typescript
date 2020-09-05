@@ -3,6 +3,7 @@ import { Module } from "../modules/Module";
 import { Inhibitor } from "../inhibitors/Inhibitor";
 import { supportedArgs } from "../arguments/supportedArgs";
 import { Remainder, Optional } from "../arguments/Arguments";
+import { CommandCategories } from "../constants";
 
 export interface Command {
     func: Function,
@@ -13,7 +14,7 @@ export interface Command {
     usage?: string,
     module: Module,
     inhibitors: Inhibitor[],
-    group: string,
+    group: CommandCategories,
     staff?: boolean,
     admin?: boolean,
     onError: (msg: Message, error: Error) => void

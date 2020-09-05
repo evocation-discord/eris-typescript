@@ -1,10 +1,8 @@
-import { Module, ErisClient, monitor, command, inhibitors, scheduler, GiveawayArgs, emotes, timeFormatter } from "@lib/utils";
+import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional } from "@lib/utils";
 import { Message } from "discord.js";
-import { Remainder, Optional } from "@lib/utils/arguments/Arguments";
 import { Giveaway } from "@database/models";
 import Duration from "@lib/utils/arguments/Duration";
 import { handleGiveawayWin } from "@lib/utils/GiveawayManager";
-import { strings, commandDescriptions } from "@lib/utils/messages";
 
 export default class GiveawayModule extends Module {
   constructor(client: ErisClient) {
@@ -12,7 +10,7 @@ export default class GiveawayModule extends Module {
   }
 
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)], group: "Giveaways", staff: true, description: commandDescriptions.start })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.start })
   async start(msg: Message, duration: Duration, winners: number, prize: string): Promise<void> {
     msg.delete();
     const giveawayMsg = await msg.channel.send(strings.modules.giveaway.loadingMessage);
@@ -40,7 +38,7 @@ export default class GiveawayModule extends Module {
     });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: "Giveaways", staff: true, description: commandDescriptions.reroll })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.reroll })
   async reroll(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
@@ -80,7 +78,7 @@ export default class GiveawayModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: "Giveaways", staff: true, description: commandDescriptions.end })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.end })
   async end(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
@@ -107,7 +105,7 @@ export default class GiveawayModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: "Giveaways", staff: true, description: commandDescriptions.list })
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.list })
   async list(msg: Message): Promise<void|Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const messageArray = [strings.modules.giveaway.activeGiveaways];
@@ -121,7 +119,7 @@ export default class GiveawayModule extends Module {
     await msg.channel.send(messageArray.join("\n\n"), { allowedMentions: { users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: "Giveaways", staff: true, description: commandDescriptions.endall })
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.endall })
   async endall(msg: Message): Promise<void|Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const endedGiveaways = [strings.modules.giveaway.endedGivewaways];

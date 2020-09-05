@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, timeFormatter } from "@lib/utils";
+import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, timeFormatter, strings } from "@lib/utils";
 import { Guild, Message, MessageEmbed, TextChannel } from "discord.js";
 import fetch from "node-fetch";
-import { strings } from "@lib/utils/messages";
 
 export default class EventModule extends Module {
   constructor(client: ErisClient) {

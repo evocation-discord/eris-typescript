@@ -1,5 +1,4 @@
-import { monitor, Module, ErisClient, CHANNELS, MAIN_GUILD_ID, ROLES, command, inhibitors } from "@lib/utils";
-import { strings, commandDescriptions } from "@lib/utils/messages";
+import { monitor, Module, ErisClient, MAIN_GUILD_ID, ROLES, command, inhibitors, strings, CommandCategories, commandDescriptions } from "@lib/utils";
 import { GuildMember, Message } from "discord.js";
 
 export default class PurchaseableRolesModule extends Module {
@@ -21,7 +20,7 @@ export default class PurchaseableRolesModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA"]), inhibitors.userCooldown(30000)], group: "Purchasable Role Limitation", description: commandDescriptions.muse })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA"]), inhibitors.userCooldown(30000)], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.muse })
   async muse(message: Message): Promise<void> {
     message.channel.send(strings.modules.purchaseableroles.museCommand[Math.floor(Math.random() * strings.modules.purchaseableroles.museCommand.length)]);
   }

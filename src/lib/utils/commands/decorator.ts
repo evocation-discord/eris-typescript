@@ -3,13 +3,14 @@ import { Inhibitor } from "../inhibitors/Inhibitor";
 import { Module } from "../modules/Module";
 import { Remainder, Optional } from "../arguments/Arguments";
 import { supportedArgs } from "../arguments/supportedArgs";
+import { CommandCategories } from "../constants";
 
 export interface ICommandDecoratorOptions {
   description?: string,
   usage?: string,
   aliases: string[],
   inhibitors: Inhibitor[],
-  group: string,
+  group: CommandCategories,
   onError: (msg: Message, error: Error) => void,
   staff?: boolean,
   admin?: boolean,
@@ -45,7 +46,7 @@ export function command(
       aliases: opts.aliases || [],
       description: opts.description,
       id: propertyKey,
-      group: opts.group || "General",
+      group: opts.group || CommandCategories.Informational,
       args: opts.args,
       usage: opts.usage,
       inhibitors: opts.inhibitors || [],

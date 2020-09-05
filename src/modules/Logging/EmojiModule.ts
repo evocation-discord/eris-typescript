@@ -1,6 +1,5 @@
-import { monitor, Module, ErisClient, CHANNELS, MAIN_GUILD_ID } from "@lib/utils";
+import { monitor, Module, ErisClient, CHANNELS, MAIN_GUILD_ID, strings } from "@lib/utils";
 import { GuildEmoji, TextChannel, Message } from "discord.js";
-import { strings } from "@lib/utils/messages";
 
 export default class EmojiModule extends Module {
   constructor(client: ErisClient) {

@@ -1,14 +1,13 @@
-import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors } from "@lib/utils";
+import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors, CommandCategories, commandDescriptions, strings } from "@lib/utils";
 import { Message, Role, User } from "discord.js";
 import { Blacklist } from "@database/models";
-import { strings, commandDescriptions } from "@lib/utils/messages";
 
 export default class ExclusionsModule extends Module {
   constructor(client: ErisClient) {
     super(client);
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(new Remainder(String))], group: "Server Administrator", staff: true, description: commandDescriptions.exclude })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.exclude })
   async exclude(msg: Message, type?: "user" | "role", id?: string): Promise<void | Message> {
     if (msg.channel.type === "dm") return;
     if (!type || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
@@ -33,7 +32,7 @@ export default class ExclusionsModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("user")));
     } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
   }
-  @command({ inhibitors: [inhibitors.adminOnly], group: "Server Administrator", args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions })
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions })
   async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message> {
     if (!what) {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });

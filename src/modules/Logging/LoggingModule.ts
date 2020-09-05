@@ -1,8 +1,7 @@
-import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, timeFormatter } from "@lib/utils";
+import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, strings } from "@lib/utils";
 import { Message, TextChannel, User } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
-import { strings } from "@lib/utils/messages";
-import { DisabledCommand } from "@lib/utils/database/models";
+import { DisabledCommand } from "@database/models";
 
 export default class LoggingModule extends Module {
   @monitor({ event: "message" })

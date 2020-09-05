@@ -1,6 +1,5 @@
-import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
-import { strings, commandDescriptions } from "@lib/utils/messages";
 
 export default class DonationModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
@@ -13,7 +12,7 @@ export default class DonationModule extends Module {
         newMember.roles.remove(ROLES.WHITE_HALLOWS, strings.modules.donations.auditLogWhiteHallowsAdd);
     }
   }
-  @command({ inhibitors: [inhibitors.adminOnly], group: "Server Administrator", args: [GuildMember, new Remainder(String)], aliases: ["ld"], staff: true, usage: "<member:member|snowflake> <item:...string>", description: commandDescriptions.logdonation })
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember, new Remainder(String)], aliases: ["ld"], staff: true, usage: "<member:member|snowflake> <item:...string>", description: commandDescriptions.logdonation })
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
     if (member.user.bot) {
