@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   redis:
     image: bitnami/redis:latest
@@ -20,7 +20,7 @@ services:
       MYSQL_USER: eris
       MYSQL_PASSWORD: eris
   bot:
-    image: .
+    image: https://docker.pkg.github.com/evocation-discord/eris/eris:stable
     depends_on:
       - mysql
       - redis
@@ -29,8 +29,8 @@ services:
       DB_USERNAME: eris
       DB_PASSWORD: eris
       DB_DATABASE: eris
-    env_file:
-      - .env
 volumes:
   redis-persistence:
+    driver: local
   eris-mysql:
+    driver: local
