@@ -140,7 +140,15 @@ export const strings = {
         `**RESOLVED LINK**: <${resLink}>\n`,
         "No automatic action has been taken against their account or the message itself. Please review the above to ensure that the link is not violative of Evocation's regulations."
       ].join("\n"),
-      userUpdate: (oldUser: User, newUser: User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`
+      userUpdate: (oldUser: User, newUser: User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`,
+      userBoost: (user: User) => [
+        `Thank you for boosting Evocation, ${user}! You now have access to change your own nickname, embed links, attach files, add reactions, and stream into the server. If these permissions seem familiar to you, that means you are **Level 3** or above.\n`,
+        "**SUCCESSFULLY UNLOCKED**:",
+        `${emotes.uncategorised.soulstones} Coloured **Wisteria** Role [HOISTED]`,
+        `${emotes.uncategorised.soulstones} x**2** Experience Multiplier [COMING SOON]`,
+        `${emotes.uncategorised.soulstones} **e!vb** Command Access [COMING SOON]`,
+        `${emotes.uncategorised.soulstones} **e!muse** Command Access`
+      ].join("\n")
     },
     permissions: {
       negations: (type: "Reaction" | "Art" | "Media" | "Experience") => `${type} negations have been executed for the specified users.`

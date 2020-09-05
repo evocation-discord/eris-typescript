@@ -79,7 +79,8 @@ const uncategorised = {
   "privatetextchannel": "<:privatetextchannel:749706275935223848>",
   "announcementchannel": "<:announcementchannel:749706275859726336>",
   "privateannouncementchannel": "<:privateannouncementchannel:749706275864182865>",
-  "expandedcategory": "<:expandedcategory:749711722130178089>"
+  "expandedcategory": "<:expandedcategory:749711722130178089>",
+  "soulstones": "<:soulstones:748553442880127097>"
 };
 
 

@@ -1,5 +1,5 @@
-import { Module, monitor, escapeRegex, emotes, CHANNELS, linkRegex, ROLES, strings } from "@lib/utils";
-import { Message, TextChannel, User } from "discord.js";
+import { Module, monitor, escapeRegex, CHANNELS, linkRegex, ROLES, strings, MAIN_GUILD_ID } from "@lib/utils";
+import { Message, TextChannel, User, GuildMember } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 import { DisabledCommand } from "@database/models";
 
@@ -50,6 +50,15 @@ export default class LoggingModule extends Module {
     if (oldUser.username !== newUser.username) {
       const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
       channel.send(strings.modules.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
+    }
+  }
+
+  @monitor({ event: "guildMemberUpdate" })
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+    if (newMember.guild.id !== MAIN_GUILD_ID) return;
+    if (!oldMember.roles.cache.has(ROLES.WISTERIA) && newMember.roles.cache.has(ROLES.WISTERIA)) {
+      const channel = newMember.guild.channels.cache.find(c => c.name === "lounge") as TextChannel;
+      channel.send(strings.modules.logging.userBoost(newMember.user));
     }
   }
 }
