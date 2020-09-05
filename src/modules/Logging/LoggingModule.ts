@@ -7,6 +7,7 @@ export default class LoggingModule extends Module {
   @monitor({ event: "message" })
   async onCommand(msg: Message): Promise<Message> {
     if (msg.author && msg.author.bot) return;
+    if (msg.guild.id !== MAIN_GUILD_ID) return;
 
     const prefix = process.env.PREFIX;
     const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
@@ -32,6 +33,7 @@ export default class LoggingModule extends Module {
   async onLink(msg: Message): Promise<Message> {
     if (msg.author && msg.author.bot) return;
     if (msg.channel.type === "dm") return;
+    if (msg.guild.id !== MAIN_GUILD_ID) return;
     if (msg.channel.id === "528598741565833246") return;
     if (isStaff(msg)) return;
     const links = msg.content.match(linkRegex) || [];
@@ -48,6 +50,7 @@ export default class LoggingModule extends Module {
   @monitor({ event: "userUpdate" })
   async onUsernameUpdate(oldUser: User, newUser: User): Promise<Message> {
     if (newUser.bot) return;
+    
     if (oldUser.username !== newUser.username) {
       const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
       channel.send(strings.modules.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
