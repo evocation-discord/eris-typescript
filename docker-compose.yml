@@ -9,5 +9,28 @@ services:
     environment:
       ALLOW_EMPTY_PASSWORD: "yes"
 
+  mysql:
+    image: mysql:latest
+    volumes:
+      - "eris-mysql:/var/lib/mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eris
+      MYSQL_DATABASE: eris
+      MYSQL_USER: eris
+      MYSQL_PASSWORD: eris
+  bot:
+    image: .
+    depends_on:
+      - mysql
+      - redis
+    environment: 
+      DB_HOST: eris
+      DB_USERNAME: eris
+      DB_PASSWORD: eris
+      DB_DATABASE: eris
+    env_file:
+      - .env
 volumes:
   redis-persistence:
+  eris-mysql:
