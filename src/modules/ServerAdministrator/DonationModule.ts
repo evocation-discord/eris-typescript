@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings, commandDescriptions } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationModule extends Module {
