@@ -26,7 +26,7 @@ export const strings = {
       description: (duration: string) => [
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
-        `You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **Level 3** or above, your entrance will be nullified.`
+        `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **Level 3** or above, your entrance will be nullified.`
       ].join("\n")
     },
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
@@ -159,9 +159,8 @@ export const strings = {
       aboutCommand: [
         "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n",
         "__**CONTRIBUTORS**__\n",
-        "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>",
-        "**DEVELOPER**: <@222073294419918848>",
-        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>"
+        "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
+        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>" // Ace
       ].join("\n"),
       pinging: `${emotes.commandresponses.server} Pinging...`,
       pingResponse: (ms: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds.`,
