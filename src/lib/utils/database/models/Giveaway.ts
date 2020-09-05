@@ -24,9 +24,6 @@ export class Giveaway extends BaseEntity {
   @Column("boolean", { default: false })
   ended: boolean;
 
-  @Column("simple-array")
-  participants: Snowflake[];
-
   @Column()
   winners: number;
 
