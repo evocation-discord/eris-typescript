@@ -94,7 +94,7 @@ export const strings = {
       exclusionEmbedName: (type: "Role" | "User") => `${type} Exclusions`,
       noUsersExcluded: "→ No users excluded.",
       noRolesExcluded: "→ No roles excluded.",
-      exclusionMapping: (ur: Blacklist) => `→ <@${ur.type === "user" ? "&" : ""}${ur.id}> (\`${ur.id}\`)`,
+      exclusionMapping: (ur: Blacklist) => `→ <@${ur.type === "role" ? "&" : ""}${ur.id}> (\`${ur.id}\`)`,
       roleNotExcluded: "This role is not excluded.",
       userNotExcluded: "This user is not excluded.",
       updatedExclusionsForRole: "Updated exclusions for the specified role.",
