@@ -89,6 +89,7 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
   if (users.length === 0) return handleNoWinner(args, giveaway);
 
   embed
+    .setAuthor(giveaway.prize)
     .setDescription(strings.giveaway.embed.winners(users.map(user => `→ ${user} (\`${user.id}\`)`).join("\n")))
     .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners));
 
