@@ -7,6 +7,7 @@ export default class PermissionsModule extends Module {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if(members.include(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -26,6 +27,7 @@ export default class PermissionsModule extends Module {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if(members.include(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -45,6 +47,7 @@ export default class PermissionsModule extends Module {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if(members.include(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -64,6 +67,7 @@ export default class PermissionsModule extends Module {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if(members.include(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
