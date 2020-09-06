@@ -31,6 +31,7 @@ const hasGuildPermission = (perm: PermissionResolvable): Inhibitor =>
 const userCooldown = (ms: number): Inhibitor => {
   const map: Map<string, number> = new Map();
   return async msg => {
+    if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
     if (map.has(msg.author.id)) {
       if ((map.get(msg.author.id) || 0) < Date.now()) {
         map.set(msg.author.id, Date.now() + ms);
