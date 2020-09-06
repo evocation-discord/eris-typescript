@@ -34,10 +34,7 @@ export default class UtilCommandModule extends Module {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
-    let alreadyDone = false;
     ["thanks eris", "thanks, eris", "thanks eris!", "thanks, eris!"].forEach(erisString => {
-      if (alreadyDone) return;
-      alreadyDone = true;
       if (message.content.toLowerCase().includes(erisString)) {
         message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
       }
