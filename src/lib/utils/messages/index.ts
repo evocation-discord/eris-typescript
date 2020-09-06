@@ -121,9 +121,9 @@ export const strings = {
       endedGivewaways: `${emotes.giveaway.giftmessage} **ENDED GIVEAWAYS**`,
     },
     help: {
-      unknownCategory: "Unknown Category",
+      unknownCategory: "**UNKNOWN CATEGORY**",
       specificCommandHelp: `To get more information about a specific command, run \`${process.env.PREFIX}help [command]\`.`,
-      noPermission: "I cannot retrieve additional information about this command as you do not satisfy its permission criteria",
+      noPermission: "I cannot retrieve additional information about this command as you do not satisfy its permission criteria.",
       noCommandFound: "No command exists with that name or alias. Please reinspect its spelling, as that may be a potential factor as to why it cannot be resolved.",
       noArgumentsNeeded: "No arguments need to be either mandatorily or optionally provided for this command.",
       noAliases: "No aliases exist for this command.",
