@@ -1,0 +1,65 @@
+Welcome to the Evocation staff team! For as long as you retain your staff position, you are bound by the below regulations. They are listed for ease of access, in opposition to paragraphs.
+
+<:staff:748173718823370863> __**ALL STAFF**__
+
+**»** Ensure that **all** internal communications remain internal. This is inclusive of staff channels, logging channels, audit logs, and any information which has only been disclosed to staff.
+
+**»** You agree to follow the server's #regulations at all times.
+
+**»** You agree to keep your Discord account secure - depending on your position, you may be required to have 2-factor authentication (2FA) enabled to be able to execute certain actions.
+
+**»** You agree that misconduct will result in relegation.
+
+**»** You agree to not instigate drama with other members or staff.
+
+**»** Your moderation/administrative abilities that you may have access to should be used only when situations necessitate them.
+
+<:staff:748173718823370863> __**MODERATION STAFF**__
+
+**»** You are expected to think objectively, be impartial, humble and patient. 
+
+**»** You agree that you need to contact an Administrator regarding any changes that will impact your ability to moderate. 
+
+**»** You are expected to use your discretion when issuing punishments and dealing with situations that may arise.
+
+<:staff:748173718823370863> __**ADMINISTRATION**__
+
+**»** You agree to gain authorisation from a Lead Administrator prior to making any changes to roles or channels. In the case of an emergency where immediate retaliation is required, this regulation is nullifeid (meaning you can act without appropriate authorisation).
+
+<:staff:748173718823370863> __**DEVELOPMENT TEAM NON-DISCLOSURE AGREEMENT**__
+
+**»** All contents of the development server must remain confidential - you are only authorised to share information which the recipient can access themselves. Even then, no private information may be disseminated in a public environment.
+
+**»** All contents of development-focused channels in this server are confidential.
+
+**»** Unreleased features that are either in beta testing or have not been publicised should not be discussed in public channels (or in Direct Messages of non-staff). 
+
+**»** Names, user IDs and/or avatars of bots that have not been released should not be publicly disclosed.
+
+Violating these staff regulations will result in punitive action, including the possibility of a fixed-term suspension of status. These lists are not exhaustive. Serious violations may result in a fixed-term ban from the server.
+
+:flame: __**TERMINATION OF STATUS**__
+
+At any time, for any reason, your position as a staff member may be terminated by server administration. You may also terminate your position yourself by contacting a Lead Administrator, expressing interest in resignation.
+
+:alert: __**ERIS PERMISSION NODE NEGATION COMMANDS**__
+_You can see a list of all commands that you have access to by running `e!help`._
+
+`e!negateexperience <userID/mention> [userID/mention...]` **»** Appends/removes the <@&531488602404814857> role to/from the specified user(s).
+**Alias**: `e!ne`
+
+`e!negatemedia <userID/mention> [userID/mention...]` **»** Appends/removes the <@&712221036812173314> role to/from the specified user(s).
+**Alias**: `e!nm`
+
+`e!negatereaction <userID/mention> [userID/mention...]` **»** Appends/removes the <@&528661325740769304> role to/from the specified user(s).
+**Alias**: `e!nr`
+
+`e!negateart <userID/mention> [userID/mention...]` **»** Appends/removes the <@&741394456179114044> role to/from the specified user(s).
+
+:alert: __**NOTES**__
+
+We use Auttaja's note system to track changes to users' behaviour and anything worthy of recording for future reference. These commands are restricted to the **<@&528619896762794004>** role (users who are hierarchically above them also have access).
+
+`-addnote <ID/@mention> <note>` **»** Adds a note to a user.
+`-removenote <note ID>` **»** Removes a note from a user.
+`-viewnotes <ID/@mention>` **»** Returns active notes on a user.
