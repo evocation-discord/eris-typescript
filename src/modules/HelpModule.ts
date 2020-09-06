@@ -6,7 +6,7 @@ const commandGroupsWithEmojis = {
   "Informational": "<:information:747497420954534050> **INFORMATIONAL**",
   "Giveaways": "<:donation:748230750805164032> **GIVEAWAYS**",
   "Server Administrator": "<:admin:747497421399130220> **SERVER ADMINISTRATOR**",
-  "Permission Node Negations": "<:denial:747497421327695902> **PERMISSION NODE NEGATIONS**",
+  "Moderation": "<:moderation:752218175986335835> **Moderation**",
   "Purchasable Role Limitation": "<:creditcard:749642425454166078> **PURCHASABLE ROLE LIMITATION**"
 };
 

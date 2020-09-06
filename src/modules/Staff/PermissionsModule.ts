@@ -2,12 +2,12 @@ import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, C
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Permission Node Negations"], args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart })
   async negateart(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
-    if(members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -22,12 +22,12 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblock(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Permission Node Negations"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
   async negatereaction(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
-    if(members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -42,12 +42,12 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Reaction")), codeblock(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Permission Node Negations"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
   async negatemedia(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
-    if(members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {
@@ -62,12 +62,12 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Media")), codeblock(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Permission Node Negations"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
   async negateexperience(msg: Message, _members: string): Promise<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
-    if(members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
     const added: GuildMember[] = [];
     const removed: GuildMember[] = [];
     for await (const member of members) {

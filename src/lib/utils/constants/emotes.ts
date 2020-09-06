@@ -80,7 +80,8 @@ const uncategorised = {
   "announcementchannel": "<:announcementchannel:749706275859726336>",
   "privateannouncementchannel": "<:privateannouncementchannel:749706275864182865>",
   "expandedcategory": "<:expandedcategory:749711722130178089>",
-  "soulstones": "<:soulstones:748553442880127097>"
+  "soulstones": "<:soulstones:748553442880127097>",
+  "moderation": "<:moderation:752218175986335835>"
 };
 
 

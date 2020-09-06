@@ -11,6 +11,6 @@ export enum CommandCategories {
   "Informational" = "Informational",
   "Giveaways" = "Giveaways",
   "Server Administrator" = "Server Administrator",
-  "Permission Node Negations" = "Permission Node Negations",
+  "Moderation" = "Moderation",
   "Purchasable Role Limitation" = "Purchasable Role Limitation"
 }
