@@ -34,9 +34,14 @@ export default class UtilCommandModule extends Module {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
-    if (["thanks eris", "thanks, eris", "thanks eris!", "thanks, eris!"].includes(message.content.toLowerCase())) {
-      message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
-    }
+    let alreadyDone = false;
+    ["thanks eris", "thanks, eris", "thanks eris!", "thanks, eris!"].forEach(erisString => {
+      if (alreadyDone) return;
+      alreadyDone = true;
+      if (message.content.toLowerCase().includes(erisString)) {
+        message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
+      }
+    });
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.datamine })

@@ -50,7 +50,6 @@ export default class LoggingModule extends Module {
   @monitor({ event: "userUpdate" })
   async onUsernameUpdate(oldUser: User, newUser: User): Promise<Message> {
     if (newUser.bot) return;
-    
     if (oldUser.username !== newUser.username) {
       const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
       channel.send(strings.modules.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
