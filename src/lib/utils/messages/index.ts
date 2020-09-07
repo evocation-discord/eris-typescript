@@ -148,7 +148,8 @@ export const strings = {
         `${emotes.uncategorised.soulstones} x**2** Experience Multiplier [COMING SOON]`,
         `${emotes.uncategorised.soulstones} **e!vb** Command Access [COMING SOON]`,
         `${emotes.uncategorised.soulstones} **e!muse** Command Access`
-      ].join("\n")
+      ].join("\n"),
+      disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment."
     },
     permissions: {
       negations: (type: "Reaction" | "Art" | "Media" | "Experience") => `${type} negations have been executed for the specified users.`
