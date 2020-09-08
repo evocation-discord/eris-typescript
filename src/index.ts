@@ -20,6 +20,7 @@ import PermissionsModule from "@modules/Staff/PermissionsModule";
 import HelpModule from "@modules/HelpModule";
 import PurchaseableRolesModule from "@modules/PurchaseableRolesModule";
 import UtilCommandModule from "@modules/UtilCommands";
+import LevelModule from "@modules/Levels/LevelModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -49,4 +50,5 @@ client
   .registerModule(HelpModule)
   .registerModule(PurchaseableRolesModule)
   .registerModule(UtilCommandModule)
+  .registerModule(LevelModule)
   .login(process.env.DISCORD_TOKEN);

@@ -1,11 +1,11 @@
 import { Entity, BaseEntity, Column, PrimaryColumn } from "typeorm";
 import { Snowflake } from "discord.js";
 
-@Entity("userexperiences")
-export class UserXP extends BaseEntity {
+@Entity("levelroles")
+export class LevelRole extends BaseEntity {
   @PrimaryColumn()
   id: Snowflake;
 
-  @Column({ default: 0 })
-  xp: number;
+  @Column()
+  level: number;
 }

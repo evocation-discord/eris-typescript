@@ -69,6 +69,7 @@ export default class LoggingModule extends Module {
   async onDisboardRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const role = newMember.guild.roles.cache.find(r => r.name === "[BOT] DISBOARD");
+    if (!role) return;
     if (!oldMember.roles.cache.has(role.id) && newMember.roles.cache.has(role.id)) newMember.roles.remove(role, strings.modules.logging.disboardRoleAdd);
   }
 }

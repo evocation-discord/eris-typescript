@@ -228,7 +228,13 @@ export const strings = {
       "I'm happy to be of service.",
       "Happy to be of help!",
       "Don't mention it."
-    ]
+    ],
+    levels: {
+      auditlog: {
+        roleAdd: "[LEVELLING SYSTEM] User met experience threshold for role advancement.",
+        roleRemove: "[LEVELLING SYSTEM] User met experience threshold for new role; removing previous reward."
+      }
+    }
   },
   commandGroups: {}
 };

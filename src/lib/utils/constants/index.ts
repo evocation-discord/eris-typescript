@@ -14,3 +14,18 @@ export enum CommandCategories {
   "Moderation" = "Moderation",
   "Purchasable Role Limitation" = "Purchasable Role Limitation"
 }
+
+export const levelConstants = {
+  getLevelXP(n: number): number {
+    return 5 * (n ** 2) + 50 * n + 100;
+  },
+  getLevelFromXP(xp: number): number {
+    let remaining_xp = xp;
+    let level = 0;
+    while (remaining_xp >= levelConstants.getLevelXP(level)) {
+      remaining_xp -= levelConstants.getLevelXP(level);
+      level += 1;
+    }
+    return level;
+  }
+};

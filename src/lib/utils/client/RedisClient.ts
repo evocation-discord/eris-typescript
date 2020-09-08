@@ -1,4 +1,5 @@
 import { createClient, ClientOpts, RedisClient } from "redis";
+import Redis from "ioredis";
 import { promisify } from "util";
 
 // Defines the promise Redis client.
@@ -23,7 +24,13 @@ class PromiseRedisClient {
 }
 
 // Return the Redis client.
-export default new PromiseRedisClient({
+// export default new PromiseRedisClient({
+//   host: process.env.REDIS_HOST,
+//   port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : undefined,
+//   password: process.env.REDIS_PASSWORD,
+// });
+
+export default new Redis({
   host: process.env.REDIS_HOST,
   port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : undefined,
   password: process.env.REDIS_PASSWORD,
