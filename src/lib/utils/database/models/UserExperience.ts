@@ -5,4 +5,7 @@ import { Snowflake } from "discord.js";
 export class UserXP extends BaseEntity {
   @PrimaryColumn()
   id: Snowflake;
+
+  @Column()
+  xp: number;
 }
