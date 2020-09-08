@@ -144,7 +144,7 @@ const resolveMember = async (query: string | discord.GuildMember | discord.User,
   return null;
 };
 
-const resolveChannel = (query: string | discord.Channel | discord.Message, guild: discord.Guild): discord.TextChannel => {
+export const resolveChannel = (query: string | discord.Channel | discord.Message, guild: discord.Guild): discord.TextChannel => {
   if (query instanceof discord.Channel && query.type === "text") return guild.channels.cache.has(query.id) ? query as TextChannel : null;
   if (query instanceof discord.Message) return query.guild.id === guild.id ? query.channel as TextChannel : null;
   if (typeof query === "string" && CHANNEL_REGEXP.test(query)) {

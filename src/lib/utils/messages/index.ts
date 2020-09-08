@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji } from "discord.js";
-import { Blacklist, Giveaway, DisabledCommand } from "../database/models";
+import { Blacklist, Giveaway, DisabledCommand, XPExclusion } from "../database/models";
 
 export const strings = {
   general: {
@@ -233,7 +233,16 @@ export const strings = {
       auditlog: {
         roleAdd: "[LEVELLING SYSTEM] User met experience threshold for role advancement.",
         roleRemove: "[LEVELLING SYSTEM] User met experience threshold for new role; removing previous reward."
-      }
+      },
+      executedExclusions: (type: "role" | "channel") => `Executed exclusions for the specified ${type}.`,
+      exclusionEmbedName: (type: "Role" | "Channel") => `${type} Exclusions`,
+      noChannelsExcluded: "→ No channels excluded.",
+      noRolesExcluded: "→ No roles excluded.",
+      exclusionMapping: (ur: XPExclusion) => `→ <${ur.type === "role" ? "@&" : "#"}${ur.id}> (\`${ur.id}\`)`,
+      roleNotExcluded: "This role is not excluded.",
+      channelNotExcluded: "This channel is not excluded.",
+      updatedExclusionsForRole: "Updated exclusions for the specified role.",
+      updatedExclusionsForChannel: "Updated exclusions for the specified channel.",
     }
   },
   commandGroups: {}
@@ -270,5 +279,14 @@ export const commandDescriptions = {
   listdisabledcmds: "Lists all disabled commands.",
   muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
   channels: "Returns a list of all existing channels (categories, text and voice) within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands.",
-  datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality."
+  datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality.",
+  xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
+  xpexclusions: "Removes a role/channel from being ignored or shows current exclusions.",
+  leaderboard: "Shows a list of users and their experience.",
+  multiplier: "Multiplier command.",
+  resetxp: "Resets XP for the specified user(s)/role(s)/server.",
+  addxp: "Adds XP to a(n) user(s).",
+  removexp: "Removes XP from (a) user(s).",
+  setlevel: "Sets a user's level. `This action is irreversible.`",
+  rank: "Displays the total experience & level of a user. If no argument is provided, it should show the invoking user's card."
 };
