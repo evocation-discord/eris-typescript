@@ -248,7 +248,8 @@ export const strings = {
         resetxpsuccessfull: (type: "role" | "user", amount: number, amount2?: number) => `The XP of **${amount}** ${type}(s) ${amount2 ? `(${amount2} users) ` : ""}is set to 0.`,
         serverReset: "You are going to reset the whole server, respond with **yes** to continue. Don't respond or send something else and this request will be cancelled.",
         cancelled: "Request has been cancelled."
-      }
+      },
+      xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s)`
     }
   },
   commandGroups: {}
