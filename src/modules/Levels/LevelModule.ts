@@ -8,6 +8,34 @@ export default class LevelModule extends Module {
     super(client);
   }
 
+  @monitor({ event: "guildMemberUpdate" })
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+    if (newMember.guild.id !== MAIN_GUILD_ID) return;
+    const xpData = await UserXP.findOne({ where: { id: newMember.id } });
+    if (!xpData) return;
+    const userLevel = levelConstants.getLevelFromXP(xpData.xp);
+    let rolesData = await LevelRole.find();
+    rolesData = rolesData.sort((a, b) => a.level - b.level);
+    const roleData = rolesData.find(r => r.level === userLevel);
+    if (!roleData) {
+      const data = rolesData.filter(rr => rr.level < userLevel).reverse()[0];
+      if (!data) return;
+      if (oldMember.roles.cache.has(data.id) && !newMember.roles.cache.has(data.id)) {
+        const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+        const firstEntry = auditLogs.entries.first();
+        if (!(firstEntry.changes[0].key === "$remove" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
+          newMember.roles.add(data.id, strings.modules.levels.auditLogRoleRemove);
+      }
+    } else {
+      if (oldMember.roles.cache.has(roleData.id) && !newMember.roles.cache.has(roleData.id)) {
+        const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+        const firstEntry = auditLogs.entries.first();
+        if (!(firstEntry.changes[0].key === "$remove" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
+          newMember.roles.add(roleData.id, strings.modules.levels.auditLogRoleRemove);
+      }
+    }
+  }
+
   getRandomXP(): number {
     return Math.floor(Math.random() * 26) + 25;
   }
@@ -54,7 +82,7 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.xpignore, usage: "<channel|role> <ID/mention>" })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["xpi"], staff: true, description: commandDescriptions.xpignore, usage: "<channel|role> <ID/mention>" })
   async xpignore(msg: Message, type: "channel" | "role", id: string): Promise<void | Message> {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
@@ -77,7 +105,7 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role] [ID/mention]" })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], aliases: ["xpe"], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role] [ID/mention]" })
   async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel", id?: string): Promise<Message> {
     if (!what) {
       const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
@@ -106,7 +134,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
-  async resetxp(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void|Message> {
+  async resetxp(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
     if (type === "server") {
       await msg.channel.send(strings.modules.levels.resetxp.serverReset);
       let members = 0;
@@ -137,7 +165,7 @@ export default class LevelModule extends Module {
       for await (const _member of _members.split(" ")) roles.push(await roleParser(_member, msg) as Role);
       let members: GuildMember[] = [];
       roles.forEach(r => members.push(...r.members.array()));
-      members = members.filter((v,i) => members.indexOf(v) === i);
+      members = members.filter((v, i) => members.indexOf(v) === i);
       for await (const member of members) {
         const xpData = await UserXP.findOne({ where: { id: member.id } });
         if (!xpData) continue;
@@ -149,7 +177,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.addxp, usage: "<amount:number> [users:...user]" })
-  async addxp(msg: Message, amount: number, _members: string): Promise<void|Message> {
+  async addxp(msg: Message, amount: number, _members: string): Promise<void | Message> {
     if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -162,9 +190,8 @@ export default class LevelModule extends Module {
     msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
   }
 
-
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.addxp, usage: "<amount:number> [users:...user]" })
-  async takexp(msg: Message, amount: number, _members: string): Promise<void|Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.takexp, usage: "<amount:number> [users:...user]" })
+  async takexp(msg: Message, amount: number, _members: string): Promise<void | Message> {
     if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -176,5 +203,17 @@ export default class LevelModule extends Module {
       await xpData.save();
     }
     msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember, Number], staff: true, description: commandDescriptions.addxp, usage: "<user:user> <level:number>" })
+  async setlevel(msg: Message, member: GuildMember, level: number): Promise<void | Message> {
+    if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
+
+    let xpData = await UserXP.findOne({ where: { id: member.id } });
+    if (!xpData) xpData = await UserXP.create({ id: member.id }).save();
+    xpData.xp = levelConstants.getLevelXP(level);
+    await xpData.save();
+
+    msg.channel.send(strings.modules.levels.levelSet(member.user, level));
   }
 }

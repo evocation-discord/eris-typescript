@@ -249,7 +249,9 @@ export const strings = {
         serverReset: "You are going to reset the whole server, respond with **yes** to continue. Don't respond or send something else and this request will be cancelled.",
         cancelled: "Request has been cancelled."
       },
-      xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s)`
+      xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
+      levelSet: (user: User, level: number) => `${user.tag} (\`${user.id}\`) is now level **${level}**.`,
+      auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy."
     }
   },
   commandGroups: {}
@@ -293,7 +295,7 @@ export const commandDescriptions = {
   multiplier: "Multiplier command.",
   resetxp: "Resets XP for the specified user(s)/role(s)/server.",
   addxp: "Adds XP to a(n) user(s).",
-  removexp: "Removes XP from (a) user(s).",
+  takexp: "Removes XP from (a) user(s).",
   setlevel: "Sets a user's level. `This action is irreversible.`",
   rank: "Displays the total experience & level of a user. If no argument is provided, it should show the invoking user's card."
 };
