@@ -1,5 +1,5 @@
-import { monitor, Module, ErisClient, MAIN_GUILD_ID, levelConstants, strings, roleParser, userParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed } from "@lib/utils";
-import { Message } from "discord.js";
+import { monitor, Module, ErisClient, MAIN_GUILD_ID, levelConstants, strings, roleParser, userParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser } from "@lib/utils";
+import { Message, GuildMember, Role } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { UserXP, XPExclusion, LevelRole } from "@lib/utils/database/models";
 
@@ -103,5 +103,48 @@ export default class LevelModule extends Module {
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForChannel));
       }
     }
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
+  async resetxp(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void|Message> {
+    if (type === "server") {
+      await msg.channel.send(strings.modules.levels.resetxp.serverReset);
+      let members = 0;
+      const message = await msg.channel.awaitMessages(m => m.author.id === msg.author.id, { max: 1, time: 60000 });
+      if (message.first() && message.first().content.toLowerCase() === "yes") {
+        for await (const member of msg.guild.members.cache.array()) {
+          const xpData = await UserXP.findOne({ where: { id: member.id } });
+          if (!xpData) continue;
+          xpData.xp = 0;
+          await xpData.save();
+          members++;
+        }
+        msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("user", members)));
+      } else return msg.channel.send(strings.modules.levels.resetxp.cancelled);
+    } else if (type === "user") {
+      const members: GuildMember[] = [];
+      for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+      if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+      for await (const member of members) {
+        const xpData = await UserXP.findOne({ where: { id: member.id } });
+        if (!xpData) continue;
+        xpData.xp = 0;
+        await xpData.save();
+      }
+      msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("user", members.length)));
+    } else if (type === "role") {
+      const roles: Role[] = [];
+      for await (const _member of _members.split(" ")) roles.push(await roleParser(_member, msg) as Role);
+      let members: GuildMember[] = [];
+      roles.forEach(r => members.push(...r.members.array()));
+      members = members.filter((v,i) => members.indexOf(v) === i);
+      for await (const member of members) {
+        const xpData = await UserXP.findOne({ where: { id: member.id } });
+        if (!xpData) continue;
+        xpData.xp = 0;
+        await xpData.save();
+      }
+      msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("role", roles.length, members.length)));
+    } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
   }
 }

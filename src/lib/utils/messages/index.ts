@@ -40,7 +40,8 @@ export const strings = {
     couldNotFindGuildMember: "Could not find that guild member.",
     couldNotFindUser: "Could not find that user.",
     couldNotFindGuild: "Could not find that guild.",
-    couldNotFindTextChannel: "Could not find that text channel."
+    couldNotFindTextChannel: "Could not find that text channel.",
+    couldNotFindRole: "Could not find that role."
   },
   inhibitors: {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
@@ -243,6 +244,11 @@ export const strings = {
       channelNotExcluded: "This channel is not excluded.",
       updatedExclusionsForRole: "Updated exclusions for the specified role.",
       updatedExclusionsForChannel: "Updated exclusions for the specified channel.",
+      resetxp: {
+        resetxpsuccessfull: (type: "role" | "user", amount: number, amount2?: number) => `The XP of **${amount}** ${type}(s) ${amount2 ? `(${amount2} users) ` : ""}is set to 0.`,
+        serverReset: "You are going to reset the whole server, respond with **yes** to continue. Don't respond or send something else and this request will be cancelled.",
+        cancelled: "Request has been cancelled."
+      }
     }
   },
   commandGroups: {}
