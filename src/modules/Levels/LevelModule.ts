@@ -1,5 +1,5 @@
-import { monitor, Module, ErisClient, MAIN_GUILD_ID, levelConstants, strings, roleParser, userParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES } from "@lib/utils";
-import { Message, GuildMember, Role } from "discord.js";
+import { monitor, Module, ErisClient, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex } from "@lib/utils";
+import { Message, GuildMember, Role, User } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { UserXP, XPExclusion, LevelRole } from "@lib/utils/database/models";
 
@@ -46,14 +46,27 @@ export default class LevelModule extends Module {
     if (!message.guild) return;
     if (message.guild.id !== MAIN_GUILD_ID) return;
 
+    let user = await UserXP.findOne({ where: { id: message.author.id } });
+    if (!user) user = await UserXP.create({ id: message.author.id }).save();
+
+    const prefix = process.env.PREFIX;
+    const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
+    if (!prefixRegex.test(message.content)) return;
+
+    const [, matchedPrefix] = message.content.match(prefixRegex);
+
+    const noPrefix = message.content.slice(matchedPrefix.length).trim();
+    const stringArgs: string[] = noPrefix.split(" ").slice(1) || [];
+    const cmdTrigger = noPrefix.split(" ")[0].toLowerCase();
+    const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
+    if (!cmd) return;
+
     // blacklists, woohoo
     const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
     const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
     if (channelExclusions.find(c => c.id === message.channel.id)) return;
     if (roleExclusions.find(r => message.member.roles.cache.has(r.id))) return;
     if (await RedisClient.get(`player:${message.author.id}:check`)) return;
-    let user = await UserXP.findOne({ where: { id: message.author.id } });
-    if (!user) user = await UserXP.create({ id: message.author.id }).save();
 
     user.xp += this.getRandomXP();
     await user.save();
@@ -216,4 +229,42 @@ export default class LevelModule extends Module {
 
     msg.channel.send(strings.modules.levels.levelSet(member.user, level));
   }
+
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]" })
+  async rank(msg: Message, member?: GuildMember): Promise<void | Message> {
+    if (!member) member = msg.member;
+    const data = await userInfo(member.user);
+    const embed = new Embed()
+      .setTitle("Experience & Level Progression")
+      .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, format: "png" }))
+      .addField("Rank", `${data.rank}/${data.total_users}`, true)
+      .addField("Level", data.lvl, true)
+      .addField("Experience", `${data.remaining_xp}/${data.level_xp} XP`, true);
+    msg.channel.send(embed);
+  }
 }
+
+const userInfo = async (user: User) => {
+  const xpData = await UserXP.findOne({ where: { id: user.id } });
+  let allData = await UserXP.find();
+  allData = allData.sort((a, b) => b.xp - a.xp);
+  const user_total_xp = xpData.xp;
+  const user_lvl = levelConstants.getLevelFromXP(user_total_xp);
+  let x = 0;
+
+  for (let i = 0; i < user_lvl; i++) {
+    x += levelConstants.getLevelXP(i);
+  }
+  const remaining_xp = user_total_xp - x;
+
+  const level_xp = levelConstants.getLevelXP(user_lvl);
+
+  return {
+    total_xp: user_total_xp,
+    lvl: user_lvl,
+    remaining_xp: remaining_xp,
+    level_xp: level_xp,
+    rank: allData.findIndex(a => a.id === user.id) + 1,
+    total_users: allData.length
+  };
+};
