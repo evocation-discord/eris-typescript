@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji } from "discord.js";
-import { Blacklist, Giveaway, DisabledCommand, XPExclusion } from "../database/models";
+import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
 
 export const strings = {
   general: {
@@ -252,7 +252,19 @@ export const strings = {
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
       levelSet: (user: User, level: number) => `${user.tag} (\`${user.id}\`) is now level **${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string) => `Type **${type}** multiplier created.`
+      multiplierCreated: (type: string) => `Type **${type}** multiplier created.`,
+      missingUserId: "You missed the userid, please try again.",
+      removedMultiplier: "Multiplier(s) exhausted.",
+      noMultiplierFound: "There is no multiplier found for this user.",
+      multiplierEmbedName: (type: "Server" | "User") => `${type} Multipliers`,
+      noMultipliers: "There are no multipliers",
+      multiplierMapping: (ur: XPMultiplier) => {
+        if (ur.type === "server")
+          return `→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
+        if (ur.type === "user")
+          return `→ User: <@${ur.userID}> (\`${ur.userID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
+
+      },
     }
   },
   commandGroups: {}

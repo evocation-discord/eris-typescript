@@ -67,7 +67,8 @@ export default class LevelModule extends Module {
 
     for await (const multiplier of [...userMultipliers, ...serverMultipliers]) {
       if (multiplier.endDate) {
-        if (multiplier.endDate.getMilliseconds() <= new Date().getMilliseconds()) {
+        console.log(multiplier.endDate.getTime(), new Date().getTime(), multiplier.endDate.getTime() <= new Date().getTime());
+        if (multiplier.endDate.getTime() <= new Date().getTime()) {
           await multiplier.remove();
           continue;
         }
@@ -260,6 +261,33 @@ export default class LevelModule extends Module {
       endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
     }).save();
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(type)));
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server] [user]" })
+  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server", id?: string): Promise<Message> {
+    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
+
+    if (what === "exhaust") {
+      if (!type || !["user", "server"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
+      if (type === "user") {
+        if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingUserId));
+        const multiplier = await XPMultiplier.findOne({ where: { userID: id, type: "user" } });
+        if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
+        multiplier.remove();
+        msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
+      } else if (type === "server") {
+        const multipliers = await XPMultiplier.find({ where: { type: "server" } });
+        await multipliers.map(m => m.remove());
+        msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
+      }
+    } else if (what === "list") {
+      const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
+      const userMultipliers = await XPMultiplier.find({ where: { type: "user" } });
+      const embed = new Embed()
+        .addField(strings.modules.levels.multiplierEmbedName("Server"), serverMultipliers.map(s => strings.modules.levels.multiplierMapping(s)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+        .addField(strings.modules.levels.multiplierEmbedName("User"), userMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers);
+      return msg.channel.send(embed);
+    }
   }
 }
 
