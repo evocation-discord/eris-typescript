@@ -1,12 +1,24 @@
-import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional } from "@lib/utils";
-import { Message } from "discord.js";
-import { Giveaway } from "@database/models";
+import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional, monitor, MAIN_GUILD_ID } from "@lib/utils";
+import { Message, MessageReaction, User } from "discord.js";
+import { Giveaway, LevelRole } from "@database/models";
 import Duration from "@lib/utils/arguments/Duration";
 import { handleGiveawayWin } from "@lib/utils/GiveawayManager";
 
 export default class GiveawayModule extends Module {
   constructor(client: ErisClient) {
     super(client);
+  }
+
+  @monitor({ event: "messageReactionAdd" })
+  async messageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
+    if (reaction.partial) reaction = await reaction.fetch();
+    if (reaction.message.guild.id !== MAIN_GUILD_ID) return;
+    if (user.bot) return;
+    const giveaway = await Giveaway.findOne({ where: { messageId: reaction.message.id } });
+    if (!giveaway) return;
+    const levelData = await LevelRole.find();
+    const levelRoles = levelData.map(r => r.id);
+    if (!reaction.message.guild.members.resolve(user.id).roles.cache.some(r => levelRoles.includes(r.id))) reaction.users.remove(user.id);
   }
 
 

@@ -67,7 +67,6 @@ export default class LevelModule extends Module {
 
     for await (const multiplier of [...userMultipliers, ...serverMultipliers]) {
       if (multiplier.endDate) {
-        console.log(multiplier.endDate.getTime(), new Date().getTime(), multiplier.endDate.getTime() <= new Date().getTime());
         if (multiplier.endDate.getTime() <= new Date().getTime()) {
           await multiplier.remove();
           continue;
@@ -247,7 +246,8 @@ export default class LevelModule extends Module {
       .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, format: "png" }))
       .addField("Rank", `${data.rank}/${data.total_users}`, true)
       .addField("Level", data.lvl, true)
-      .addField("Experience", `${data.remaining_xp}/${data.level_xp} XP`, true);
+      .addField("Experience", `${data.remaining_xp}/${data.level_xp} XP`, true)
+      .addField("Total Experience", `${data.total_xp} XP`, true);
     msg.channel.send(embed);
   }
 
