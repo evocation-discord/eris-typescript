@@ -243,7 +243,12 @@ export default class LevelModule extends Module {
 
     let xpData = await UserXP.findOne({ where: { id: member.id } });
     if (!xpData) xpData = await UserXP.create({ id: member.id }).save();
-    xpData.xp = levelConstants.getLevelXP(level);
+    let xp = 0;
+
+    for (let i = 0; i < level; i++) {
+      x += levelConstants.getLevelXP(i);
+    }
+    xpData.xp = xp;
     await xpData.save();
 
     msg.channel.send(strings.modules.levels.levelSet(member.user, level));
