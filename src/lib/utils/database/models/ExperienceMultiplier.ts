@@ -16,5 +16,5 @@ export class XPMultiplier extends BaseEntity {
   multiplier: number;
 
   @Column({ nullable: true })
-  duration: number;
+  endDate?: Date;
 }

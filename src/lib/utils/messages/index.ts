@@ -251,7 +251,8 @@ export const strings = {
       },
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
       levelSet: (user: User, level: number) => `${user.tag} (\`${user.id}\`) is now level **${level}**.`,
-      auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy."
+      auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
+      multiplierCreated: (type: string) => `Type **${type}** multiplier created.`
     }
   },
   commandGroups: {}
@@ -292,7 +293,8 @@ export const commandDescriptions = {
   xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
   xpexclusions: "Removes a role/channel from being ignored or shows current exclusions.",
   leaderboard: "Shows a list of users and their experience.",
-  multiplier: "Multiplier command.",
+  activatemultiplier: "Activates a multiplier.  If no duration is provided, it should be permanent unless manually exhausted. If you want to add a multiplier to a server, userid can be anything.",
+  multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server.",
   resetxp: "Resets XP for the specified user(s)/role(s)/server.",
   addxp: "Adds XP to a(n) user(s).",
   takexp: "Removes XP from (a) user(s).",

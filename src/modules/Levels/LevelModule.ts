@@ -1,7 +1,8 @@
 import { monitor, Module, ErisClient, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex } from "@lib/utils";
 import { Message, GuildMember, Role, User } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
-import { UserXP, XPExclusion, LevelRole } from "@lib/utils/database/models";
+import { UserXP, XPExclusion, LevelRole, XPMultiplier } from "@lib/utils/database/models";
+import Duration from "@lib/utils/arguments/Duration";
 
 export default class LevelModule extends Module {
   constructor(client: ErisClient) {
@@ -49,17 +50,8 @@ export default class LevelModule extends Module {
     let user = await UserXP.findOne({ where: { id: message.author.id } });
     if (!user) user = await UserXP.create({ id: message.author.id }).save();
 
-    const prefix = process.env.PREFIX;
-    const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
-    if (!prefixRegex.test(message.content)) return;
-
-    const [, matchedPrefix] = message.content.match(prefixRegex);
-
-    const noPrefix = message.content.slice(matchedPrefix.length).trim();
-    const stringArgs: string[] = noPrefix.split(" ").slice(1) || [];
-    const cmdTrigger = noPrefix.split(" ")[0].toLowerCase();
-    const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
-    if (!cmd) return;
+    const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(process.env.PREFIX)})\\s*`);
+    if (prefixRegex.test(message.content)) return;
 
     // blacklists, woohoo
     const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
@@ -68,7 +60,22 @@ export default class LevelModule extends Module {
     if (roleExclusions.find(r => message.member.roles.cache.has(r.id))) return;
     if (await RedisClient.get(`player:${message.author.id}:check`)) return;
 
-    user.xp += this.getRandomXP();
+    const randomXP = this.getRandomXP();
+
+    const userMultipliers = await XPMultiplier.find({ where: { type: "user", userID: message.author.id } });
+    const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
+
+    for await (const multiplier of [...userMultipliers, ...serverMultipliers]) {
+      if (multiplier.endDate) {
+        if (multiplier.endDate.getMilliseconds() <= new Date().getMilliseconds()) {
+          await multiplier.remove();
+          continue;
+        }
+      }
+      user.xp += (multiplier.multiplier * randomXP);
+    }
+
+    user.xp += randomXP;
     await user.save();
 
     await this.levelRoleCheck(message, user.xp);
@@ -241,6 +248,18 @@ export default class LevelModule extends Module {
       .addField("Level", data.lvl, true)
       .addField("Experience", `${data.remaining_xp}/${data.level_xp} XP`, true);
     msg.channel.send(embed);
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, String, Number, new Optional(Duration)], staff: true, aliases: ["am"], description: commandDescriptions.activatemultiplier, usage: "<user|server> <userid:string> <multiplier> [duration]" })
+  async activatemultiplier(msg: Message, type: "user" | "server", userID: string, multiplier: number, duration?: Duration): Promise<void | Message> {
+    if (!["server", "user"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!activatemultiplier <user|server> <userid:string> <multiplier> [duration]")));
+    await XPMultiplier.create({
+      type: type,
+      userID: type === "user" ? userID : null,
+      multiplier: multiplier,
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+    }).save();
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(type)));
   }
 }
 
