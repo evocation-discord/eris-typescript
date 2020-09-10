@@ -309,8 +309,8 @@ export const commandDescriptions = {
   activatemultiplier: "Activates a multiplier.  If no duration is provided, it should be permanent unless manually exhausted. If you want to add a multiplier to a server, userid can be anything.",
   multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server.",
   resetxp: "Resets XP for the specified user(s)/role(s)/server.",
-  addxp: "Adds XP to a(n) user(s).",
-  takexp: "Removes XP from (a) user(s).",
+  addexperience: "Adds XP to a(n) user(s).",
+  deductexperience: "Removes XP from (a) user(s).",
   setlevel: "Sets a user's level. `This action is irreversible.`",
   rank: "Displays the total experience & level of a user. If no argument is provided, it should show the invoking user's card."
 };
