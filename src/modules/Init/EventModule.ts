@@ -38,6 +38,7 @@ export default class EventModule extends Module {
       .addField("Replayed Events", replayed);
 
     this.sendControlMessage(embed);
+    this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }
 
   @listener({ event: "shardReconnecting" })
@@ -51,6 +52,7 @@ export default class EventModule extends Module {
       .addField("Session ID", this.client.ws.shards.first().sessionID);
 
     this.sendControlMessage(embed);
+    this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
   }
 
   @monitor({ event: "message" })
