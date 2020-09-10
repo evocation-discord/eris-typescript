@@ -150,7 +150,8 @@ export const strings = {
         `${emotes.uncategorised.soulstones} **e!vb** Command Access [COMING SOON]`,
         `${emotes.uncategorised.soulstones} **e!muse** Command Access`
       ].join("\n"),
-      disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment."
+      disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment.",
+      hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
     },
     permissions: {
       negations: (type: "Reaction" | "Art" | "Media" | "Experience") => `${type} negations have been executed for the specified users.`

@@ -37,6 +37,18 @@ export default class LevelModule extends Module {
     }
   }
 
+  @monitor({ event: "guildMemberUpdate" })
+  async onGuildMemberRoleAdd2(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+    if (newMember.guild.id !== MAIN_GUILD_ID) return;
+    const levelData = await LevelRole.find();
+    const roles = levelData.map(r => r.id);
+    for (const role of roles) {
+      if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
+        if (newMember.roles.cache.has(ROLES.HYACINTH)) newMember.roles.remove(ROLES.HYACINTH);
+      }
+    }
+  }
+
   getRandomXP(): number {
     return Math.floor(Math.random() * 26) + 25;
   }
