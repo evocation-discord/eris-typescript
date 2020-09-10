@@ -42,13 +42,15 @@ export const timeFormatter = (date?: Date): string => {
   const _minutes = `0${date.getUTCMinutes()}`;
   const _day = `0${date.getUTCDate()}`;
   const _month = `0${date.getUTCMonth() + 1}`;
+  const _seconds = `0${date.getUTCSeconds()}`;
   const year = date.getUTCFullYear();
 
   const hour = _hour.slice(-2);
   const minutes = _minutes.slice(-2);
   const day = _day.slice(-2);
   const month = _month.slice(-2);
-  return `${hour}:${minutes} ${day}/${month}/${year} UTC`;
+  const seconds = _seconds.slice(-2);
+  return `${hour}:${minutes}:${seconds} ${day}/${month}/${year} UTC`;
 };
 
 export const getDuration = (duration: number): string => {
