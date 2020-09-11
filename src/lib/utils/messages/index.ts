@@ -265,7 +265,7 @@ export const strings = {
       },
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
-      levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now Level **${level}**.`,
+      levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
       multiplierCreated: (type: string) => `Type **${type.toUpperCase()}** multiplier created. Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
