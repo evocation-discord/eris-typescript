@@ -281,11 +281,11 @@ export const strings = {
 
       },
       levelRole: {
-        add: (role: Role, level: number) => `Registered **${role}** as level role on level **${level}**.`,
-        remove: (role: Role) => `Removed **${role}** as level role.`,
+        add: (role: Role, level: number) => `Registered **${role}** as a levelled role. It will be automatically awarded to users at Level **${level}**.`,
+        remove: (role: Role) => `Removed **${role}** from the levelled roles registry.`,
         alreadyRegistered: "This role is already registered as a level role.",
-        doesNotExist: "This role is not registered as a level role.",
-        noLevelledRoles: "No levelled roles present."
+        doesNotExist: "This role is not configured to be awarded upon meeting an experience threshold.",
+        noLevelledRoles: "No levelled roles have been configured."
       }
     }
   },
@@ -334,7 +334,7 @@ export const commandDescriptions = {
   deductexperience: "Deducts experience from (a) user(s).",
   setlevel: "Forcibly updates a user's level. This action is strictly irreversible.",
   rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument.",
-  addlevelledrole: "Add a level role to the level role list.",
-  removelevelledrole: "Remove a level role from the level role list.",
-  listlevelledroles: "See all level roles."
+  addlevelledrole: "Adds a role that will be autmatically assigned to users upon meeting experience thresholds.",
+  removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
+  listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds."
 };
