@@ -274,6 +274,7 @@ export const strings = {
         remove: (role: Role) => `Removed **${role}** as level role.`,
         alreadyRegistered: "This role is already registered as a level role.",
         doesNotExist: "This role is not registered as a level role.",
+        noLevelledRoles: "No levelled roles present."
       }
     }
   },

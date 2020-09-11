@@ -336,7 +336,7 @@ export default class LevelModule extends Module {
     const levelroles = await LevelRole.find();
     const embed = new Embed()
       .setAuthor("Level Roles")
-      .setDescription(levelroles.map(r => `→ **<@&${r.id}>** - Level ${r.level}`).join("\n"));
+      .setDescription(levelroles.map(r => `→ **<@&${r.id}>** - Level ${r.level}`).join("\n") || strings.modules.levels.levelRole.noLevelledRoles);
     return msg.channel.send(embed);
   }
 }
