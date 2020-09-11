@@ -309,6 +309,16 @@ export default class LevelModule extends Module {
       return msg.channel.send(embed);
     }
   }
+
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelrole, usage: "<role:role> <level:number>" })
+  async addlevelrole(msg: Message, role: Role, level: number): Promise<Message> {
+    if (await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
+    await LevelRole.create({
+      id: role.id,
+      level: level
+    }).save();
+    return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.add(role, level)), { allowedMentions: { roles: [] } });
+  }
 }
 
 const userInfo = async (user: User) => {

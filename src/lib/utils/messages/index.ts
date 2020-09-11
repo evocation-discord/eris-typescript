@@ -2,6 +2,7 @@
 import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji } from "discord.js";
 import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
+import { Role } from "discord.js";
 
 export const strings = {
   general: {
@@ -267,6 +268,10 @@ export const strings = {
           return `→ User: <@${ur.userID}> (\`${ur.userID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
 
       },
+      levelRole: {
+        add: (role: Role, level: number) => `Registered **${role}** as level role on level **${level}**.`,
+        alreadyRegistered: "This role is already registered as a level role."
+      }
     }
   },
   commandGroups: {}
@@ -313,5 +318,6 @@ export const commandDescriptions = {
   addexperience: "Adds experience to a(n) user(s).",
   deductexperience: "Deducts experience from (a) user(s).",
   setlevel: "Forcibly updates a user's level. This action is strictly irreversible.",
-  rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument."
+  rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument.",
+  addlevelrole: "Add a level role to the level role list."
 };

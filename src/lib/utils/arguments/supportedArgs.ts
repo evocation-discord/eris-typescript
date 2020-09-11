@@ -4,7 +4,7 @@ import { regExpEsc } from "..";
 import { strings } from "../messages";
 
 // All supported arguments.
-export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
+export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Role | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
 
 // Defines all parsers.
 export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
@@ -136,6 +136,7 @@ export const roleParser = async (arg: string, msg: discord.Message): Promise<dis
   if (querySearch.length === 0) throw new Error(strings.general.error(strings.arguments.couldNotFindRole));
   return querySearch[0];
 };
+allParsers.set(discord.Role, roleParser);
 
 // Handle string parsing.
 allParsers.set(String, async x => x);
