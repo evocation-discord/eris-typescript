@@ -313,8 +313,8 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelrole, usage: "<role:role> <level:number>" })
-  async addlevelrole(msg: Message, role: Role, level: number): Promise<Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelledrole, usage: "<role:role> <level:number>", aliases: ["alr"] })
+  async addlevelledrole(msg: Message, role: Role, level: number): Promise<Message> {
     if (await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
     await LevelRole.create({
       id: role.id,
@@ -323,20 +323,20 @@ export default class LevelModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.add(role, level)), { allowedMentions: { roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelrole, usage: "<role:role>" })
-  async removelevelrole(msg: Message, role: Role): Promise<Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role>", aliases: ["rlr"] })
+  async removelevelledrole(msg: Message, role: Role): Promise<Message> {
     if (!await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     await levelrole.remove();
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.remove(role)), { allowedMentions: { roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelrole })
-  async listlevelrole(msg: Message): Promise<Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelledroles, aliases: ["llr"] })
+  async listlevelledroles(msg: Message): Promise<Message> {
     const levelroles = await LevelRole.find();
     const embed = new Embed()
       .setAuthor("Level Roles")
-      .setDescription(levelroles.map(r => `**<@&${r.id}>** - Level ${r.level}`).join("\n"));
+      .setDescription(levelroles.map(r => `→ **<@&${r.id}>** - Level ${r.level}`).join("\n"));
     return msg.channel.send(embed);
   }
 }

@@ -322,7 +322,7 @@ export const commandDescriptions = {
   deductexperience: "Deducts experience from (a) user(s).",
   setlevel: "Forcibly updates a user's level. This action is strictly irreversible.",
   rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument.",
-  addlevelrole: "Add a level role to the level role list.",
-  removelevelrole: "Remove a level role from the level role list.",
-  listlevelrole: "See all level roles."
+  addlevelledrole: "Add a level role to the level role list.",
+  removelevelledrole: "Remove a level role from the level role list.",
+  listlevelledroles: "See all level roles."
 };
