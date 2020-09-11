@@ -251,6 +251,7 @@ export const strings = {
         cancelled: "The request has been terminated."
       },
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
+      xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: User, level: number) => `${user.tag} (\`${user.id}\`) is now level **${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
       multiplierCreated: (type: string) => `Type **${type.toUpperCase()}** multiplier created.`,

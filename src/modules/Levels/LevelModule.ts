@@ -5,9 +5,6 @@ import { UserXP, XPExclusion, LevelRole, XPMultiplier } from "@lib/utils/databas
 import Duration from "@lib/utils/arguments/Duration";
 
 export default class LevelModule extends Module {
-  constructor(client: ErisClient) {
-    super(client);
-  }
 
   @monitor({ event: "guildMemberUpdate" })
   async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
@@ -223,7 +220,7 @@ export default class LevelModule extends Module {
       await xpData.save();
       await this.levelRoleCheck(member, xpData.xp);
     }
-    msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
+    msg.channel.send(strings.general.success(strings.modules.levels.xpAdded(amount, members.length)));
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], aliases: ["de"], staff: true, description: commandDescriptions.deductexperience, usage: "<amount:number> [users:...user]" })
@@ -239,7 +236,7 @@ export default class LevelModule extends Module {
       await xpData.save();
       await this.levelRoleCheck(member, xpData.xp);
     }
-    msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
+    msg.channel.send(strings.general.success(strings.modules.levels.xpDeducted(amount, members.length)));
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember, Number], staff: true, description: commandDescriptions.setlevel, usage: "<user:user> <level:number>" })
@@ -257,7 +254,7 @@ export default class LevelModule extends Module {
     await xpData.save();
     await this.levelRoleCheck(member, xpData.xp);
 
-    msg.channel.send(strings.modules.levels.levelSet(member.user, level));
+    msg.channel.send(strings.general.success(strings.modules.levels.levelSet(member.user, level)));
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]" })
