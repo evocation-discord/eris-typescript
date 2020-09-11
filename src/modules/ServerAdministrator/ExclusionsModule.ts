@@ -32,6 +32,7 @@ export default class ExclusionsModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("user")));
     } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
   }
+
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions, usage: "[remove|clear] [user|role] [ID/mention]" })
   async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message> {
     if (!what) {

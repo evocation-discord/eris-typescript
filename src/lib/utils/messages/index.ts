@@ -285,7 +285,9 @@ export const strings = {
         remove: (role: Role) => `Removed **${role}** from the levelled roles registry.`,
         alreadyRegistered: "This role is already registered as a level role.",
         doesNotExist: "This role is not configured to be awarded upon meeting an experience threshold.",
-        noLevelledRoles: "No levelled roles have been configured."
+        noLevelledRoles: "No levelled roles have been configured.",
+        levelledRolesEmbedTitle: "Levelled Roles",
+        levelledRolesEmbedFooter: "These are the roles that will be automatically awarded to users based on predefined thresholds. Certain restrictions may be in place regarding their attribution/revocation.",
       }
     }
   },

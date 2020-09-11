@@ -12,6 +12,7 @@ export default class DonationModule extends Module {
         newMember.roles.remove(ROLES.WHITE_HALLOWS, strings.modules.donations.auditLogWhiteHallowsAdd);
     }
   }
+
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember, new Remainder(String)], aliases: ["ld"], staff: true, usage: "<member:member|snowflake> <item:...string>", description: commandDescriptions.logdonation })
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();

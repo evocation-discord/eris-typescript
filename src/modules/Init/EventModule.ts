@@ -18,7 +18,7 @@ export default class EventModule extends Module {
     Array.from(this.client.cronManager.crons).map(cron => cron.cronJob.fireOnTick());
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
-    
+
     setInterval(() => this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" }), 5400000);
 
     const embed = new Embed()

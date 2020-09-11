@@ -21,7 +21,6 @@ export default class GiveawayModule extends Module {
     if (!reaction.message.guild.members.resolve(user.id).roles.cache.some(r => levelRoles.includes(r.id))) reaction.users.remove(user.id);
   }
 
-
   @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.start, usage: "<duration:duration> <winners:number> <prize:...string>" })
   async start(msg: Message, duration: Duration, winners: number, prize: string): Promise<void> {
     msg.delete();
