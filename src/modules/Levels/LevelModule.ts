@@ -165,8 +165,8 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
-  async resetxp(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, aliases: ["resetxp"], description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
+  async resetexperience (msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
     if (type === "server") {
       await msg.channel.send(strings.modules.levels.resetxp.serverReset);
       let members = 0;
@@ -321,6 +321,23 @@ export default class LevelModule extends Module {
       level: level
     }).save();
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.add(role, level)), { allowedMentions: { roles: [] } });
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelrole, usage: "<role:role>" })
+  async removelevelrole(msg: Message, role: Role): Promise<Message> {
+    if (!await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.doesNotExist));
+    const levelrole = await LevelRole.findOne({ where: { id: role.id } });
+    await levelrole.remove();
+    return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.remove(role)), { allowedMentions: { roles: [] } });
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelrole })
+  async listlevelrole(msg: Message): Promise<Message> {
+    const levelroles = await LevelRole.find();
+    const embed = new Embed()
+      .setAuthor("Level Roles")
+      .setDescription(levelroles.map(r => `**<@&${r.id}>** - Level ${r.level}`).join("\n"));
+    return msg.channel.send(embed);
   }
 }
 

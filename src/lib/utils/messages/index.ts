@@ -271,7 +271,9 @@ export const strings = {
       },
       levelRole: {
         add: (role: Role, level: number) => `Registered **${role}** as level role on level **${level}**.`,
-        alreadyRegistered: "This role is already registered as a level role."
+        remove: (role: Role) => `Removed **${role}** as level role.`,
+        alreadyRegistered: "This role is already registered as a level role.",
+        doesNotExist: "This role is not registered as a level role.",
       }
     }
   },
@@ -320,5 +322,7 @@ export const commandDescriptions = {
   deductexperience: "Deducts experience from (a) user(s).",
   setlevel: "Forcibly updates a user's level. This action is strictly irreversible.",
   rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument.",
-  addlevelrole: "Add a level role to the level role list."
+  addlevelrole: "Add a level role to the level role list.",
+  removelevelrole: "Remove a level role from the level role list.",
+  listlevelrole: "See all level roles."
 };
