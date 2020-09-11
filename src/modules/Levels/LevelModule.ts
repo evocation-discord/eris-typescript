@@ -90,13 +90,13 @@ export default class LevelModule extends Module {
     user.xp += randomXP;
     await user.save();
 
-    await this.levelRoleCheck(message, user.xp);
+    await this.levelRoleCheck(message.member, user.xp);
 
     await RedisClient.set(`player:${message.author.id}:check`, "1", "ex", 60);
   }
 
-  async levelRoleCheck(msg: Message, xp: number): Promise<void> {
-    if (msg.member.roles.cache.find(r => r.name === "Muted")) return;
+  async levelRoleCheck(member: GuildMember, xp: number): Promise<void> {
+    if (member.roles.cache.find(r => r.name === "Muted")) return;
     const userLevel = levelConstants.getLevelFromXP(xp);
     let rolesData = await LevelRole.find();
     rolesData = rolesData.sort((a, b) => a.level - b.level);
@@ -105,12 +105,12 @@ export default class LevelModule extends Module {
       const data = rolesData.filter(rr => rr.level < userLevel).reverse()[0];
       if (!data) return;
       const previousRole = rolesData[rolesData.indexOf(data) - 1] || null;
-      if (previousRole) msg.member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
-      msg.member.roles.add(data.id, strings.modules.levels.auditlog.roleAdd);
+      if (previousRole) member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
+      member.roles.add(data.id, strings.modules.levels.auditlog.roleAdd);
     } else {
       const previousRole = rolesData[rolesData.indexOf(roleData) - 1] || null;
-      if (previousRole) msg.member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
-      msg.member.roles.add(roleData.id, strings.modules.levels.auditlog.roleAdd);
+      if (previousRole) member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
+      member.roles.add(roleData.id, strings.modules.levels.auditlog.roleAdd);
     }
   }
 
@@ -177,6 +177,7 @@ export default class LevelModule extends Module {
           if (!xpData) continue;
           xpData.xp = 0;
           await xpData.save();
+          await this.levelRoleCheck(member, xpData.xp);
           members++;
         }
         msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("user", members)));
@@ -190,6 +191,7 @@ export default class LevelModule extends Module {
         if (!xpData) continue;
         xpData.xp = 0;
         await xpData.save();
+        await this.levelRoleCheck(member, xpData.xp);
       }
       msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("user", members.length)));
     } else if (type === "role") {
@@ -203,6 +205,7 @@ export default class LevelModule extends Module {
         if (!xpData) continue;
         xpData.xp = 0;
         await xpData.save();
+        await this.levelRoleCheck(member, xpData.xp);
       }
       msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("role", roles.length, members.length)));
     } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
@@ -218,6 +221,7 @@ export default class LevelModule extends Module {
       if (!xpData) xpData = await UserXP.create({ id: member.id }).save();
       xpData.xp += amount;
       await xpData.save();
+      await this.levelRoleCheck(member, xpData.xp);
     }
     msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
   }
@@ -233,6 +237,7 @@ export default class LevelModule extends Module {
       xpData.xp -= amount;
       if (xpData.xp < 0) xpData.xp = 0;
       await xpData.save();
+      await this.levelRoleCheck(member, xpData.xp);
     }
     msg.channel.send(strings.modules.levels.xpAdded(amount, members.length));
   }
@@ -246,10 +251,11 @@ export default class LevelModule extends Module {
     let xp = 0;
 
     for (let i = 0; i < level; i++) {
-      x += levelConstants.getLevelXP(i);
+      xp += levelConstants.getLevelXP(i);
     }
     xpData.xp = xp;
     await xpData.save();
+    await this.levelRoleCheck(member, xpData.xp);
 
     msg.channel.send(strings.modules.levels.levelSet(member.user, level));
   }
