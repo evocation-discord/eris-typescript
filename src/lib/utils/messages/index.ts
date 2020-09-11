@@ -217,7 +217,9 @@ export const strings = {
         "Imagine an awakening of what could be.",
         "We must heal ourselves and bless others. This circuit never ends. It is time to take intuition to the next level.",
         "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
-        "That that is, is. That that is not, is not. That is it, is it not?"
+        "That that is, is. That that is not, is not. That is it, is it not?",
+        "you have to be at the bed with your mum",
+        "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     },
