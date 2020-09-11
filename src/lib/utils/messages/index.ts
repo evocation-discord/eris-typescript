@@ -220,7 +220,18 @@ export const strings = {
         "Imagine an awakening of what could be.",
         "We must heal ourselves and bless others. This circuit never ends. It is time to take intuition to the next level.",
         "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
-        "That that is, is. That that is not, is not. That is it, is it not?"
+        "That that is, is. That that is not, is not. That is it, is it not?",
+        "okay so it’s ok but it’s okay but it’s not ok but it has to me now it’s a great game and it’s so cute and it’s cute ok I wanna was the first time ever",
+        "okay so it’s ok but it’s okay but it’s not ok",
+        "iconic picture and a video to show me a lot more than I wanna cry like I know you can’t spell",
+        "do you ever just",
+        "destroy your life in a few days you will be fine I don’t think you should ever be a better friend or anything like you did I miss him",
+        "scan the link to my account I don’t think I need it for the day or anything I can have to ask for it haha was a she said it would never be anything different from the server",
+        "architecture and the other birds is the one who has no idea how much it will take for a long to be done to help them with the other hand",
+        "baby progress I will have a question about the next time I am going on the hunt to see you guys and I will have to ask him about what you want me and you do not want me anything else you wanna is that you like to him",
+        "ace game is so good game to kill me I gotta was a fun day lol I love it lol I wanna know what you wanna know lol I wanna know that I wanna cry like I gotta is the day I gotta is the way you look like you wanna is a time for us lol",
+        "chicken wings with no chicken",
+        "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     },
