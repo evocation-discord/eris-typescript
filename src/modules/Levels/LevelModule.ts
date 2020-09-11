@@ -335,7 +335,7 @@ export default class LevelModule extends Module {
   async listlevelledroles(msg: Message): Promise<Message> {
     const levelroles = await LevelRole.find();
     const embed = new Embed()
-      .setAuthor("Level Roles")
+      .setAuthor("Levelled Roles")
       .setDescription(levelroles.map(r => `→ **<@&${r.id}>** \`➔\` **LEVEL ${r.level}**`).join("\n") || strings.modules.levels.levelRole.noLevelledRoles)
       .setFooter("These are the roles that will be automatically awarded to users based on predefined thresholds. Certain restrictions may be in place regarding their attribution/revocation.");
     return msg.channel.send(embed);
