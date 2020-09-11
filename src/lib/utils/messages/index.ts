@@ -254,7 +254,7 @@ export const strings = {
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now Level **${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string) => `Type **${type.toUpperCase()}** multiplier created.`,
+      multiplierCreated: (type: string) => `Type **${type.toUpperCase()}** multiplier created. Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       removedMultiplier: "Multiplier(s) exhausted.",
       noMultiplierFound: "It does not appear that this user has an active experience multiplier.",
