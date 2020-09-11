@@ -247,21 +247,21 @@ export const strings = {
       updatedExclusionsForChannel: "Updated exclusions for the specified channel.",
       resetxp: {
         resetxpsuccessfull: (type: "role" | "user", amount: number, amount2?: number) => `The XP of **${amount}** ${type}(s) ${amount2 ? `(${amount2} users) ` : ""}is set to 0.`,
-        serverReset: "You are going to reset the whole server, respond with **yes** to continue. Don't respond or send something else and this request will be cancelled.",
-        cancelled: "Request has been cancelled."
+        serverReset: "You are about to delete all experience data associated with users on the current server. Respond with **yes** to proceed. Do **not** respond or send an unrelated message and this request will be automatically terminated.",
+        cancelled: "The request has been terminated."
       },
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
       levelSet: (user: User, level: number) => `${user.tag} (\`${user.id}\`) is now level **${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
       multiplierCreated: (type: string) => `Type **${type}** multiplier created.`,
-      missingUserId: "You missed the userid, please try again.",
+      missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       removedMultiplier: "Multiplier(s) exhausted.",
-      noMultiplierFound: "There is no multiplier found for this user.",
+      noMultiplierFound: "It does not appear that this user has an active experience multiplier.",
       multiplierEmbedName: (type: "Server" | "User") => `${type} Multipliers`,
-      noMultipliers: "There are no multipliers",
+      noMultipliers: "There are no active multipliers under this category.",
       multiplierMapping: (ur: XPMultiplier) => {
         if (ur.type === "server")
-          return `→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
+          return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiry**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
         if (ur.type === "user")
           return `→ User: <@${ur.userID}> (\`${ur.userID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
 
@@ -305,12 +305,12 @@ export const commandDescriptions = {
   datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality.",
   xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
   xpexclusions: "Removes a role/channel from being ignored or shows current exclusions.",
-  leaderboard: "Shows a list of users and their experience.",
-  activatemultiplier: "Activates a multiplier.  If no duration is provided, it should be permanent unless manually exhausted. If you want to add a multiplier to a server, userid can be anything.",
+  leaderboard: "Shows a paginated list of users and their experience.",
+  activatemultiplier: "Activates a multiplier. If no duration is provided, the multiplier will be bound by permanence until manually exhausted. When enabling a server multiplier, the user ID argument is still necessary, though you can input `-` as a placeholder.",
   multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server.",
   resetxp: "Resets XP for the specified user(s)/role(s)/server.",
   addexperience: "Adds XP to a(n) user(s).",
-  deductexperience: "Removes XP from (a) user(s).",
-  setlevel: "Sets a user's level. `This action is irreversible.`",
-  rank: "Displays the total experience & level of a user. If no argument is provided, it should show the invoking user's card."
+  deductexperience: "Deducts XP from (a) user(s).",
+  setlevel: "Forcibly updates a user's level. This action is strictly irreversible.",
+  rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument."
 };
