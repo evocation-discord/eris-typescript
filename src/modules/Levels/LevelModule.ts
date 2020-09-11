@@ -277,13 +277,13 @@ export default class LevelModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, String, Number, new Optional(Duration)], staff: true, aliases: ["am"], description: commandDescriptions.activatemultiplier, usage: "<user|server> <userid:string> <multiplier> [duration]" })
   async activatemultiplier(msg: Message, type: "user" | "server", userID: string, multiplier: number, duration?: Duration): Promise<void | Message> {
     if (!["server", "user"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!activatemultiplier <user|server> <userid:string> <multiplier> [duration]")));
-    await XPMultiplier.create({
+    const xpmultiplier = await XPMultiplier.create({
       type: type,
       userID: type === "user" ? userID : null,
       multiplier: multiplier,
       endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
     }).save();
-    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(type)));
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(type, type === "user" ? msg.guild.members.resolve(userID).user : "server", multiplier, xpmultiplier.endDate)));
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server] [user]" })
