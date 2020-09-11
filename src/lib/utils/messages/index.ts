@@ -219,6 +219,7 @@ export const strings = {
         "Who are we? Where on the great circuit will we be reborn? Humankind has nothing to lose. Throughout history, humans have been interacting with the totality via morphogenetic fields.",
         "That that is, is. That that is not, is not. That is it, is it not?",
         "you have to be at the bed with your mum",
+        "death penalty for a bit more of the light is a bit more of an awful experience for the kids and then the next time I will wanna go to play the cage so you don’t have any time for me a lot more than you do know what to you say anything to me",
         "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
