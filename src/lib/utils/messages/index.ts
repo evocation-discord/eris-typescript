@@ -334,7 +334,7 @@ export const commandDescriptions = {
   activateservermultiplier: "Activates a multiplier that affects the entire server.",
   activaterolemultiplier: "Activates a multiplier that affects an entire role.",
   activateusermultiplier: "Activates a multiplier that affects a single user.",
-  multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server.",
+  multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server/all users within a specified role.",
   resetxp: "Resets experience for the specified user(s)/role(s)/server.",
   addexperience: "Adds experience to a(n) user(s).",
   deductexperience: "Deducts experience from (a) user(s).",
