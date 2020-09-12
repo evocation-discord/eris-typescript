@@ -267,7 +267,7 @@ export const strings = {
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string, us: User | "server", amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : "the whole server"}. They will receive **${amount}** times as much experience as they usually would. This multiplier is set to expire at **${timeFormatter(expireDate)}**. Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
+      multiplierCreated: (type: string, us: User | Role | "server", amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : "They"} will receive **${amount}** times as much experience as they usually would. This multiplier is set to expire at **${timeFormatter(expireDate)}**. Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       removedMultiplier: "Multiplier(s) exhausted.",
       noMultiplierFound: "It does not appear that this user has an active experience multiplier.",
@@ -277,7 +277,9 @@ export const strings = {
         if (ur.type === "server")
           return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiry**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
         if (ur.type === "user")
-          return `→ User: <@${ur.userID}> (\`${ur.userID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "no duration"}`;
+          return `→ User: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        if (ur.type === "role")
+          return `→ Role: <@&${ur.thingID}> (\`${ur.thingID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
 
       },
       levelRole: {
@@ -329,7 +331,9 @@ export const commandDescriptions = {
   xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
   xpexclusions: "Removes a role/channel from being ignored or lists active exclusions categorically. Identifiers will only be parsed as arguments, not mentions.",
   leaderboard: "Returns a paginated list of users, based on their rank, level and total experience.",
-  activatemultiplier: "Activates an experience multiplier. If no duration is provided, the multiplier will be bound by permanence until manually exhausted. When enabling a server multiplier, the user ID argument is still necessary, though you can input `-` as a placeholder.",
+  activateservermultiplier: "Activates a multiplier that affects the entire server.",
+  activaterolemultiplier: "Activates a multiplier that affects an entire role.",
+  activateusermultiplier: "Activates a multiplier that affects a single user.",
   multiplier: "Exhausts an active multiplier, lists all active multipliers or resets multipliers for the entire server.",
   resetxp: "Resets experience for the specified user(s)/role(s)/server.",
   addexperience: "Adds experience to a(n) user(s).",

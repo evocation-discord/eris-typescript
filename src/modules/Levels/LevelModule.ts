@@ -71,7 +71,7 @@ export default class LevelModule extends Module {
 
     const randomXP = this.getRandomXP();
 
-    const userMultipliers = await XPMultiplier.find({ where: { type: "user", userID: message.author.id } });
+    const userMultipliers = await XPMultiplier.find({ where: { type: "user", thingID: message.author.id } });
     const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
 
     for await (const multiplier of [...userMultipliers, ...serverMultipliers]) {
@@ -263,6 +263,7 @@ export default class LevelModule extends Module {
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]" })
   async rank(msg: Message, member?: GuildMember): Promise<void | Message> {
     if (!member) member = msg.member;
+    if (member.user.bot) return;
     const data = await userInfo(member.user);
     const embed = new Embed()
       .setTitle("Experience & Level Progression")
@@ -274,20 +275,45 @@ export default class LevelModule extends Module {
     msg.channel.send(embed);
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, String, Number, new Optional(Duration)], staff: true, aliases: ["am"], description: commandDescriptions.activatemultiplier, usage: "<user|server> <userid:string> <multiplier> [duration]" })
-  async activatemultiplier(msg: Message, type: "user" | "server", userID: string, multiplier: number, duration?: Duration): Promise<void | Message> {
-    if (!["server", "user"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!activatemultiplier <user|server> <userid:string> <multiplier> [duration]")));
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(Duration)], staff: true, aliases: ["asm"], description: commandDescriptions.activateservermultiplier, usage: "<multiplier> [duration]" })
+  async activateservermultiplier(msg: Message, multiplier: number, duration?: Duration): Promise<void> {
+    await msg.delete();
     const xpmultiplier = await XPMultiplier.create({
-      type: type,
-      userID: type === "user" ? userID : null,
+      type: "server",
       multiplier: multiplier,
       endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
     }).save();
-    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(type, type === "user" ? msg.guild.members.resolve(userID).user : "server", multiplier, xpmultiplier.endDate)));
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, "server", multiplier, xpmultiplier.endDate)));
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [User, Number, new Optional(Duration)], staff: true, aliases: ["aum"], description: commandDescriptions.activateusermultiplier, usage: "<user:user> <multiplier> [duration]" })
+  async activateusermultiplier(msg: Message, user: User, multiplier: number, duration?: Duration): Promise<void> {
+    await msg.delete();
+    const xpmultiplier = await XPMultiplier.create({
+      type: "user",
+      multiplier: multiplier,
+      thingID: user.id,
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+    }).save();
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, user, multiplier, xpmultiplier.endDate)));
+  }
+
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Role, Number, new Optional(Duration)], staff: true, aliases: ["arm"], description: commandDescriptions.activaterolemultiplier, usage: "<role:role> <multiplier> [duration]" })
+  async activaterolemultiplier(msg: Message, role: Role, multiplier: number, duration?: Duration): Promise<void> {
+    await msg.delete();
+    const xpmultiplier = await XPMultiplier.create({
+      type: "role",
+      multiplier: multiplier,
+      thingID: role.id,
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+    }).save();
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, role, multiplier, xpmultiplier.endDate)), { allowedMentions: { roles: [] } });
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server] [user]" })
   async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server", id?: string): Promise<Message> {
+    await msg.delete();
     if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
 
     if (what === "exhaust") {

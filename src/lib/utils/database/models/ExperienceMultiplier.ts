@@ -7,10 +7,10 @@ export class XPMultiplier extends BaseEntity {
   id: number;
 
   @Column()
-  type: "user" | "server";
+  type: "user" | "server" | "role";
 
   @Column({ nullable: true })
-  userID: Snowflake;
+  thingID: Snowflake;
 
   @Column()
   multiplier: number;
