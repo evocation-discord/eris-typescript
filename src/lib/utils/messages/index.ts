@@ -147,7 +147,7 @@ export const strings = {
         `Thank you for boosting Evocation, ${user}! You now have access to change your own nickname, embed links, attach files, add reactions, and stream into the server. If these permissions seem familiar to you, that means you are **Level 3** or above.\n`,
         "**SUCCESSFULLY UNLOCKED**:",
         `${emotes.uncategorised.soulstones} Coloured **Wisteria** Role [HOISTED]`,
-        `${emotes.uncategorised.soulstones} x**2** Experience Multiplier [COMING SOON]`,
+        `${emotes.uncategorised.soulstones} x**2** Experience Multiplier`,
         `${emotes.uncategorised.soulstones} **e!vb** Command Access [COMING SOON]`,
         `${emotes.uncategorised.soulstones} **e!muse** Command Access`
       ].join("\n"),
