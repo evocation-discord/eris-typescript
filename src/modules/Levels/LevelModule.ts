@@ -318,10 +318,10 @@ export default class LevelModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role] [user]" })
   async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role", id?: string): Promise<Message> {
     await msg.delete();
-    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
+    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user]")));
 
     if (what === "exhaust") {
-      if (!type || !["user", "server"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
+      if (!type || !["user", "server", "role"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user]")));
       if (type === "user") {
         if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingUserId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
