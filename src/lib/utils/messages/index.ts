@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { emotes, ROLES, timeFormatter } from "..";
-import { PermissionResolvable, Snowflake, Message, User, GuildEmoji } from "discord.js";
+import { PermissionResolvable, Snowflake, Message, User, GuildEmoji, Guild } from "discord.js";
 import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
 import { Role } from "discord.js";
 
@@ -267,7 +267,7 @@ export const strings = {
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string, us: User | Role | "server", amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
+      multiplierCreated: (type: string, us: User | Role | Guild, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : us instanceof Guild ? `All members of **${us.name}**` : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       missingRoleId: "No role ID can be deduced from your command invocation. Please try again.",
       removedMultiplier: "Multiplier(s) exhausted.",

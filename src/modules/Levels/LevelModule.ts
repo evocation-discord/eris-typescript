@@ -287,7 +287,7 @@ export default class LevelModule extends Module {
       multiplier: multiplier,
       endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
     }).save();
-    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, "server", multiplier, xpmultiplier.endDate)));
+    msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, msg.guild, multiplier, xpmultiplier.endDate)));
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [User, Number, new Optional(Duration)], staff: true, aliases: ["aum"], description: commandDescriptions.activateusermultiplier, usage: "<user:user> <multiplier> [duration]" })
