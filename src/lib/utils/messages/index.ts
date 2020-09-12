@@ -246,7 +246,7 @@ export const strings = {
     levels: {
       auditlog: {
         roleAdd: "[LEVELLING SYSTEM] User met experience threshold for role advancement.",
-        roleRemove: "[LEVELLING SYSTEM] Remove old experience roles.",
+        roleRemove: "[LEVELLING SYSTEM] Removing outdated levelled role(s).",
         xpReset: "[LEVELLING SYSTEM] Experience of user has been reset."
       },
       executedExclusions: (type: "role" | "channel") => `Executed exclusions for the specified ${type}.`,
@@ -276,11 +276,11 @@ export const strings = {
       noMultipliers: "There are no active multipliers under this category.",
       multiplierMapping: (ur: XPMultiplier) => {
         if (ur.type === "server")
-          return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiry**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+          return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
         if (ur.type === "user")
-          return `→ User: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+          return `→ **User**: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
         if (ur.type === "role")
-          return `→ Role: <@&${ur.thingID}> (\`${ur.thingID}\`)\n→ Multiplier: ${ur.multiplier}\n→ Endtime: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+          return `→ **Role**: <@&${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
 
       },
       levelRole: {
