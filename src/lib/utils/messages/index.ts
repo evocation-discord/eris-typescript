@@ -246,7 +246,7 @@ export const strings = {
     levels: {
       auditlog: {
         roleAdd: "[LEVELLING SYSTEM] User met experience threshold for role advancement.",
-        roleRemove: "[LEVELLING SYSTEM] Remove old experience roles.",
+        roleRemove: "[LEVELLING SYSTEM] Removing outdated levelled role(s).",
         xpReset: "[LEVELLING SYSTEM] Experience of user has been reset."
       },
       executedExclusions: (type: "role" | "channel") => `Executed exclusions for the specified ${type}.`,
