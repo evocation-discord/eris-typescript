@@ -225,7 +225,6 @@ export const strings = {
         "okay so it’s ok but it’s okay but it’s not ok",
         "iconic picture and a video to show me a lot more than I wanna cry like I know you can’t spell",
         "do you ever just",
-        "destroy your life in a few days you will be fine I don’t think you should ever be a better friend or anything like you did I miss him",
         "scan the link to my account I don’t think I need it for the day or anything I can have to ask for it haha was a she said it would never be anything different from the server",
         "architecture and the other birds is the one who has no idea how much it will take for a long to be done to help them with the other hand",
         "baby progress I will have a question about the next time I am going on the hunt to see you guys and I will have to ask him about what you want me and you do not want me anything else you wanna is that you like to him",
