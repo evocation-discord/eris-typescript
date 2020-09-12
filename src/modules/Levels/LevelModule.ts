@@ -315,13 +315,13 @@ export default class LevelModule extends Module {
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, role, multiplier, xpmultiplier.endDate)), { allowedMentions: { roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role] [user]" })
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role] [user|role]" })
   async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role", id?: string): Promise<Message> {
     await msg.delete();
-    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user]")));
+    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user|role]")));
 
     if (what === "exhaust") {
-      if (!type || !["user", "server", "role"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user]")));
+      if (!type || !["user", "server", "role"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role] [user|role]")));
       if (type === "user") {
         if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingUserId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
