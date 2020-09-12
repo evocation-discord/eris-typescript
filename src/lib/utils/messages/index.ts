@@ -27,7 +27,7 @@ export const strings = {
       description: (duration: string) => [
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
-        `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **Level 3** or above, your entrance will be nullified.`
+        `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **LEVEL 3** or above, your entrance will be nullified.`
       ].join("\n")
     },
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
