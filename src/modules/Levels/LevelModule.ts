@@ -72,9 +72,11 @@ export default class LevelModule extends Module {
     const randomXP = this.getRandomXP();
 
     const userMultipliers = await XPMultiplier.find({ where: { type: "user", thingID: message.author.id } });
+    let roleMultipliers = await XPMultiplier.find({ where: { type: "role" } });
+    roleMultipliers = roleMultipliers.filter(r => message.member.roles.cache.has(r.thingID));
     const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
 
-    for await (const multiplier of [...userMultipliers, ...serverMultipliers]) {
+    for await (const multiplier of [...userMultipliers, ...serverMultipliers, ...roleMultipliers]) {
       if (multiplier.endDate) {
         if (multiplier.endDate.getTime() <= new Date().getTime()) {
           await multiplier.remove();
@@ -166,7 +168,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, aliases: ["resetxp"], description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
-  async resetexperience (msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
+  async resetexperience(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
     if (type === "server") {
       await msg.channel.send(strings.modules.levels.resetxp.serverReset);
       let members = 0;
@@ -311,8 +313,8 @@ export default class LevelModule extends Module {
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, role, multiplier, xpmultiplier.endDate)), { allowedMentions: { roles: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server] [user]" })
-  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server", id?: string): Promise<Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role] [user]" })
+  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role", id?: string): Promise<Message> {
     await msg.delete();
     if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
 
@@ -320,7 +322,7 @@ export default class LevelModule extends Module {
       if (!type || !["user", "server"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server] [user]")));
       if (type === "user") {
         if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingUserId));
-        const multiplier = await XPMultiplier.findOne({ where: { userID: id, type: "user" } });
+        const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
         if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
@@ -328,13 +330,21 @@ export default class LevelModule extends Module {
         const multipliers = await XPMultiplier.find({ where: { type: "server" } });
         await multipliers.map(m => m.remove());
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
+      } else if (type === "role") {
+        if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingRoleId));
+        const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "role" } });
+        if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
+        multiplier.remove();
+        msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       }
     } else if (what === "list") {
       const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
       const userMultipliers = await XPMultiplier.find({ where: { type: "user" } });
+      const roleMultipliers = await XPMultiplier.find({ where: { type: "role" } });
       const embed = new Embed()
         .addField(strings.modules.levels.multiplierEmbedName("Server"), serverMultipliers.map(s => strings.modules.levels.multiplierMapping(s)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
-        .addField(strings.modules.levels.multiplierEmbedName("User"), userMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers);
+        .addField(strings.modules.levels.multiplierEmbedName("User"), userMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+        .addField(strings.modules.levels.multiplierEmbedName("Role"), roleMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers);
       return msg.channel.send(embed);
     }
   }
