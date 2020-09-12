@@ -97,7 +97,7 @@ export default class LevelModule extends Module {
   async levelRoleCheck(member: GuildMember, xp: number): Promise<void> {
     if (member.roles.cache.find(r => r.name === "Muted")) return;
     const userLevel = levelConstants.getLevelFromXP(xp);
-    if (userLevel === 0) {
+    if (xp === 0) {
       const rolesData = await LevelRole.find();
       member.roles.remove(rolesData.map(r => r.id), strings.modules.levels.auditlog.xpReset);
       return;
@@ -108,11 +108,13 @@ export default class LevelModule extends Module {
     if (!roleData) {
       const data = rolesData.filter(rr => rr.level < userLevel).reverse()[0];
       if (!data) return;
-      member.roles.remove(rolesData.filter(r => r !== data).map(r => r.id), strings.modules.levels.auditlog.roleRemove);
-      member.roles.add(data.id, strings.modules.levels.auditlog.roleAdd);
+      await member.roles.add(data.id, strings.modules.levels.auditlog.roleAdd);
+      const previousRole = rolesData[rolesData.indexOf(data) - 1] || null;
+      if (previousRole) await member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
     } else {
-      member.roles.remove(rolesData.filter(r => r !== roleData).map(r => r.id), strings.modules.levels.auditlog.roleRemove);
-      member.roles.add(roleData.id, strings.modules.levels.auditlog.roleAdd);
+      await member.roles.add(roleData.id, strings.modules.levels.auditlog.roleAdd);
+      const previousRole = rolesData[rolesData.indexOf(roleData) - 1] || null;
+      if (previousRole) await member.roles.remove(previousRole.id, strings.modules.levels.auditlog.roleRemove).catch(_ => _);
     }
   }
 
