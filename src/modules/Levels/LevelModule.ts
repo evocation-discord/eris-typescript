@@ -264,7 +264,7 @@ export default class LevelModule extends Module {
     msg.channel.send(strings.general.success(strings.modules.levels.levelSet(member.user, level)));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]" })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]", aliases: ["xp"] })
   async rank(msg: Message, member?: GuildMember): Promise<void | Message> {
     if (!member) member = msg.member;
     if (member.user.bot) return;
