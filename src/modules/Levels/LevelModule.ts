@@ -379,7 +379,8 @@ export default class LevelModule extends Module {
 }
 
 const userInfo = async (user: User) => {
-  const xpData = await UserXP.findOne({ where: { id: user.id } });
+  let xpData = await UserXP.findOne({ where: { id: user.id } });
+  if (!xpData) xpData = await UserXP.create({ id: user.id }).save();
   let allData = await UserXP.find();
   allData = allData.sort((a, b) => b.xp - a.xp);
   const user_total_xp = xpData.xp;
