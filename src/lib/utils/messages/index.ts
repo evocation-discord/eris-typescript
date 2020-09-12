@@ -280,7 +280,7 @@ export const strings = {
         if (ur.type === "user")
           return `→ **User**: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
         if (ur.type === "role")
-          return `→ **Role**: <@&${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+          return `→ **Role**: **<@&${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
 
       },
       levelRole: {
