@@ -79,6 +79,7 @@ const roleValidation = async (msg: Message, roleID: string): Promise<boolean> =>
 const canOnlyBeExecutedInBotCommands =
   mergeInhibitors(guildsOnly, async (msg, client) => {
     if (client.botAdmins.includes(msg.author.id)) return undefined;
+    if (msg.channel.id === "528598741565833246") return undefined;
     if ((msg.channel as TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejected;
     return undefined;
   });
