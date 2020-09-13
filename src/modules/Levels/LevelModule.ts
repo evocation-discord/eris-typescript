@@ -359,6 +359,7 @@ export default class LevelModule extends Module {
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       }
     } else if (what === "list") {
+      if ((msg.channel as TextChannel).name !== "administrator-bot-commands") return;
       const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
       const userMultipliers = await XPMultiplier.find({ where: { type: "user" } });
       const roleMultipliers = await XPMultiplier.find({ where: { type: "role" } });
