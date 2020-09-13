@@ -346,5 +346,5 @@ export const commandDescriptions = {
   addlevelledrole: "Adds a role that will be autmatically assigned to users upon meeting experience thresholds.",
   removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
-  miraculum: "Awards a user with Evocation Miraculum."
+  miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it."
 };
