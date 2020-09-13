@@ -35,7 +35,7 @@ export default class DonationModule extends Module {
     (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(strings.modules.donations.commands.logdonationLogEntry(member.user, item, msg.author));
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember], staff: true, usage: "<member:member|snowflake> <item:...string>", description: commandDescriptions.miraculum })
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember], staff: true, usage: "<member:member|snowflake>", description: commandDescriptions.miraculum })
   async miraculum(msg: Message, member: GuildMember): Promise<void> {
     await member.roles.add(ROLES.EVOCATION_MIRACULUM);
     msg.channel.send(strings.general.success(strings.modules.donations.commands.awardMiraculum(member.user)), { allowedMentions: { roles: [], users: [] } });
