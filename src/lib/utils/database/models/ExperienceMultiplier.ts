@@ -7,7 +7,7 @@ export class XPMultiplier extends BaseEntity {
   id: number;
 
   @Column()
-  type: "user" | "server" | "role";
+  type: "user" | "server" | "role" | "channel";
 
   @Column({ nullable: true })
   thingID: Snowflake;
