@@ -1,13 +1,13 @@
 import { Message } from "discord.js";
-import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings } from "@lib/utils";
+import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings, emotes } from "@lib/utils";
 
 const commandGroupsWithEmojis = {
-  "Bot Owner": "<:settings:747497421457588236> **BOT OWNER**",
-  "Informational": "<:information:747497420954534050> **INFORMATIONAL**",
-  "Giveaways": "<:donation:748230750805164032> **GIVEAWAYS**",
-  "Server Administrator": "<:admin:747497421399130220> **SERVER ADMINISTRATOR**",
-  "Moderation": "<:moderation:752218175986335835> **MODERATION**",
-  "Purchasable Role Limitation": "<:creditcard:749642425454166078> **PURCHASABLE ROLE LIMITATION**"
+  "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
+  "Informational": `${emotes.commandresponses.information} **INFORMATIONAL**`,
+  "Giveaways": `${emotes.giveaway.donation} **GIVEAWAYS**`,
+  "Server Administrator": `${emotes.commandresponses.admin} **SERVER ADMINISTRATOR**`,
+  "Moderation": `${emotes.uncategorised.moderation} **MODERATION**`,
+  "Purchasable Role Limitation": `${emotes.uncategorised.creditcard} **PURCHASABLE ROLE LIMITATION**`
 };
 
 export default class HelpModule extends Module {
