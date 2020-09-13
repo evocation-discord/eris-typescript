@@ -69,11 +69,12 @@ export const strings = {
       }
     },
     donations: {
-      auditLogWhiteHallowsAdd: "[FORCED REVOCATION] Authenticity cannot be verified.",
+      auditLogDonationRoleAdd: "[FORCED REVOCATION] Authenticity cannot be verified.",
       commands: {
         logdonationBotError: "The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.",
         logdonationAlreadyWhiteHallows: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
         logdonationNewWhiteHallows: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
+        awardMiraculum: (user: User) => `I awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role if they did not have the role yet.`,
         logdonationLogEntry: (user: User, item: string, executor: User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
       }
     },
@@ -343,5 +344,6 @@ export const commandDescriptions = {
   rank: "Displays the total experience and level progression of the invoking user. A user ID/mention can be provided as an argument.",
   addlevelledrole: "Adds a role that will be autmatically assigned to users upon meeting experience thresholds.",
   removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
-  listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds."
+  listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
+  miraculum: "Awards a user with Evocation Miraculum."
 };

@@ -9,7 +9,13 @@ export default class DonationModule extends Module {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
       const firstEntry = auditLogs.entries.first();
       if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
-        newMember.roles.remove(ROLES.WHITE_HALLOWS, strings.modules.donations.auditLogWhiteHallowsAdd);
+        newMember.roles.remove(ROLES.WHITE_HALLOWS, strings.modules.donations.auditLogDonationRoleAdd);
+    }
+    if (!oldMember.roles.cache.has(ROLES.EVOCATION_MIRACULUM) && newMember.roles.cache.has(ROLES.EVOCATION_MIRACULUM)) {
+      const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+      const firstEntry = auditLogs.entries.first();
+      if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
+        newMember.roles.remove(ROLES.EVOCATION_MIRACULUM, strings.modules.donations.auditLogDonationRoleAdd);
     }
   }
 
@@ -27,5 +33,11 @@ export default class DonationModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.donations.commands.logdonationNewWhiteHallows(member.user)), { allowedMentions: { roles: [], users: [] } }).then(msg => setTimeout(() => msg.delete(), 5000));
     }
     (msg.guild.channels.resolve(CHANNELS.DONATION_LOG) as TextChannel).send(strings.modules.donations.commands.logdonationLogEntry(member.user, item, msg.author));
+  }
+
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember], staff: true, usage: "<member:member|snowflake> <item:...string>", description: commandDescriptions.miraculum })
+  async miraculum(msg: Message, member: GuildMember): Promise<void> {
+    await member.roles.add(ROLES.EVOCATION_MIRACULUM);
+    msg.channel.send(strings.general.success(strings.modules.donations.commands.awardMiraculum(member.user)));
   }
 }
