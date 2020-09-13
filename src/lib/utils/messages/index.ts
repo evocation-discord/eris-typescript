@@ -74,7 +74,7 @@ export const strings = {
         logdonationBotError: "The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.",
         logdonationAlreadyWhiteHallows: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
         logdonationNewWhiteHallows: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
-        awardMiraculum: (user: User) => `I awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role if they did not have the role yet.`,
+        awardMiraculum: (user: User) => `I have awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role. Please take into consideration that this message will be returned even if the user already has the role prior to the command invocation being sent.`,
         logdonationLogEntry: (user: User, item: string, executor: User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
       }
     },
