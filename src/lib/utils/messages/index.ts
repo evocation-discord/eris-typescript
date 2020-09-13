@@ -74,7 +74,7 @@ export const strings = {
         logdonationBotError: "The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.",
         logdonationAlreadyWhiteHallows: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
         logdonationNewWhiteHallows: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
-        awardMiraculum: (user: User) => `I awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role if they did not have the role yet.`,
+        awardMiraculum: (user: User) => `I have awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role. Please take into consideration that this message will be returned even if the user already has the role prior to the command invocation being sent.`,
         logdonationLogEntry: (user: User, item: string, executor: User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
       }
     },
@@ -172,7 +172,8 @@ export const strings = {
         "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n",
         "__**CONTRIBUTORS**__\n",
         "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
-        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>" // Ace
+        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", // Ace
+        "**ABSTRACTION CONFIDANT**: <@700418258687230083>" // yesfromskribbl        
       ].join("\n"),
       pinging: `${emotes.commandresponses.server} Pinging...`,
       pingResponse: (ms: number, discordPing: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds. It took me **${discordPing}** milliseconds to receive a response from the Discord API.`,
@@ -345,5 +346,5 @@ export const commandDescriptions = {
   addlevelledrole: "Adds a role that will be autmatically assigned to users upon meeting experience thresholds.",
   removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
-  miraculum: "Awards a user with Evocation Miraculum."
+  miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it."
 };
