@@ -173,7 +173,7 @@ export const strings = {
         "__**CONTRIBUTORS**__\n",
         "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
         "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", // Ace
-        "**ABSTRACTION CONFIDANT**: <@700418258687230083>" // yesfromskribbl        
+        "**ABSTRACTION CONFIDANT**: <@700418258687230083>" // yesfromskribbl
       ].join("\n"),
       pinging: `${emotes.commandresponses.server} Pinging...`,
       pingResponse: (ms: number, discordPing: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds. It took me **${discordPing}** milliseconds to receive a response from the Discord API.`,
@@ -267,7 +267,7 @@ export const strings = {
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string, us: User | Role | Guild | TextChannel, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : us instanceof TextChannel ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : us instanceof Guild ? `All members of **${us.name}**` : us instanceof TextChannel ? "Users that talk in this channel" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
+      multiplierCreated: (type: string, us: User | Role | Guild | TextChannel, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : us instanceof TextChannel ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : us instanceof Guild ? `All members of **${us.name.toUpperCase()}**` : us instanceof TextChannel ? "Users that talk in this channel" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       missingRoleId: "No role ID can be deduced from your command invocation. Please try again.",
       missingChannelId: "No channel ID can be deduced from your command invocation. Please try again.",
