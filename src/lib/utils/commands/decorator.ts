@@ -53,7 +53,7 @@ export function command(
       onError:
         opts.onError ||
         (msg => {
-          msg.reply(":warning: error while executing command!");
+          msg.reply(":grey_exclamation: **COMMAND INHIBITED**: An error was encountered while executing this command. You should never see this response. Please Direct Message <@747105315840983212> with this message link so we can investigate.");
         })
     };
 
