@@ -41,6 +41,7 @@ export default class LoggingModule extends Module {
     if (links.length) {
       for await (const _link of links) {
         const link = await linkResolver(_link);
+        if (link.startsWith("https://discord.com/")) continue;
         if (link === _link) continue;
         channel.send(strings.modules.logging.linkResolver(msg, _link, link));
       }
