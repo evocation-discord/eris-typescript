@@ -35,7 +35,6 @@ export default class UtilCommandModule extends Module {
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
     const random = Math.floor(Math.random() * 100 + 1);
-    console.log(`${random} % 2: ${random % 2}`);
     if (random % 2 === 1) return;
     let done = false;
     ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach(erisString => {
