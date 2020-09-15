@@ -27,7 +27,7 @@ export const strings = {
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
         `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **LEVEL 3** or above, your entrance will be nullified.\n`,
-        `Want to receive notifications everytime a giveaway is active? Run \`-ar Giveaway Notifications\` in <#528598988673253376>.`
+        "Want to receive notifications everytime a giveaway is active? Run `-ar Giveaway Notifications` in <#528598988673253376>."
       ].join("\n")
     },
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
@@ -243,6 +243,13 @@ export const strings = {
       "I'm happy to be of service.",
       "Happy to be of help!",
       "Don't mention it."
+    ],
+    erisGoodnightMessage: [
+      (message: Message) => `:catblush: Goodnight, **${message.author.username}**!`,
+      () => "Rest well, dear.",
+      () => "Until the morning, then, I guess.",
+      () => "See you!",
+      () => "I hope your dreams are enchanted with beauty."
     ],
     levels: {
       auditlog: {

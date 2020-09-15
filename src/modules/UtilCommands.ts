@@ -34,16 +34,33 @@ export default class UtilCommandModule extends Module {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
-    const random = Math.floor(Math.random() * 100 + 1);
-    if (random % 2 === 1) return;
-    let done = false;
-    ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach(erisString => {
-      if (message.content.toLowerCase().includes(erisString)) {
-        if (done) return;
-        message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
-        done = true;
-      }
-    });
+    const thankYouEris = () => {
+      const random = Math.floor(Math.random() * 100 + 1);
+      if (random % 2 === 1) return;
+      let done = false;
+      ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach(erisString => {
+        if (message.content.toLowerCase().includes(erisString)) {
+          if (done) return;
+          message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
+          done = true;
+        }
+      });
+    };
+    thankYouEris();
+
+    const goodnightEris = () => {
+      const random = Math.floor(Math.random() * 100 + 1);
+      if (random % 2 === 1) return;
+      let done = false;
+      ["goodnight eris", "night eris", "gn eris", "gngn eris"].forEach(erisString => {
+        if (message.content.toLowerCase().includes(erisString)) {
+          if (done) return;
+          message.channel.send(strings.modules.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.erisGoodnightMessage.length)](message));
+          done = true;
+        }
+      });
+    };
+    goodnightEris();
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.datamine })
