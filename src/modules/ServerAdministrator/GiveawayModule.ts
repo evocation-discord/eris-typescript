@@ -138,6 +138,11 @@ export default class GiveawayModule extends Module {
     for await (const [index, giveaway] of giveaways.entries()) {
       const channel = await this.client.channels.fetch(giveaway.channelId);
       const message = await msg.channel.messages.fetch(giveaway.messageId);
+      if (!message) {
+        giveaway.ended = true;
+        await giveaway.save();
+        continue;
+      }
       await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
       endedGiveaways.push();
     }

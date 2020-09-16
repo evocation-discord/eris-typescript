@@ -245,7 +245,7 @@ export const strings = {
       "Don't mention it."
     ],
     erisGoodnightMessage: [
-      (message: Message) => `:catblush: Goodnight, **${message.author.username}**!`,
+      (message: Message) => `<:catblush:752075380227309598> Goodnight, **${message.author.username}**!`,
       () => "Rest well, dear.",
       () => "Until the morning, then, I guess.",
       () => "See you!",
