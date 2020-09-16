@@ -25,6 +25,7 @@ export default class ExclusionsModule extends Module {
       const user = await userParser(id, msg);
       if (typeof user === "string") return msg.channel.send(strings.general.error(user));
       if (user.id === msg.author.id) return msg.channel.send(strings.general.error(strings.modules.exclusions.cantExcludeYourself));
+      if (user.bot) return msg.channel.send(strings.general.error(strings.modules.exclusions.cantExcludeBots));
       await Blacklist.create({
         type: "user",
         id: user.id

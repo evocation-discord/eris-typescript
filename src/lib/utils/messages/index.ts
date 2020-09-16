@@ -93,6 +93,7 @@ export const strings = {
     },
     exclusions: {
       cantAddRoleToExclusions: "You cannot add that role as an exclusion as it would constitute your exclusion, too.",
+      cantExcludeBots: "You cannot exclude bot users. Please remember that Eris automatically ignores all other bots, webhooks and herself.",
       cantExcludeYourself: "You cannot execute that command on yourself.",
       executedExclusions: (type: "role" | "user") => `Executed exclusions for the specified ${type}.`,
       exclusionEmbedName: (type: "Role" | "User") => `${type} Exclusions`,
