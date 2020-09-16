@@ -34,6 +34,7 @@ export default class UtilCommandModule extends Module {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     if (!message.member.roles.cache.some(r => [ROLES.EVOCATION_LACUNAE, ROLES.EVOCATION_OCULI, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
+    if (["528593099971100672", "728243965987389442Wh"].includes(message.channel.parentID)) return;
     const thankYouEris = () => {
       const random = Math.floor(Math.random() * 100 + 1);
       if (random % 2 === 1) return;
