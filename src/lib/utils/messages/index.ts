@@ -9,7 +9,8 @@ export const strings = {
     error: (text: string) => `${emotes.commandresponses.denial} **COMMAND INHIBITED**: ${text}`,
     commandSyntax: (text: string) => `Syntactic fallacy detected. **COMMAND SYNTAX**: \`${text}\``,
     somethingWentWrong: "Something went wrong.",
-    commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`)."
+    commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`).",
+    version: "**VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY)."
   },
   giveaway: {
     embed: {
@@ -354,5 +355,6 @@ export const commandDescriptions = {
   addlevelledrole: "Adds a role that will be autmatically assigned to users upon meeting experience thresholds.",
   removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
-  miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it."
+  miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it.",
+  version: "Returns Eris' deployment version and its title, if applicable."
 };

@@ -68,4 +68,9 @@ export default class UtilCommandModule extends Module {
   async datamine(msg: Message): Promise<void> {
     msg.channel.send(strings.modules.util.datamine);
   }
+
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.version })
+  async version(msg: Message): Promise<void> {
+    msg.channel.send(strings.general.version);
+  }
 }
