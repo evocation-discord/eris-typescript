@@ -6,8 +6,9 @@ const commandGroupsWithEmojis = {
   "Informational": `${emotes.commandresponses.information} **INFORMATIONAL**`,
   "Giveaways": `${emotes.giveaway.donation} **GIVEAWAYS**`,
   "Server Administrator": `${emotes.commandresponses.admin} **SERVER ADMINISTRATOR**`,
-  "Moderation": `${emotes.uncategorised.moderation} **MODERATION**`,
-  "Purchasable Role Limitation": `${emotes.uncategorised.creditcard} **PURCHASABLE ROLE LIMITATION**`
+  "Moderation": `${emotes.commandresponses.moderation} **MODERATION**`,
+  "Purchasable Role Limitation": `${emotes.commandresponses.creditcard} **PURCHASABLE ROLE LIMITATION**`,
+  "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`
 };
 
 export default class HelpModule extends Module {

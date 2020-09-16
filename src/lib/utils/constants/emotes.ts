@@ -58,7 +58,27 @@ const commandresponses = {
   information: "<:information:747497420954534050>",
   settings: "<:settings:747497421457588236>",
   success: "<:success:747743173501124618>",
-  server: "<:server:752268602669006909>"
+  server: "<:server:752268602669006909>",
+  channels: {
+    voicechannel: "<:voicechannel:752268602366885901>",
+    privatevoicechannel: "<:privatevoicechannel:752268602534789201>",
+    textchannel: "<:textchannel:752268602698367097>",
+    privatetextchannel: "<:privatetextchannel:752268602698236005>",
+    announcementchannel: "<:announcementchannel:752268602647904306>",
+    privateannouncementchannel: "<:privateannouncementchannel:752268602694041680>",
+    expandedcategory: "<:expandedcategory:752268602404503573>",
+  },
+  badges: {
+    idle: "<:idle:752564909169967214>",
+    offline: "<:offline:752564909279150151>",
+    online: "<:online:752564909140869141>",
+    streaming: "<:streaming:752564909358973028>",
+    donotdisturb: "<:donotdisturb:752564908956057692>",
+  },
+  creditcard: "<:creditcard:752268602710949898>",
+  soulstones: "<:soulstones:752268601880215644>",
+  moderation: "<:moderation:752268602799030282>",
+  experience: "<:experience:754238145951825951>",
 };
 
 const experiencecapsules = {
@@ -72,22 +92,6 @@ const uncategorised = {
   fantasyregulations: "<:fantasyregulations:739758249213165598>",
   leave: "<:leave:746817814459056208>",
   regulations: "<:regulations:739751088932257842>",
-  creditcard: "<:creditcard:752268602710949898>",
-  voicechannel: "<:voicechannel:752268602366885901>",
-  privatevoicechannel: "<:privatevoicechannel:752268602534789201>",
-  textchannel: "<:textchannel:752268602698367097>",
-  privatetextchannel: "<:privatetextchannel:752268602698236005>",
-  announcementchannel: "<:announcementchannel:752268602647904306>",
-  privateannouncementchannel: "<:privateannouncementchannel:752268602694041680>",
-  expandedcategory: "<:expandedcategory:752268602404503573>",
-  soulstones: "<:soulstones:752268601880215644>",
-  moderation: "<:moderation:752268602799030282>",
-  donotdisturb: "<:donotdisturb:752564908956057692>",
-  experience: "<:experience:754238145951825951>",
-  idle: "<:idle:752564909169967214>",
-  offline: "<:offline:752564909279150151>",
-  online: "<:online:752564909140869141>",
-  streaming: "<:streaming:752564909358973028>"
 };
 
 

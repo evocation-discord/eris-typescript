@@ -12,7 +12,8 @@ export enum CommandCategories {
   "Giveaways" = "Giveaways",
   "Server Administrator" = "Server Administrator",
   "Moderation" = "Moderation",
-  "Purchasable Role Limitation" = "Purchasable Role Limitation"
+  "Purchasable Role Limitation" = "Purchasable Role Limitation",
+  "Levelling System" = "Levelling System"
 }
 
 export const levelConstants = {

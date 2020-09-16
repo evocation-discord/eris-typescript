@@ -147,10 +147,10 @@ export const strings = {
       userBoost: (user: User) => [
         `Thank you for boosting Evocation, ${user}! You now have access to change your own nickname, embed links, attach files, add reactions, and stream into the server. If these permissions seem familiar to you, that means you are **Level 3** or above.\n`,
         "**SUCCESSFULLY UNLOCKED**:",
-        `${emotes.uncategorised.soulstones} Coloured **WISTERIA** Role [HOISTED]`,
-        `${emotes.uncategorised.soulstones} Permanent x**2** Experience Multiplier`,
-        `${emotes.uncategorised.soulstones} **e!vb** Command Access [COMING SOON]`,
-        `${emotes.uncategorised.soulstones} **e!muse** Command Access`
+        `${emotes.commandresponses.soulstones} Coloured **WISTERIA** Role [HOISTED]`,
+        `${emotes.commandresponses.soulstones} Permanent x**2** Experience Multiplier`,
+        `${emotes.commandresponses.soulstones} **e!vb** Command Access [COMING SOON]`,
+        `${emotes.commandresponses.soulstones} **e!muse** Command Access`
       ].join("\n"),
       disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment.",
       hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
