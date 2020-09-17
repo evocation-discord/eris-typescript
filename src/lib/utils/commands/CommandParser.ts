@@ -58,7 +58,7 @@ export class CommandParserModule extends Module {
       } catch (err) {
         // Return a error.
         try {
-          return msg.channel.send((err as Error).message);
+          return msg.channel.send(strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`)));
         } catch (_) {
           // Do nothing. The user doesn't have the correct arguments.
           return;
