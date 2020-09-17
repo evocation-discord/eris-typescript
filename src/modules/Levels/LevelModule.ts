@@ -41,8 +41,18 @@ export default class LevelModule extends Module {
     const roles = levelData.map(r => r.id);
     for (const role of roles) {
       if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
-        if (newMember.roles.cache.has(ROLES.HYACINTH)) newMember.roles.remove(ROLES.HYACINTH);
+        if (newMember.roles.cache.has(ROLES.HYACINTH)) newMember.roles.remove(ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
       }
+    }
+  }
+
+  @monitor({ event: "guildMemberUpdate" })
+  async onGuildMemberRoleAdd3(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+    if (newMember.guild.id !== MAIN_GUILD_ID) return;
+    const levelData = await LevelRole.find();
+    const roles = levelData.map(r => r.id);
+    if (!oldMember.roles.cache.has(ROLES.HYACINTH) && newMember.roles.cache.has(ROLES.HYACINTH)) {
+      if (newMember.roles.cache.some(r => roles.includes(r.id))) newMember.roles.remove(ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
     }
   }
 
@@ -286,7 +296,7 @@ export default class LevelModule extends Module {
     const xpmultiplier = await XPMultiplier.create({
       type: "server",
       multiplier: multiplier,
-      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) : null
     }).save();
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, msg.guild, multiplier, xpmultiplier.endDate)));
   }
@@ -298,7 +308,7 @@ export default class LevelModule extends Module {
       type: "user",
       multiplier: multiplier,
       thingID: user.id,
-      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) : null
     }).save();
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, user, multiplier, xpmultiplier.endDate)));
   }
@@ -311,7 +321,7 @@ export default class LevelModule extends Module {
       type: "role",
       multiplier: multiplier,
       thingID: role.id,
-      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) : null
     }).save();
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, role, multiplier, xpmultiplier.endDate)), { allowedMentions: { roles: [] } });
   }
@@ -323,7 +333,7 @@ export default class LevelModule extends Module {
       type: "channel",
       multiplier: multiplier,
       thingID: channel.id,
-      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) :  null
+      endDate: duration ? new Date(Math.round(Date.now()) + duration.duration) : null
     }).save();
     msg.channel.send(strings.general.success(strings.modules.levels.multiplierCreated(xpmultiplier.type, channel, multiplier, xpmultiplier.endDate)), { allowedMentions: { roles: [] } });
   }
