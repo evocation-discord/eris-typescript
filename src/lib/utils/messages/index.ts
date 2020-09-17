@@ -19,7 +19,7 @@ export const strings = {
       footer: (winnerAmount: number) => `${winnerAmount} Winner(s) | Ends`,
       noWinner: `${emotes.commandresponses.denial} **EXECUTION FAILURE**: A winner was not able to be determined.`,
       giveawayEndedHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY ENDED** ${emotes.giveaway.giftmessage}`,
-      giveawayHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY** ${emotes.giveaway.giftmessage}\n<@&727558105705086976>`,
+      giveawayHeader: `${emotes.giveaway.giftmessage} **GIVEAWAY** ${emotes.giveaway.giftmessage}`,
       winners: (winners: string) => [
         "This giveaway was won by:",
         winners,

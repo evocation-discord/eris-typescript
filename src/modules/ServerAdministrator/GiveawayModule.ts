@@ -47,6 +47,7 @@ export default class GiveawayModule extends Module {
       startTime: startTimestamp,
       endTime: startTimestamp + duration.duration
     });
+    await giveawayMsg.channel.send("<@&727558105705086976>");
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.reroll, usage: "[messageid:string]" })
