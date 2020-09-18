@@ -6,6 +6,8 @@ declare module "discord.js" {
   }
 
   interface ClientEvents {
-    eventLog: [string, string]
+    eventLog: [string, string],
+    guildMemberRoleAdd: [GuildMember, GuildMember, Role],
+    guildMemberRoleRemove: [GuildMember, GuildMember, Role]
   }
 }

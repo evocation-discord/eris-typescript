@@ -6,52 +6,49 @@ import Duration from "@lib/utils/arguments/Duration";
 
 export default class LevelModule extends Module {
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleRemove" })
+  async onGuildMemberRoleRemove(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const xpData = await UserXP.findOne({ where: { id: newMember.id } });
     if (!xpData) return;
     const userLevel = levelConstants.getLevelFromXP(xpData.xp);
     let rolesData = await LevelRole.find();
     rolesData = rolesData.sort((a, b) => a.level - b.level);
+    const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+    const firstEntry = auditLogs.entries.first();
+    const isValid = ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id);
+
     const roleData = rolesData.find(r => r.level === userLevel);
-    if (!roleData) {
-      const data = rolesData.filter(rr => rr.level < userLevel).reverse()[0];
-      if (!data) return;
-      if (oldMember.roles.cache.has(data.id) && !newMember.roles.cache.has(data.id)) {
-        const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
-        const firstEntry = auditLogs.entries.first();
-        if (!(firstEntry.changes[0].key === "$remove" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
-          newMember.roles.add(data.id, strings.modules.levels.auditLogRoleRemove);
+    if (roleData && roleData.id === role.id) {
+      if (firstEntry.changes[0].key === "$remove") {
+        if (!isValid) newMember.roles.add(role.id, strings.modules.levels.auditLogRoleRemove);
       }
     } else {
-      if (oldMember.roles.cache.has(roleData.id) && !newMember.roles.cache.has(roleData.id)) {
-        const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
-        const firstEntry = auditLogs.entries.first();
-        if (!(firstEntry.changes[0].key === "$remove" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
-          newMember.roles.add(roleData.id, strings.modules.levels.auditLogRoleRemove);
+      const data = rolesData.filter(rr => rr.level < userLevel).reverse()[0];
+      if (data.id === role.id) {
+        if (firstEntry.changes[0].key === "$remove") {
+          if (!isValid) newMember.roles.add(role.id, strings.modules.levels.auditLogRoleRemove);
+        }
       }
     }
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd2(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const levelData = await LevelRole.find();
     const roles = levelData.map(r => r.id);
-    for (const role of roles) {
-      if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
-        if (newMember.roles.cache.has(ROLES.HYACINTH)) newMember.roles.remove(ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
-      }
+    if (roles.some(r => r === role.id)) {
+      if (newMember.roles.cache.has(ROLES.HYACINTH)) newMember.roles.remove(ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
     }
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd3(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd2(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const levelData = await LevelRole.find();
     const roles = levelData.map(r => r.id);
-    if (!oldMember.roles.cache.has(ROLES.HYACINTH) && newMember.roles.cache.has(ROLES.HYACINTH)) {
+    if (role.id === ROLES.HYACINTH) {
       if (newMember.roles.cache.some(r => roles.includes(r.id))) newMember.roles.remove(ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
     }
   }

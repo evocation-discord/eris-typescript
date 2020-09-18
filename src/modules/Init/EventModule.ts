@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed } from "@lib/utils";
-import { Guild, Message, TextChannel } from "discord.js";
+import { Guild, Message, TextChannel, GuildMember, Role } from "discord.js";
 import fetch from "node-fetch";
 
 export default class EventModule extends Module {
@@ -84,4 +84,17 @@ export default class EventModule extends Module {
     channel.send({ embed });
   }
 
+  @monitor({ event: "guildMemberUpdate" })
+  async onGuildMemberUpdate(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+    const addedRoles: Role[] = [];
+    newMember.roles.cache.forEach(role => {
+      if (!oldMember.roles.cache.has(role.id)) addedRoles.push(role);
+    });
+    addedRoles.forEach(role => this.client.emit("guildMemberRoleAdd", oldMember, newMember, role));
+    const removedRoles: Role[] = [];
+    oldMember.roles.cache.forEach(role => {
+      if (!newMember.roles.cache.has(role.id)) removedRoles.push(role);
+    });
+    removedRoles.forEach(role => this.client.emit("guildMemberRoleRemove", oldMember, newMember, role));
+  }
 }
