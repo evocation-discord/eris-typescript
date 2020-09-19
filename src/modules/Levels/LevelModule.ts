@@ -407,6 +407,22 @@ export default class LevelModule extends Module {
       .setFooter(strings.modules.levels.levelRole.levelledRolesEmbedFooter);
     return msg.channel.send(embed);
   }
+
+  @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.leaderboard, aliases: ["lb", "levels"] })
+  async leaderboard(msg: Message): Promise<void> {
+    let xpData = await UserXP.find();
+    xpData = xpData.sort((a, b) => b.xp - a.xp);
+    xpData = xpData.slice(0, 10);
+
+    const message: string[] = [strings.modules.levels.leaderboard.header];
+
+    for await (const data of xpData) {
+      const user = await msg.client.users.fetch(data.id);
+      const info = await userInfo(user);
+      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.total_xp));
+    }
+    await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
+  }
 }
 
 const userInfo = async (user: User) => {

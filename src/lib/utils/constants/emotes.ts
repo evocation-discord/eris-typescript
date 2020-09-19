@@ -79,6 +79,12 @@ const commandresponses = {
   soulstones: "<:soulstones:752268601880215644>",
   moderation: "<:moderation:752268602799030282>",
   experience: "<:experience:754238145951825951>",
+  leaderboard: {
+    leaderboard: "<:leaderboard:756906394166231101>",
+    numberone: "<:numberone:756906394413957200>",
+    numbertwo: "<:numbertwo:756906394162167950>",
+    numberthree: "<:numberthree:756906394317488259>",
+  }
 };
 
 const experiencecapsules = {

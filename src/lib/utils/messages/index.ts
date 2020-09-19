@@ -304,6 +304,10 @@ export const strings = {
         noLevelledRoles: "No levelled roles have been configured.",
         levelledRolesEmbedTitle: "Levelled Roles",
         levelledRolesEmbedFooter: "These are the roles that will be automatically awarded to users based on predefined thresholds. Certain restrictions may be in place regarding their attribution/revocation.",
+      },
+      leaderboard: {
+        header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
+        row: (rank: number, user: User, level: number, totalXP: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) - **LVL \`${level}\`** / **\`${totalXP}\` TOTAL EXPERIENCE**`
       }
     }
   },
@@ -344,7 +348,7 @@ export const commandDescriptions = {
   datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality.",
   xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
   xpexclusions: "Removes a role/channel from being ignored or lists active exclusions categorically. Identifiers will only be parsed as arguments, not mentions.",
-  leaderboard: "Returns a paginated list of users, based on their rank, level and total experience.",
+  leaderboard: "Returns a list of levelled users, showing their rank and total experience.",
   activateservermultiplier: "Activates a multiplier that affects the entire server.",
   activaterolemultiplier: "Activates a multiplier that affects an entire role.",
   activateusermultiplier: "Activates a multiplier that affects a single user.",
@@ -359,4 +363,11 @@ export const commandDescriptions = {
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
   miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it.",
   version: "Returns Eris' deployment version and its title, if applicable."
+};
+
+const rankEmoji = (rank: number): string => {
+  if (rank === 1) return `${emotes.commandresponses.leaderboard.numberone} `;
+  if (rank === 2) return `${emotes.commandresponses.leaderboard.numbertwo} `;
+  if (rank === 3) return `${emotes.commandresponses.leaderboard.numberthree} `;
+  return "       ";
 };
