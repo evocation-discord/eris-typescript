@@ -307,7 +307,7 @@ export const strings = {
       },
       leaderboard: {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
-        row: (rank: number, user: User, level: number, totalXP: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) - **LVL \`${level}\`** / **\`${totalXP}\` TOTAL EXPERIENCE**`
+        row: (rank: number, user: User, level: number, totalXP: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE**`
       }
     }
   },
