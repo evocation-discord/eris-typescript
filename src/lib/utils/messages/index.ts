@@ -112,6 +112,7 @@ export const strings = {
     giveaway: {
       loadingMessage: "Loading...",
       notValidMessageID: "That is not a valid message ID! Try running without an ID to use the most recent giveaway in this channel.",
+      giveawayEnded: "Giveaway has been ended.",
       noGiveawayMessageLinked: "The message you linked is not a giveaway message!",
       rerollNewWinner: (name: string, winner: User, messageLink: string) => [
         `The new winner of **${name}** is ${winner}.`,

@@ -94,19 +94,21 @@ export default class GiveawayModule extends Module {
   async end(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
-      const message = await msg.channel.messages.fetch(messageId);
-      if (!message) {
-        const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-        if (!giveaway) return;
-        if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
-        return;
-      }
-      if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid))
-        return msg.channel.send(strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
+      try {
+        const message = await msg.channel.messages.fetch(messageId);
+        if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid))
+          return msg.channel.send(strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
 
-      const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-      if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
-      await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
+        const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
+        if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
+        await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
+      } catch (e) {
+        const giveaway = await Giveaway.findOne({ where: { messageId: messageId } });
+        if (!giveaway) return msg.channel.send(strings.modules.giveaway.notValidMessageID);
+        giveaway.ended = true;
+        await giveaway.save();
+        msg.channel.send(strings.modules.giveaway.giveawayEnded);
+      }
     } else {
       const _msgs = await msg.channel.messages.fetch({ limit: 100 });
       const message = _msgs
@@ -124,7 +126,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.list })
-  async list(msg: Message): Promise<void|Message> {
+  async list(msg: Message): Promise<void | Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const messageArray = [strings.modules.giveaway.activeGiveaways];
 
@@ -138,7 +140,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.endall })
-  async endall(msg: Message): Promise<void|Message> {
+  async endall(msg: Message): Promise<void | Message> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const endedGiveaways = [strings.modules.giveaway.endedGivewaways];
 
