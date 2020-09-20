@@ -104,6 +104,11 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
 const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway) => {
   const channel = await client.channels.fetch(args.channelId) as TextChannel;
   const message = await channel.messages.fetch(giveaway.messageId);
+  if (!message) {
+    giveaway.ended = true;
+    await giveaway.save();
+    return;
+  }
   // Create the embed.
   const embed = new Embed()
     .setAuthor(giveaway.prize)

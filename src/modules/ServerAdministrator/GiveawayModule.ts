@@ -95,6 +95,12 @@ export default class GiveawayModule extends Module {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
       const message = await msg.channel.messages.fetch(messageId);
+      if (!message) {
+        const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
+        if (!giveaway) return;
+        if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
+        return;
+      }
       if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid))
         return msg.channel.send(strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
 
