@@ -67,7 +67,7 @@ export default class HelpModule extends Module {
 
     commands.forEach(command => {
       if (command.staff) {
-        if (msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) cmds.push(command);
+        if (msg.member.roles.cache.some(role => [ROLES.MODERATOR, ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(command);
       } else cmds.push(command);
     });
 
