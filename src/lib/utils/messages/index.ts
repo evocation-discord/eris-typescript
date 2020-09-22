@@ -175,9 +175,10 @@ export const strings = {
       shutdown: "I can feel my Drearian Spirit fading...",
       aboutCommand: [
         "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n",
-        "__**CONTRIBUTORS**__\n",
+        "__**PRIMARY CONTRIBUTORS**__\n",
         "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
-        "**DEVELOPER**: <@366601247660441600>", // TheFabiCraft
+        "**DEVELOPER**: <@366601247660441600>\n", // TheFabiCraft
+        "__**SECONDARY CONTRIBUTORS**__\n",
         "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", // Ace
         "**ABSTRACTION CONFIDANT**: <@700418258687230083>" // yesfromskribbl
       ].join("\n"),
