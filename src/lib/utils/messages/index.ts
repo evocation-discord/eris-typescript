@@ -167,7 +167,7 @@ export const strings = {
       statusSet: (status: string) => `My status is now **${status}**.`,
       gameError: "Type needs to be `watching`, `playing` or `listening`.",
       gameSet: (type: "watching" | "playing" | "listening", game: string) => `I am now ${type}${type === "listening" ? " to" : ""} **${game}**.`,
-      linkDoesNotMatchDiscordLink: "Failed to identify Discord message link.",
+      linkDoesNotMatchDiscordLink: "Failed to identify Discord message link. If it should have matched, please try again.",
       guildWasNotFound: (id: string) => `Guild with ID \`${id}\` was not found.`,
       channelWasNotFound: (id: string) => `Channel with ID \`${id}\` was not found.`,
       messageWasNotFound: (id: string) => `Message with ID \`${id}\` was not found.`,
@@ -310,6 +310,15 @@ export const strings = {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
         row: (rank: number, user: User, level: number, totalXP: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE**`
       }
+    },
+    moderation: {
+      quote: {
+        embedAuthor: (msg: Message) => `${msg.author.tag} (${msg.author.id})`,
+        embedFooter: (msgId: string, channelName: string) => `Message ID: ${msgId} | Sent in #${channelName}`,
+        unknownError: "Cannot quote this message; do I have permission to view the channel in which this message originates?",
+        restrictedChannel: "You cannot quote a message from that channel as its access is highly restricted.",
+        bot: "You cannot quote bots."
+      }
     }
   },
   commandGroups: {}
@@ -363,7 +372,8 @@ export const commandDescriptions = {
   removelevelledrole: "Remove a role from being automatically assigned to users upon meeting experience thresholds.",
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
   miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it.",
-  version: "Returns Eris' deployment version and its title, if applicable."
+  version: "Returns Eris' deployment version and its title, if applicable.",
+  quote: "Echoes a message that was sent by a user on the server."
 };
 
 const rankEmoji = (rank: number): string => {

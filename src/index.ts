@@ -21,6 +21,7 @@ import HelpModule from "@modules/HelpModule";
 import PurchaseableRolesModule from "@modules/PurchaseableRolesModule";
 import UtilCommandModule from "@modules/UtilCommands";
 import LevelModule from "@modules/Levels/LevelModule";
+import ModerationModule from "@modules/Staff/ModerationModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -46,6 +47,7 @@ client
   .registerModule(GiveawayModule)
   // Staff Modules
   .registerModule(PermissionsModule)
+  .registerModule(ModerationModule)
   // Other Modules
   .registerModule(HelpModule)
   .registerModule(PurchaseableRolesModule)
