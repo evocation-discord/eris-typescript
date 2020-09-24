@@ -3,7 +3,7 @@ import { Message, TextChannel } from "discord.js";
 
 export default class ModerationModule extends Module {
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [String], staff: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.quote })
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote })
   async quote(msg: Message, messageLink: string): Promise<void | Message> {
     msg.delete();
     const executedRegex = messageLinkRegex.exec(messageLink);
