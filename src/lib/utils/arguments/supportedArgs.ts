@@ -168,10 +168,13 @@ const resolveMember = async (query: string | discord.GuildMember | discord.User,
 
 export const resolveChannel = (query: string | discord.Channel | discord.Message, guild: discord.Guild): discord.TextChannel => {
   if (query instanceof discord.Channel && query.type === "text") return guild.channels.cache.has(query.id) ? query as discord.TextChannel : null;
+  if (query instanceof discord.Channel && query.type === "news") return guild.channels.cache.has(query.id) ? query as discord.TextChannel : null;
   if (query instanceof discord.Message) return query.guild.id === guild.id ? query.channel as discord.TextChannel : null;
   if (typeof query === "string" && CHANNEL_REGEXP.test(query)) {
     const ch = guild.channels.cache.get(CHANNEL_REGEXP.exec(query)[1]) as discord.TextChannel;
-    return ch.type === "text" ? ch : null;
+    if (ch.type === "text") return ch;
+    if (ch.type === "news") return ch;
+    return null;
   }
   return null;
 };
