@@ -153,8 +153,10 @@ export const strings = {
         "**SUCCESSFULLY UNLOCKED**:",
         `${emotes.commandresponses.soulstones} Coloured **WISTERIA** Role [HOISTED]`,
         `${emotes.commandresponses.soulstones} Permanent x**2** Experience Multiplier`,
-        `${emotes.commandresponses.soulstones} **e!vb** Command Access [COMING SOON]`,
-        `${emotes.commandresponses.soulstones} **e!muse** Command Access`
+        `${emotes.commandresponses.soulstones} Permanent Appearance in Server Leaderboard`,
+        `${emotes.commandresponses.soulstones} Special Badge Appended to Your Entry in Server Leaderboard`,
+        `${emotes.commandresponses.soulstones} \`**e!vb**\` Command Access [COMING SOON]`,
+        `${emotes.commandresponses.soulstones} \`**e!muse**\` Command Access`
       ].join("\n"),
       disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment.",
       hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
