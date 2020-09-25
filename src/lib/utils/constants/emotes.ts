@@ -84,6 +84,7 @@ const commandresponses = {
     numberone: "<:numberone:756906394413957200>",
     numbertwo: "<:numbertwo:756906394162167950>",
     numberthree: "<:numberthree:756906394317488259>",
+    blobboost: "<:blobboost:756961323740430378>"
   }
 };
 

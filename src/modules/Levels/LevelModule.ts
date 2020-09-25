@@ -410,6 +410,7 @@ export default class LevelModule extends Module {
 
   @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.leaderboard, aliases: ["lb", "levels"] })
   async leaderboard(msg: Message): Promise<void> {
+    const guild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     let xpData = await UserXP.find();
     xpData = xpData.sort((a, b) => b.xp - a.xp);
     xpData = xpData.slice(0, 10);
@@ -419,7 +420,16 @@ export default class LevelModule extends Module {
     for await (const data of xpData) {
       const user = await msg.client.users.fetch(data.id);
       const info = await userInfo(user);
-      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.total_xp));
+      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.total_xp, guild.members.resolve(user.id).roles.cache.has(ROLES.WISTERIA)));
+    }
+    const boosters = guild.members.cache.filter(m => xpData.find(xp => xp.id === m.id) ? false : true).filter(m => !m.user.bot).filter(m => m.roles.cache.has(ROLES.WISTERIA));
+    if (boosters.size > 0) {
+      message.push("\n");
+      message.push(strings.modules.levels.leaderboard.boosterHeader);
+    }
+    for await (const data of boosters.array()) {
+      const info = await userInfo(data.user);
+      message.push(strings.modules.levels.leaderboard.row(info.rank, data.user, info.lvl, info.total_xp, true));
     }
     await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
   }
