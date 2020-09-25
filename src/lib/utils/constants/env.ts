@@ -35,6 +35,7 @@ export const NEGATIONS = {
   MEDIA: process.env.NEGATION_MEDIA,
   REACTIONS: process.env.NEGATION_REACTIONS,
   ART: process.env.NEGATION_ART,
+  FEEDBACK: process.env.NEGATION_FEEDBACK
 };
 
 export const DATABASE_INFO = {

@@ -162,7 +162,7 @@ export const strings = {
       hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
     },
     permissions: {
-      negations: (type: "Reaction" | "Art" | "Media" | "Experience") => `${type} negations have been executed for the specified users.`
+      negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback") => `${type} negations have been executed for the specified users.`
     },
     util: {
       statusError: "Status needs to be `online`, `dnd`, `idle` or `invisible`.",
@@ -343,6 +343,7 @@ export const commandDescriptions = {
   help: "Returns information about available commands.",
   logdonation: "Logs a donation and awards the 'White Hallows' role to the specified user, if they don't already have it.",
   negateart: "Appends/removes the '[NEGATION] Art' role to/from the specified user(s).",
+  negatefeedback: "Appends/removes the '[NEGATION] Feedback' role to/from the specified user(s).",
   negatereaction: "Appends/removes the '[NEGATION] Reactions' role to/from the specified user(s).",
   negatemedia: "Appends/removes the '[NEGATION] Media' role to/from the specified user(s).",
   negateexperience: "Appends/removes the '[NEGATION] Experience' role to/from the specified user(s).",

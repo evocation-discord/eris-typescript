@@ -22,6 +22,26 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblock(added, removed)].join("\n"), { split: true });
   }
 
+  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback })
+  async negatefeedback(msg: Message, _members: string): Promise<void> {
+    msg.delete();
+    const members: GuildMember[] = [];
+    for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    const added: GuildMember[] = [];
+    const removed: GuildMember[] = [];
+    for await (const member of members) {
+      if (member.roles.cache.has(NEGATIONS.FEEDBACK)) {
+        member.roles.remove(NEGATIONS.FEEDBACK);
+        removed.push(member);
+      } else {
+        member.roles.add(NEGATIONS.FEEDBACK);
+        added.push(member);
+      }
+    }
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Feedback")), codeblock(added, removed)].join("\n"), { split: true });
+  }
+
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
   async negatereaction(msg: Message, _members: string): Promise<void> {
     msg.delete();
