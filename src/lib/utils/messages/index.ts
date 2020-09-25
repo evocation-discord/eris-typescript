@@ -10,7 +10,7 @@ export const strings = {
     commandSyntax: (text: string) => `Syntactic fallacy detected. **COMMAND SYNTAX**: \`${text}\``,
     somethingWentWrong: "Something went wrong.",
     commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`).",
-    version: "**VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY).",
+    version: `${emotes.commandresponses.version} **VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY).`,
     commandSyntaxError: (usage: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\``
   },
   giveaway: {

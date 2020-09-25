@@ -85,7 +85,8 @@ const commandresponses = {
     numbertwo: "<:numbertwo:756906394162167950>",
     numberthree: "<:numberthree:756906394317488259>",
     blobboost: "<:blobboost:756961323740430378>"
-  }
+  },
+  version: "<:version:755867807106859089>"
 };
 
 const experiencecapsules = {
