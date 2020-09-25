@@ -149,10 +149,10 @@ export const strings = {
       ].join("\n"),
       userUpdate: (oldUser: User, newUser: User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`,
       userBoost: (user: User) => [
-        `Thank you for boosting Evocation, ${user}! You now have access to change your own nickname, embed links, attach files, add reactions, and stream into the server. If these permissions seem familiar to you, that means you are **Level 3** or above.\n`,
+        `Thank you for boosting **Evocation**, ${user}! You now have access to change your own nickname, embed links, attach files and stream into the server. If these permissions seem familiar to you, that means you are **LEVEL 3** or above.\n`,
         "**SUCCESSFULLY UNLOCKED**:",
         `${emotes.commandresponses.soulstones} Coloured **WISTERIA** Role [HOISTED]`,
-        `${emotes.commandresponses.soulstones} Permanent x**2** Experience Multiplier`,
+        `${emotes.commandresponses.soulstones} Permanent x**2 EXPERIENCE MULTIPLIER**`,
         `${emotes.commandresponses.soulstones} Permanent Appearance in Server Leaderboard`,
         `${emotes.commandresponses.soulstones} Special Badge Appended to Your Entry in Server Leaderboard`,
         `${emotes.commandresponses.soulstones} \`**e!vb**\` Command Access [COMING SOON]`,
