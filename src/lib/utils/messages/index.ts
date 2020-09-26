@@ -186,6 +186,7 @@ export const strings = {
       ].join("\n"),
       pinging: `${emotes.commandresponses.server} Pinging...`,
       pingResponse: (ms: number, discordPing: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds. It took me **${discordPing}** milliseconds to receive a response from the Discord API.`,
+      heartBeatResponse: (discordPing: number) => `${emotes.commandresponses.heartbeatrps} **BEEP**: My heartbeat is **${discordPing}** milliseconds.`,
       privacypolicy: {
         error: "Your User Settings are preventing me from being able to send you Direct Messages. Please rectify this issue and try again.",
         message1: [

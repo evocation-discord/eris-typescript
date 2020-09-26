@@ -14,6 +14,12 @@ export default class UtilCommandModule extends Module {
     await message.edit(strings.modules.util.pingResponse(message.createdTimestamp - msg.createdTimestamp, msg.client.ws.ping));
   }
 
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.ping })
+  async heartbeat(msg: Message): Promise<void> {
+    const message = await msg.channel.send(strings.modules.util.pinging);
+    await message.edit(strings.modules.util.heartBeatResponse(msg.client.ws.ping));
+  }
+
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.privacypolicy, aliases: ["privacy"] })
   async privacypolicy(msg: Message): Promise<void> {
     try {

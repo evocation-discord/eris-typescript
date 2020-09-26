@@ -86,6 +86,7 @@ const commandresponses = {
     numberthree: "<:numberthree:756906394317488259>",
     blobboost: "<:blobboost:756961323740430378>"
   },
+  heartbeatrps: "<:heartbeatrps:755879175889354762>",
   version: "<:version:755867807106859089>"
 };
 
