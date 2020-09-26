@@ -424,7 +424,6 @@ export default class LevelModule extends Module {
     }
     const boosters = guild.members.cache.filter(m => xpData.find(xp => xp.id === m.id) ? false : true).filter(m => !m.user.bot).filter(m => m.roles.cache.has(ROLES.WISTERIA));
     if (boosters.size > 0) {
-      message.push("\n");
       message.push(strings.modules.levels.leaderboard.boosterHeader);
     }
     for await (const data of boosters.array()) {

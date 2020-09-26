@@ -312,7 +312,7 @@ export const strings = {
       },
       leaderboard: {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
-        boosterHeader: `${emotes.commandresponses.leaderboard.blobboost} **BOOSTER LEADERBOARD**`,
+        boosterHeader: `\n${emotes.commandresponses.leaderboard.blobboost} **BOOSTER LEADERBOARD**`,
         row: (rank: number, user: User, level: number, totalXP: number, booster = false) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
       }
     },
