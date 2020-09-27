@@ -38,7 +38,7 @@ export class CommandParserModule extends Module {
     if (roleBlacklists.find(r => msg.member.roles.cache.has(r.id))) return;
 
     for (const inhibitor of cmd.inhibitors) {
-      const reason = await inhibitor(msg, this.client);
+      const reason = await inhibitor(msg, cmd);
       if (reason) {
         // It inhibited
         msg.channel.send(strings.general.error(reason));

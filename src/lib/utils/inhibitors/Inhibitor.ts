@@ -2,8 +2,10 @@ import { Message, PermissionResolvable } from "discord.js";
 import humanizeDuration from "humanize-duration";
 import { ErisClient } from "../client/ErisClient";
 import { TextChannel } from "discord.js";
-import { ROLES } from "../constants";
+import { MAIN_GUILD_ID, ROLES } from "../constants";
 import { strings } from "../messages";
+import { Command } from "..";
+import RedisClient from "../client/RedisClient";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   return async (msg, client) => {
@@ -29,34 +31,29 @@ const hasGuildPermission = (perm: PermissionResolvable): Inhibitor =>
   );
 
 const userCooldown = (ms: number): Inhibitor => {
-  const map: Map<string, number> = new Map();
-  return async msg => {
-    if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-    if (map.has(msg.author.id)) {
-      if ((map.get(msg.author.id) || 0) < Date.now()) {
-        map.set(msg.author.id, Date.now() + ms);
-        return undefined;
-      } else {
-        return strings.inhibitors.cooldown(humanizeDuration(Date.now() - (map.get(msg.author.id) || 0)));
-      }
-    } else {
-      map.set(msg.author.id, Date.now() + ms);
-      return undefined;
-    }
+  return async (msg, cmd) => {
+    const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+    const redisString = `user:${msg.author.id}:command:${cmd.triggers[0]}`;
+    if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
+    if (await RedisClient.get(redisString)) return strings.inhibitors.cooldown(humanizeDuration(await RedisClient.ttl(redisString) * 1000 || 0));
+    await RedisClient.set(redisString, "1", "ex", ms / 1000);
+    return undefined;
   };
 };
 
-const moderatorOnly: Inhibitor = async (msg, client) => {
-  const isNotGuild = await guildsOnly(msg, client);
+const moderatorOnly: Inhibitor = async (msg) => {
+  const isNotGuild = await guildsOnly(msg);
   if (isNotGuild) return isNotGuild;
-  if (msg.member.roles.cache.some(role => [ROLES.MODERATOR, ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
+  const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+  if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.MODERATOR, ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
 };
 
 const adminOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.member.roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
+  const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+  if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -73,12 +70,13 @@ const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
 
 const roleValidation = async (msg: Message, roleID: string): Promise<boolean> => {
   if (!msg.member) return false;
-  return msg.member.roles.cache.has(roleID);
+  const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+  return mainGuild.members.resolve(msg.author.id).roles.cache.has(roleID);
 };
 
 const canOnlyBeExecutedInBotCommands =
   mergeInhibitors(guildsOnly, async (msg, client) => {
-    if (client.botAdmins.includes(msg.author.id)) return undefined;
+    if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
     if (msg.channel.id === "528598741565833246") return undefined;
     if ((msg.channel as TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejected;
     return undefined;
@@ -86,7 +84,7 @@ const canOnlyBeExecutedInBotCommands =
 
 export type Inhibitor = (
   msg: Message,
-  client: ErisClient
+  command?: Command,
 ) => Promise<string | undefined>;
 export const inhibitors = {
   botAdminsOnly,
