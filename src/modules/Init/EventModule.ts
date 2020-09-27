@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed, MAIN_GUILD_ID, ROLES, emotes } from "@lib/utils";
-import { Guild, Message, TextChannel, GuildMember, Role } from "discord.js";
+import { Guild, Message, TextChannel, GuildMember, Role, User, MessageReaction } from "discord.js";
 import fetch from "node-fetch";
 
 export default class EventModule extends Module {
@@ -108,5 +108,15 @@ export default class EventModule extends Module {
     if (message.member.roles.cache.has(ROLES.ADMINISTRATORS) || message.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
     await message.react(message.client.emojis.resolve(emotes.uncategorised.yyid));
     await message.react(emotes.uncategorised.nnid);
+  }
+
+  @monitor({ event: "messageReactionAdd" })
+  async onFeedbackMessageReaction(reaction: MessageReaction, user: User): Promise<void> {
+    if (user.bot) return;
+    if (reaction.message.channel.type === "dm") return;
+    reaction.message.channel = reaction.message.channel as TextChannel;
+    if (reaction.message.guild.id !== MAIN_GUILD_ID) return;
+    if (reaction.message.channel.name !== "feedback") return;
+    if (reaction.message.author.id === user.id) reaction.users.remove(user);
   }
 }
