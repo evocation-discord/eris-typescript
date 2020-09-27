@@ -246,6 +246,7 @@ export const strings = {
       cancel_0: (user: User) => `${user} has been **CANCELLED**.`,
       cancel_1: (user: User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
       cantCancelYourself: "You can't cancel yourself in this way.",
+      cantCancelEris: "You can't cancel me.",
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     },
     erisThanksMessage: [
