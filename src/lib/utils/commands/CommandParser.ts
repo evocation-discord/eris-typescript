@@ -7,6 +7,7 @@ import { escapeRegex, emotes } from "..";
 import { monitor } from "../monitor/decorator";
 import { Blacklist, DisabledCommand } from "../database/models";
 import { strings } from "../messages";
+import RedisClient from "../client/RedisClient";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -58,6 +59,9 @@ export class CommandParserModule extends Module {
       } catch (err) {
         // Return a error.
         try {
+          if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
+            await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
+          }
           return msg.channel.send(strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`)));
         } catch (_) {
           // Do nothing. The user doesn't have the correct arguments.
@@ -81,6 +85,9 @@ export class CommandParserModule extends Module {
         `error while executing command ${cmd.id}! executed by ${msg.author.tag}/${msg.author.id} in guild ${msg.guild?.name}/${msg.guild?.id}\n`,
         err
       );
+      if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
+        await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
+      }
       cmd.onError(msg, err);
     }
   }

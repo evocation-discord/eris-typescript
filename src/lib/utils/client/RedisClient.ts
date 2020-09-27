@@ -12,6 +12,7 @@ class PromiseRedisClient {
   public srem: (key: string, value: string) => Promise<void>;
   public ping: () => Promise<string>;
   public ttl: (key: string) => Promise<number>;
+  public del: (key: string) => Promise<number>;
 
   constructor(options?: ClientOpts) {
     this.baseClient = createClient(options);
@@ -22,6 +23,7 @@ class PromiseRedisClient {
     this.srem = promisify(this.baseClient.srem).bind(this.baseClient);
     this.ping = promisify(this.baseClient.ping).bind(this.baseClient);
     this.ttl = promisify(this.baseClient.ttl).bind(this.baseClient);
+    this.del = promisify(this.baseClient.del).bind(this.baseClient);
   }
 }
 
