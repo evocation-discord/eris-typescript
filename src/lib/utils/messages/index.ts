@@ -243,6 +243,9 @@ export const strings = {
         "chicken wings with no chicken",
         "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
+      cancel_0: (user: User) => `${user} (\`${user.id}\`) has been **CANCELLED**.`,
+      cancel_1: (user: User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
+      cantCancelYourself: "You can't cancel yourself in this way.",
       auditLogRoleAdd: "[FORCED REVOCATION] Role was not added in similitude with systematic guidelines."
     },
     erisThanksMessage: [
@@ -380,7 +383,8 @@ export const commandDescriptions = {
   listlevelledroles: "Returns a list of roles that are defined to be awarded to users upon meeting experience thresholds.",
   miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it.",
   version: "Returns Eris' deployment version and its title, if applicable.",
-  quote: "Echoes a message that was sent by a user on the server."
+  quote: "Echoes a message that was sent by a user on the server.",
+  cancel: "Cancels a user."
 };
 
 const rankEmoji = (rank: number): string => {

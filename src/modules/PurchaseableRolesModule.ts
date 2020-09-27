@@ -1,5 +1,5 @@
-import { monitor, Module, ErisClient, MAIN_GUILD_ID, ROLES, command, inhibitors, strings, CommandCategories, commandDescriptions } from "@lib/utils";
-import { GuildMember, Message } from "discord.js";
+import { monitor, Module, ErisClient, MAIN_GUILD_ID, ROLES, command, inhibitors, strings, CommandCategories, commandDescriptions, messageLinkRegex } from "@lib/utils";
+import { GuildMember, Message, User } from "discord.js";
 
 export default class PurchaseableRolesModule extends Module {
   constructor(client: ErisClient) {
@@ -23,5 +23,13 @@ export default class PurchaseableRolesModule extends Module {
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA"]), inhibitors.userCooldown(30000)], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.muse })
   async muse(message: Message): Promise<void> {
     message.channel.send(strings.modules.purchaseableroles.museCommand[Math.floor(Math.random() * strings.modules.purchaseableroles.museCommand.length)]);
+  }
+
+  @command({ inhibitors: [inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI"]), inhibitors.userCooldown(600000)], usage: "<user:user>", args: [User], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.cancel })
+  async cancel(message: Message, user: User): Promise<Message> {
+    if (message.author === user) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
+    const random = Math.round(Math.random());
+    if (random === 1) return message.channel.send(strings.modules.purchaseableroles.cancel_0(user));
+    if (random === 0) return message.channel.send(strings.modules.purchaseableroles.cancel_1(user));
   }
 }
