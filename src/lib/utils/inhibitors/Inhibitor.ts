@@ -35,6 +35,7 @@ const userCooldown = (ms: number): Inhibitor => {
     const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     const redisString = `user:${msg.author.id}:command:${cmd.triggers[0]}`;
     if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
+    if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
     if (await RedisClient.get(redisString)) return strings.inhibitors.cooldown(humanizeDuration(await RedisClient.ttl(redisString) * 1000 || 0));
     await RedisClient.set(redisString, "1", "ex", ms / 1000);
     return undefined;
@@ -52,6 +53,7 @@ const moderatorOnly: Inhibitor = async (msg) => {
 const adminOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
+  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
@@ -60,6 +62,7 @@ const adminOnly: Inhibitor = async (msg, client) => {
 const serverGrowthLeadOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
+  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS, ROLES.SERVER_GROWTH_LEAD].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
