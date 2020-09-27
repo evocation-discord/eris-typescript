@@ -62,6 +62,7 @@ export default class LevelModule extends Module {
     if (message.author.bot) return;
     if (!message.guild) return;
     if (message.guild.id !== MAIN_GUILD_ID) return;
+    const channel = message.channel as TextChannel;
 
     let user = await UserXP.findOne({ where: { id: message.author.id } });
     if (!user) user = await UserXP.create({ id: message.author.id }).save();
@@ -72,7 +73,9 @@ export default class LevelModule extends Module {
     // blacklists, woohoo
     const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
     const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
+    const categoryExclusions = await XPExclusion.find({ where: { type: "category" } });
     if (channelExclusions.find(c => c.id === message.channel.id)) return;
+    if (categoryExclusions.find(c => c.id === channel.parentID)) return;
     if (roleExclusions.find(r => message.member.roles.cache.has(r.id))) return;
     if (await RedisClient.get(`player:${message.author.id}:check`)) return;
 
@@ -126,8 +129,8 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["xpi"], staff: true, description: commandDescriptions.xpignore, usage: "<channel|role> <ID/mention>" })
-  async xpignore(msg: Message, type: "channel" | "role", id: string): Promise<void | Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["xpi"], staff: true, description: commandDescriptions.xpignore, usage: "<category|channel|role> <ID/mention>" })
+  async xpignore(msg: Message, type: "channel" | "role" | "category", id: string): Promise<void | Message> {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
@@ -146,23 +149,33 @@ export default class LevelModule extends Module {
         id: channel.id
       }).save();
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("channel")));
+    } else if (type === "category") {
+      const channel = await channelParser(id, msg);
+      if (typeof channel === "string") return msg.channel.send(strings.general.error(channel));
+      await XPExclusion.create({
+        type: "category",
+        id: channel.id
+      }).save();
+      msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("category")));
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], aliases: ["xpe"], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role] [ID/mention]" })
-  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel", id?: string): Promise<Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], aliases: ["xpe"], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role|category] [ID/mention]" })
+  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel" | "category", id?: string): Promise<Message> {
     if (!what) {
       const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
       const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
+      const categoryExclusions = await XPExclusion.find({ where: { type: "category" } });
       const embed = new Embed()
+        .addField(strings.modules.levels.exclusionEmbedName("Category"), categoryExclusions.map(r => strings.modules.levels.exclusionMapping(r)).join("\n") || strings.modules.levels.noCategoriesExcluded)
         .addField(strings.modules.levels.exclusionEmbedName("Channel"), channelExclusions.map(u => strings.modules.levels.exclusionMapping(u)).join("\n") || strings.modules.levels.noChannelsExcluded)
         .addField(strings.modules.levels.exclusionEmbedName("Role"), roleExclusions.map(r => strings.modules.levels.exclusionMapping(r)).join("\n") || strings.modules.levels.noRolesExcluded);
       return msg.channel.send(embed);
     }
-    if (!["remove"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role] [ID/mention]")));
+    if (!["remove"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
 
     if (what === "remove") {
-      if (!type || !["channel", "role"].includes(type) || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role] [ID/mention]")));
+      if (!type || !["channel", "role", "category"].includes(type) || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
       if (type === "role") {
         const exclusion = await XPExclusion.findOne({ where: { id: id, type: "role" } });
         if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.roleNotExcluded));
@@ -173,6 +186,11 @@ export default class LevelModule extends Module {
         if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.channelNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForChannel));
+      } else if (type === "category") {
+        const exclusion = await XPExclusion.findOne({ where: { id: id, type: "category" } });
+        if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.categoryNotExcluded));
+        exclusion.remove();
+        msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForCategory));
       }
     }
   }

@@ -44,6 +44,7 @@ export const strings = {
     couldNotFindUser: "Could not find that user.",
     couldNotFindGuild: "Could not find that guild.",
     couldNotFindTextChannel: "Could not find that text channel.",
+    couldNotFindCategory: "Could not find that category.",
     couldNotFindRole: "Could not find that role."
   },
   inhibitors: {
@@ -292,15 +293,18 @@ export const strings = {
         roleRemove: "[LEVELLING SYSTEM] Removing outdated levelled role(s).",
         xpReset: "[LEVELLING SYSTEM] Experience of user has been reset."
       },
-      executedExclusions: (type: "role" | "channel") => `Executed exclusions for the specified ${type}.`,
-      exclusionEmbedName: (type: "Role" | "Channel") => `${type} Exclusions`,
+      executedExclusions: (type: "role" | "channel" | "category") => `Executed exclusions for the specified ${type}.`,
+      exclusionEmbedName: (type: "Role" | "Channel" | "Category") => `${type} Exclusions`,
       noChannelsExcluded: "→ No channels excluded.",
       noRolesExcluded: "→ No roles excluded.",
+      noCategoriesExcluded: "→ No categories excluded.",
       exclusionMapping: (ur: XPExclusion) => `→ <${ur.type === "role" ? "@&" : "#"}${ur.id}> (\`${ur.id}\`)`,
       roleNotExcluded: "This role is not excluded.",
       channelNotExcluded: "This channel is not excluded.",
+      categoryNotExcluded: "This category is not excluded.",
       updatedExclusionsForRole: "Updated exclusions for the specified role.",
       updatedExclusionsForChannel: "Updated exclusions for the specified channel.",
+      updatedExclusionsForCategory: "Updated exclusions for the specified category.",
       resetxp: {
         resetxpsuccessfull: (type: "role" | "user", amount: number, amount2?: number) => `The XP of **${amount}** ${type}(s) ${amount2 ? `(${amount2} users) ` : ""}is set to 0.`,
         serverReset: "You are about to delete all experience data associated with users on the current server. Respond with **yes** to proceed. Do **not** respond or send an unrelated message and this request will be automatically terminated.",
