@@ -101,6 +101,10 @@ const uncategorised = {
   fantasyregulations: "<:fantasyregulations:739758249213165598>",
   leave: "<:leave:746817814459056208>",
   regulations: "<:regulations:739751088932257842>",
+  yy: "<:yy:759711893995651122>",
+  yyid: "759711893995651122",
+  nn: "<:nn:759711893777809420>",
+  nnid: "759711893777809420"
 };
 
 
