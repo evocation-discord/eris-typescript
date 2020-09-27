@@ -42,6 +42,7 @@ export class CommandParserModule extends Module {
       const reason = await inhibitor(msg, cmd);
       if (reason) {
         // It inhibited
+        if (reason === "Silent") return;
         msg.channel.send(strings.general.error(reason));
         return;
       }

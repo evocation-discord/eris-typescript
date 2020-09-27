@@ -88,7 +88,8 @@ const commandresponses = {
   },
   heartbeatrps: "<:heartbeatrps:755879175889354762>",
   version: "<:version:755867807106859089>",
-  educateme: "<:educateme:756178333326245977>"
+  educateme: "<:educateme:756178333326245977>",
+  affiliate: "<:affiliate:759818080489701397>"
 };
 
 const experiencecapsules = {

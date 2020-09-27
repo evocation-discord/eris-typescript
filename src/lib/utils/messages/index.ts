@@ -2,6 +2,7 @@
 import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji, Guild, TextChannel, Role } from "discord.js";
 import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
+import { GuildMember } from "discord.js";
 
 export const strings = {
   general: {
@@ -52,7 +53,8 @@ export const strings = {
     notInGuild: "You are not in a guild.",
     missingDiscordPermission: (permission: PermissionResolvable) => `You do not satisfy a Discord permission node: **${permission}**.`,
     cooldown: (cooldown: string) => `You must wait **${cooldown}** to run this command!`,
-    requestRejected: "Request has been rejected. Please run this command in <#528598988673253376>!"
+    requestRejectedBotCommands: "Request has been rejected. Please run this command in <#528598988673253376>!",
+    requestRejected: "Request has been rejected."
   },
   modules: {
     directmessages: {
@@ -355,6 +357,27 @@ export const strings = {
         restrictedChannel: "You cannot quote a message from that channel as its access is highly restricted.",
         bot: "You cannot quote bots."
       }
+    },
+    affiliate: {
+      cantAffiliateYourself: "You cannot execute affiliate commands on yourself.",
+      cantAffiliateBots: "You may only use this command on users, not bots. Please only use these affiliation commands with necessity. Thank you.",
+      affiliate: {
+        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has been awarded the <@&${ROLES.AFFILIATE}> role.`,
+        denied: `${emotes.commandresponses.denial} That user is already an Evocation affiliate.`,
+        audit: (user: User) => `User was selected to represent an affiliated server by ${user.tag}.`
+      },
+      removeaffiliate: {
+        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has had their <@&${ROLES.AFFILIATE}> role removed.`,
+        denied: `${emotes.commandresponses.denial} That user is not an Evocation affiliate.`,
+        audit: (user: User) => `Representative for a server is being changed/affiliation is being dissolved. Responsible User: ${user.tag}.`
+      },
+      listaffiliates: {
+        embedFieldTitle: "Affiliates",
+        noAffiliate: "→ No affliates.",
+        affiliateMap: (member: GuildMember) => `→ ${member} (\`${member.id}\`)`,
+      },
+      roleRemoveNotLegitimacy: "[CONDITIONAL REVOCATION] Role was not added to user with legitimacy.",
+      roleAddNotLegitimacy: "[FORCED ATTRIBTUION] Role was not removed from user with legitimacy.",
     }
   },
   commandGroups: {}
@@ -412,7 +435,10 @@ export const commandDescriptions = {
   version: "Returns Eris' deployment version and its title, if applicable.",
   quote: "Echoes a message that was sent by a user on the server.",
   cancel: "Cancels a user.",
-  educateme: "Have Eris return an educational fact. This may be based on Evocation, Discord and everything outward."
+  educateme: "Have Eris return an educational fact. This may be based on Evocation, Discord and everything outward.",
+  affiliate: "Assigns a user the 'Affiliate Representative' role.",
+  removeaffiliate: "Removes an Evocation affiliate.",
+  listaffiliate: "Returns a list of users with the 'Affiliate Representative' role."
 };
 
 const rankEmoji = (rank: number): string => {

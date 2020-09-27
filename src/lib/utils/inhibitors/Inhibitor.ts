@@ -57,14 +57,22 @@ const adminOnly: Inhibitor = async (msg, client) => {
   return strings.inhibitors.noPermission;
 };
 
+const serverGrowthLeadOnly: Inhibitor = async (msg, client) => {
+  const isNotGuild = await guildsOnly(msg, client);
+  if (isNotGuild) return isNotGuild;
+  const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+  if (mainGuild.members.resolve(msg.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS, ROLES.SERVER_GROWTH_LEAD].includes(role.id))) return undefined;
+  return strings.inhibitors.noPermission;
+};
+
 const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
   return async msg => {
     if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
     if (roles.includes("STAFF") && await roleValidation(msg, ROLES.STAFF)) return undefined;
     if (roles.includes("SCIONS OF ELYSIUM") && await roleValidation(msg, ROLES.SCIONS_OF_ELYSIUM)) return undefined;
     if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, ROLES.SENTRIES_OF_DESCENSUS)) return undefined;
-    if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, ROLES.EVOCATION_OCULI)) return undefined;
-    if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, ROLES.EVOCATION_LACUNAE)) return undefined;
+    if (roles.includes("EVOCATION OCULI") && await roleValidation(msg, ROLES.EVOCATION_OCULI)) return undefined;
+    if (roles.includes("EVOCATION LACUNAE") && await roleValidation(msg, ROLES.EVOCATION_LACUNAE)) return undefined;
     if (roles.includes("WISTERIA") && await roleValidation(msg, ROLES.WISTERIA)) return undefined;
     return strings.inhibitors.noPermission;
   };
@@ -77,12 +85,21 @@ const roleValidation = async (msg: Message, roleID: string): Promise<boolean> =>
 };
 
 const canOnlyBeExecutedInBotCommands =
-  mergeInhibitors(guildsOnly, async (msg, client) => {
+  mergeInhibitors(guildsOnly, async (msg) => {
     if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
     if (msg.channel.id === "528598741565833246") return undefined;
-    if ((msg.channel as TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejected;
+    if ((msg.channel as TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejectedBotCommands;
     return undefined;
   });
+
+const canOnlyBeExecutedInChannels = (channels: string[], silent = false): Inhibitor =>
+  mergeInhibitors(guildsOnly, async (msg) => {
+    if (channels.includes(msg.channel.id)) return undefined;
+    if (channels.includes((msg.channel as TextChannel).name)) return undefined;
+    if (silent) return "Silent";
+    return strings.inhibitors.requestRejected;
+  });
+
 
 export type Inhibitor = (
   msg: Message,
@@ -96,7 +113,9 @@ export const inhibitors = {
   canOnlyBeExecutedInBotCommands,
   moderatorOnly,
   adminOnly,
-  onlySomeRolesCanExecute
+  onlySomeRolesCanExecute,
+  serverGrowthLeadOnly,
+  canOnlyBeExecutedInChannels
 };
 
 type PermissionRole = "STAFF" | "WISTERIA" | "SCIONS OF ELYSIUM" | "SENTRIES OF DESCENSUS" | "EVOCATION LACUNAE" | "EVOCATION OCULI";

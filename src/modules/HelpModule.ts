@@ -3,12 +3,13 @@ import { command, Module, Optional, Command, ROLES, CommandCategories, commandDe
 
 const commandGroupsWithEmojis = {
   "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
-  "Informational": `${emotes.commandresponses.information} **INFORMATIONAL**`,
-  "Giveaways": `${emotes.giveaway.donation} **GIVEAWAYS**`,
   "Server Administrator": `${emotes.commandresponses.admin} **SERVER ADMINISTRATOR**`,
+  "Informational": `${emotes.commandresponses.information} **INFORMATIONAL**`,
+  "Affiliation Management": `${emotes.commandresponses.affiliate} **AFFILIATION MANAGEMENT**`,
+  "Giveaways": `${emotes.giveaway.donation} **GIVEAWAYS**`,
   "Moderation": `${emotes.commandresponses.moderation} **MODERATION**`,
   "Purchasable Role Limitation": `${emotes.commandresponses.creditcard} **PURCHASABLE ROLE LIMITATION**`,
-  "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`
+  "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`,
 };
 
 export default class HelpModule extends Module {
@@ -17,7 +18,21 @@ export default class HelpModule extends Module {
   async help(msg: Message, command?: string): Promise<void|Message> {
     const commands = Array.from(this.client.commandManager.cmds);
     if (!command) {
-      const commandGroups = commands.map(cmd => cmd.group).filter((item, index, self) => self.indexOf(item) === index);
+      const commandGroups: CommandCategories[] = [
+        CommandCategories["Bot Owner"],
+        CommandCategories["Server Administrator"],
+        CommandCategories["Affiliation Management"],
+        // CommandCategories["Temporary Role Assignment"],
+        // CommandCategories["Starboard"],
+        CommandCategories["Giveaways"],
+        CommandCategories["Moderation"],
+        // CommandCategories["Currency (Endorphins)"],
+        // CommandCategories["Currency (Soulstones)"],
+        // CommandCategories["Relics"],
+        CommandCategories["Levelling System"],
+        CommandCategories["Informational"],
+        CommandCategories["Purchasable Role Limitation"]
+      ];
       const messageArray: string[] = [];
 
       for await (const commandGroup of commandGroups) {
@@ -26,7 +41,7 @@ export default class HelpModule extends Module {
         messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(strings.modules.help.specificCommandHelp);
-      msg.channel.send(messageArray.join("\n"));
+      msg.channel.send(messageArray.join("\n"), { split: true });
     } else if (this.client.commandManager.getByTrigger(command)) {
       const cmd = this.client.commandManager.getByTrigger(command);
       if (cmd.admin) {
