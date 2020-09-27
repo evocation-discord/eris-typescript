@@ -36,6 +36,6 @@ export default class PurchaseableRolesModule extends Module {
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI", "EVOCATION LACUNAE"])], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.educateme, aliases: ["enlighten", "enlightenme", "educate"] })
   async educateme(message: Message): Promise<void> {
-    message.channel.send(strings.modules.purchaseableroles.educateme[Math.floor(Math.random() * strings.modules.purchaseableroles.educateme.length)]);
+    message.channel.send([strings.modules.purchaseableroles.educatemePrefix, strings.modules.purchaseableroles.educateme[Math.floor(Math.random() * strings.modules.purchaseableroles.educateme.length)]].join(" "));
   }
 }

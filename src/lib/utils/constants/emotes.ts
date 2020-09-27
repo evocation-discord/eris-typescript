@@ -87,7 +87,8 @@ const commandresponses = {
     blobboost: "<:blobboost:756961323740430378>"
   },
   heartbeatrps: "<:heartbeatrps:755879175889354762>",
-  version: "<:version:755867807106859089>"
+  version: "<:version:755867807106859089>",
+  educateme: "<:educateme:756178333326245977>"
 };
 
 const experiencecapsules = {
