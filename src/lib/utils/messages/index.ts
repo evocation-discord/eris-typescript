@@ -243,7 +243,7 @@ export const strings = {
         "chicken wings with no chicken",
         "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
-      educatemePrefix: `${emotes.commandresponses.educateme}: **EDUCATION**:`,
+      educatemePrefix: `${emotes.commandresponses.educateme} **EDUCATION**:`,
       educateme: [
         "*Pentheraphobia* is the intense and disproportionate fear of your mother-in-law.",
         "Murmurations are the graceful, undulating patterns starlings create when they flock together in the sky. Scientists are still unsure how the birds coordinate their movements so quickly.",
