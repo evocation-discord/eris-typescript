@@ -1,16 +1,17 @@
-import { command, CommandCategories, commandDescriptions, Embed, inhibitors, MAIN_GUILD_ID, Module, monitor, ROLES, strings } from "@lib/utils";
-import { Message, GuildMember, Role } from "discord.js";
+import { CHANNELS, command, CommandCategories, commandDescriptions, Embed, inhibitors, MAIN_GUILD_ID, messageLinkRegex, Module, monitor, ROLES, strings } from "@lib/utils";
+import { Message, GuildMember, Role,TextChannel } from "discord.js";
 
 export default class AffiliateModule extends Module {
 
   @monitor({ event: "guildMemberRoleAdd" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<GuildMember|void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     if (role.id !== ROLES.AFFILIATE) return;
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
     const firstEntry = auditLogs.entries.first();
     if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id)))
-      newMember.roles.remove(ROLES.AFFILIATE, strings.modules.affiliate.roleRemoveNotLegitimacy);
+      return newMember.roles.remove(ROLES.AFFILIATE, strings.modules.affiliate.roleRemoveNotLegitimacy);
+    (newMember.client.channels.resolve(CHANNELS.AFFILIATE_LOUNGE) as TextChannel).send(strings.modules.affiliate.welcomeMessage(newMember.user));
   }
 
   @monitor({ event: "guildMemberRoleRemove" })

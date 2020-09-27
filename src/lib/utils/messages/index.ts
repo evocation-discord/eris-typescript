@@ -3,6 +3,7 @@ import { emotes, ROLES, timeFormatter } from "..";
 import { PermissionResolvable, Snowflake, Message, User, GuildEmoji, Guild, TextChannel, Role } from "discord.js";
 import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
 import { GuildMember } from "discord.js";
+import { CHANNELS } from "../constants";
 
 export const strings = {
   general: {
@@ -378,6 +379,12 @@ export const strings = {
       },
       roleRemoveNotLegitimacy: "[CONDITIONAL REVOCATION] Role was not added to user with legitimacy.",
       roleAddNotLegitimacy: "[FORCED ATTRIBTUION] Role was not removed from user with legitimacy.",
+      welcomeMessage: (user: User) => [
+        `Welcome, ${user}, to Evocation's **Affiliate Lounge**.`,
+        `You have been selected as an **Affiliate Representative** for a server that is listed in <#${CHANNELS.AFFILIATE_LOUNGE}>`,
+        "This channel is intended as a secure medium of liaison - you can communicate updates to your listing or questions about affiliation. Please also use this channel to notify us about anything that you believe may be of significance in relation to the future operation of your server that may influence your association with our server.",
+        "This channel's access is restricted to **Administrators**, the **Server Growth Lead** and **Affiliate Representatives**."
+      ].join("\n\n")
     }
   },
   commandGroups: {}
