@@ -243,6 +243,27 @@ export const strings = {
         "chicken wings with no chicken",
         "passion is not the same way of that lol but it was definitely a great app to help me find my life in a few years I am now and now my baby is so much better now than that ever happened I was told that she had no clue where she could have it and I wanna know how to you get it and I wanna know that you are mean and you don’t wanna cry like a child and then I have a question for that and I wanna cry is baby girl you are so stupid"
       ],
+      educateme: [
+        "*Pentheraphobia* is the intense and disproportionate fear of your mother-in-law.",
+        "Murmurations are the graceful, undulating patterns starlings create when they flock together in the sky. Scientists are still unsure how the birds coordinate their movements so quickly.",
+        "A team of chemists described old book smell as “a combination of grassy notes with a tang of acids and a hint of vanilla over an underlying mustiness.” The odour actually comes from chemicals like benzaldehyde, furfural, and acetic acid—all byproducts of decomposition.",
+        "Venetia Burney, who at age 11 suggested the name “Pluto” for the ninth planet in our solar system, lived to see it demoted to a dwarf planet in 2006.",
+        "According to NASA, it possibly rains glass on the planet known as HD 189733b.",
+        "“Bloodcurdling” isn’t just an expression: research shows that watching horror movies can increase a certain clotting protein in our bloodstreams.",
+        "Sleep literally cleans your brain. During slumber, more cerebrospinal fluid flushes through the brain to wash away harmful proteins and toxins that build up during the day.",
+        "On average, people in India spend 10 hours and 42 minutes a week reading, the most time of any country on Earth.",
+        "Nicknamed ”sea bunnies”, *Jorunna parva* is actually a highly toxic species of sea slug.",
+        "*Hippopotomonstrosesquippedaliophobia* is the fear of long words.",
+        "The ampersand symbol is formed from the letters in et—the Latin word for \"and\".",
+        "In 1897, Indiana state legislators tried to pass a bill that would have legally redefined the value of pi as 3.2.",
+        "The number 4 is the only number with the same number of letters as the meaning of its name.",
+        "Blue whales may weigh up to twice as much as the largest dinosaur.",
+        "Bacon was used to make explosives during World War II.",
+        "A face with big eyes, a small nose, and a small chin exhibits kinderschema: the collection of traits humans have evolved to find adorable.",
+        "When it comes to wine, an aroma similar to cat pee is a considered a good thing.",
+        "A group of clowns is sometimes called a giggle.",
+        "Spiders recycle webs by eating them.",
+      ],
       cancel_0: (user: User) => `${user} has been **CANCELLED**.`,
       cancel_1: (user: User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
       cantCancelYourself: "You can't cancel yourself in this way.",
@@ -385,7 +406,8 @@ export const commandDescriptions = {
   miraculum: "Awards a user with the 'Evocation Miraculum' role if they don't already have it.",
   version: "Returns Eris' deployment version and its title, if applicable.",
   quote: "Echoes a message that was sent by a user on the server.",
-  cancel: "Cancels a user."
+  cancel: "Cancels a user.",
+  educateme: "Have Eris return an educational fact. This may be based on Evocation, Discord and everything outward."
 };
 
 const rankEmoji = (rank: number): string => {
