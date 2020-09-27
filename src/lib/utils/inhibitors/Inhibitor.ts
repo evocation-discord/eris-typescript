@@ -97,6 +97,7 @@ const canOnlyBeExecutedInBotCommands =
 
 const canOnlyBeExecutedInChannels = (channels: string[], silent = false): Inhibitor =>
   mergeInhibitors(guildsOnly, async (msg) => {
+    if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
     if (channels.includes(msg.channel.id)) return undefined;
     if (channels.includes((msg.channel as TextChannel).name)) return undefined;
     if (silent) return "Silent";
