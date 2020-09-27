@@ -15,6 +15,7 @@ export default class ModerationModule extends Module {
       const channel = guild.channels.resolve(channelId) as TextChannel;
       if (!channel) return msg.channel.send(strings.general.error(strings.modules.util.channelWasNotFound(channelId)));
       if (["Staff", "Oversight & Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) return msg.channel.send(strings.general.error(strings.modules.moderation.quote.restrictedChannel));
+      if (["729429041022500885", "528598741565833246"].includes(channel.id)) return msg.channel.send(strings.general.error(strings.modules.moderation.quote.restrictedChannel));
       const message = await channel.messages.fetch(messageId);
       if (!message) return msg.channel.send(strings.general.error(strings.modules.util.messageWasNotFound(messageId)));
       if (message.author.bot) return msg.channel.send(strings.general.error(strings.modules.moderation.quote.bot));
