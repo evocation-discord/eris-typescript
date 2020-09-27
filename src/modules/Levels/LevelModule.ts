@@ -150,7 +150,7 @@ export default class LevelModule extends Module {
       }).save();
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("channel")));
     } else if (type === "category") {
-      const channel = await channelParser(id, msg);
+      const channel = await channelParser(id, msg, true);
       if (typeof channel === "string") return msg.channel.send(strings.general.error(channel));
       await XPExclusion.create({
         type: "category",
