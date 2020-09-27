@@ -41,7 +41,7 @@ export default class HelpModule extends Module {
       const message = [
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
         `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded }`  ,
-        `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``) : strings.modules.help.noAliases}`,
+        `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``).join(", ") : strings.modules.help.noAliases}`,
         `**DESCRIPTION**: ${cmd.description || strings.modules.help.noDescription}`
       ];
       return msg.channel.send(message.join("\n"));
