@@ -13,7 +13,9 @@ export const strings = {
     somethingWentWrong: "Something went wrong.",
     commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`).",
     version: `${emotes.commandresponses.version} **VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY).`,
-    commandSyntaxError: (usage: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\``
+    commandSyntaxError: (usage: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\``,
+    dmsclosed: "Your User Settings are preventing me from being able to send you Direct Messages. Please rectify this issue and try again.",
+    checkdms: "Check your Direct Messages."
   },
   giveaway: {
     embed: {
@@ -192,7 +194,6 @@ export const strings = {
       pingResponse: (ms: number, discordPing: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds. It took me **${discordPing}** milliseconds to receive a response from the Discord API.`,
       heartBeatResponse: (discordPing: number) => `${emotes.commandresponses.heartbeatrps} **BEEP**: My heartbeat is **${discordPing}** milliseconds.`,
       privacypolicy: {
-        error: "Your User Settings are preventing me from being able to send you Direct Messages. Please rectify this issue and try again.",
         message1: [
           "Eris is a custom bot designed for use by Evocation staff and members. It includes features such as a levelling system, currency, informational commands, hierarchical advancement handlers and more. Some of Eris' features are intended for internal use, which is why they will not be discussed in a public environment.",
           "Most data that is passively collected by Eris is only accessible to server administrators or bot developers of Eris. All Evocation development team members are bound by a non-disclosure agreement, preventing them from being able to disseminate any information that has been defined to them as confidential.",
@@ -349,6 +350,10 @@ export const strings = {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
         boosterHeader: `\n${emotes.commandresponses.leaderboard.blobboost} **BOOSTER LEADERBOARD**`,
         row: (rank: number, user: User, level: number, totalXP: number, booster = false) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
+      },
+      checkmultipliers: {
+        userProvided: "The above multipliers have been determined to influence this user's experience gain.",
+        noUserProvided: "The above multipliers have been determined to influence your experience gain."
       }
     },
     moderation: {
@@ -446,7 +451,8 @@ export const commandDescriptions = {
   educateme: "Have Eris return an educational fact. This may be based on Evocation, Discord and everything outward.",
   affiliate: "Assigns a user the 'Affiliate Representative' role.",
   removeaffiliate: "Removes an Evocation affiliate.",
-  listaffiliate: "Returns a list of users with the 'Affiliate Representative' role."
+  listaffiliate: "Returns a list of users with the 'Affiliate Representative' role.",
+  checkmultipliers: "Checks if any server, user or role multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users."
 };
 
 const rankEmoji = (rank: number): string => {

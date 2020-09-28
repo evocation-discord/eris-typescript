@@ -26,7 +26,7 @@ export default class UtilCommandModule extends Module {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
       await msg.author.send(strings.modules.util.privacypolicy.message2);
     } catch (e) {
-      msg.channel.send(strings.general.error(strings.modules.util.privacypolicy.error));
+      msg.channel.send(strings.general.error(strings.general.dmsclosed));
     }
     try {
       await msg.delete();

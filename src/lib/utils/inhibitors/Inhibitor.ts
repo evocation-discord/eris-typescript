@@ -81,7 +81,7 @@ const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
   };
 };
 
-const roleValidation = async (msg: Message, roleID: string): Promise<boolean> => {
+export const roleValidation = async (msg: Message, roleID: string): Promise<boolean> => {
   if (!msg.member) return false;
   const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
   return mainGuild.members.resolve(msg.author.id).roles.cache.has(roleID);

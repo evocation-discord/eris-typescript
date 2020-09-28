@@ -1,4 +1,4 @@
-import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex } from "@lib/utils";
+import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation } from "@lib/utils";
 import { Message, GuildMember, Role, User, TextChannel } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { UserXP, XPExclusion, LevelRole, XPMultiplier } from "@lib/utils/database/models";
@@ -449,6 +449,38 @@ export default class LevelModule extends Module {
       message.push(strings.modules.levels.leaderboard.row(info.rank, data.user, info.lvl, info.total_xp, true));
     }
     await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
+  }
+
+  @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.checkmultipliers, usage: "[user:user]", args: [new Optional(User)] })
+  async checkmultipliers(message: Message, user: User): Promise<void|Message> {
+    const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
+    if (!user) user = message.author;
+    if (!roleValidation(message, ROLES.STAFF)) user = message.author;
+    const userMultipliers = await XPMultiplier.find({ where: { type: "user", thingID: user.id } });
+    let roleMultipliers = await XPMultiplier.find({ where: { type: "role" } });
+    roleMultipliers = roleMultipliers.filter(r => guild.members.resolve(user.id).roles.cache.has(r.thingID));
+    const serverMultipliers = await XPMultiplier.find({ where: { type: "server" } });
+    let channelMultipliers = await XPMultiplier.find({ where: { type: "channel" } });
+    channelMultipliers = channelMultipliers.filter(r => guild.channels.resolve(r.thingID).permissionsFor(user).has("VIEW_CHANNEL") || false);
+
+    const embed = new Embed()
+      .setAuthor(user.tag, user.displayAvatarURL({ dynamic: true, format: "png" }))
+      .addField(strings.modules.levels.multiplierEmbedName("Server"), serverMultipliers.map(s => strings.modules.levels.multiplierMapping(s)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+      .addField(strings.modules.levels.multiplierEmbedName("User"), userMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+      .addField(strings.modules.levels.multiplierEmbedName("Role"), roleMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+      .addField(strings.modules.levels.multiplierEmbedName("Channel"), channelMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
+      .setFooter(user.id === message.author.id ? strings.modules.levels.checkmultipliers.noUserProvided : strings.modules.levels.checkmultipliers.userProvided);
+
+    if (roleValidation(message, ROLES.STAFF) && user.id !== message.author.id) {
+      try {
+        await message.author.send(embed);
+        await message.channel.send(strings.general.success(strings.general.checkdms));
+      } catch (e) {
+        message.channel.send(strings.general.error(strings.general.dmsclosed));
+      }
+      return;
+    }
+    return message.channel.send(embed);
   }
 }
 
