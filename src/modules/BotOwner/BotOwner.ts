@@ -80,6 +80,7 @@ export default class BotOwner extends Module {
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval })
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
+    const isErisCool = () => true;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Discord = require("discord.js");
     try {
