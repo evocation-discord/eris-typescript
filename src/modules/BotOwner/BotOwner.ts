@@ -81,6 +81,7 @@ export default class BotOwner extends Module {
   async eval(msg: Message, code: string): Promise<void> {
     const client = msg.client;
     const isErisCool = () => true;
+    const isErisFunny = () => true;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Discord = require("discord.js");
     try {
