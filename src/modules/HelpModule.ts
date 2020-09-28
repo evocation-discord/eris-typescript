@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings, emotes } from "@lib/utils";
+import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings, emotes, errorMessage } from "@lib/utils";
 
 const commandGroupsWithEmojis = {
   "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
@@ -45,10 +45,10 @@ export default class HelpModule extends Module {
     } else if (this.client.commandManager.getByTrigger(command)) {
       const cmd = this.client.commandManager.getByTrigger(command);
       if (cmd.admin) {
-        if (!this.client.botAdmins.includes(msg.author.id)) return msg.channel.send(strings.general.error(strings.modules.help.noPermission));
+        if (!this.client.botAdmins.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
       } else {
         if (cmd.staff) {
-          if (!msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return msg.channel.send(strings.general.error(strings.modules.help.noPermission));
+          if (!msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
         }
       }
       const triggers = [...cmd.triggers];
@@ -61,7 +61,7 @@ export default class HelpModule extends Module {
       ];
       return msg.channel.send(message.join("\n"));
     } else {
-      return msg.channel.send(strings.general.error(strings.modules.help.noCommandFound));
+      return errorMessage(msg, strings.general.error(strings.modules.help.noCommandFound));
     }
   }
 

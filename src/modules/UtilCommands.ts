@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions } from "@lib/utils";
+import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage } from "@lib/utils";
 
 export default class UtilCommandModule extends Module {
 
@@ -26,7 +26,7 @@ export default class UtilCommandModule extends Module {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
       await msg.author.send(strings.modules.util.privacypolicy.message2);
     } catch (e) {
-      msg.channel.send(strings.general.error(strings.general.dmsclosed));
+      errorMessage(msg, strings.general.error(strings.general.dmsclosed));
     }
     try {
       await msg.delete();

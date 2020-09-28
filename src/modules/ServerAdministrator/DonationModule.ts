@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings, commandDescriptions } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings, commandDescriptions, errorMessage } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationModule extends Module {
@@ -23,7 +23,7 @@ export default class DonationModule extends Module {
   logdonation(msg: Message, member: GuildMember, item: string): void {
     msg.delete();
     if (member.user.bot) {
-      msg.channel.send(strings.general.error(strings.modules.donations.commands.logdonationBotError));
+      errorMessage(msg, strings.general.error(strings.modules.donations.commands.logdonationBotError));
       return;
     }
     if (member.roles.cache.has(ROLES.WHITE_HALLOWS))

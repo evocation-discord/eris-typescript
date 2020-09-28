@@ -1,4 +1,4 @@
-import { CHANNELS, command, CommandCategories, commandDescriptions, Embed, inhibitors, MAIN_GUILD_ID, messageLinkRegex, Module, monitor, ROLES, strings } from "@lib/utils";
+import { CHANNELS, command, CommandCategories, commandDescriptions, Embed, errorMessage, inhibitors, MAIN_GUILD_ID, messageLinkRegex, Module, monitor, ROLES, strings } from "@lib/utils";
 import { Message, GuildMember, Role,TextChannel } from "discord.js";
 
 export default class AffiliateModule extends Module {
@@ -25,20 +25,20 @@ export default class AffiliateModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.serverGrowthLeadOnly, inhibitors.canOnlyBeExecutedInChannels(["server-growth-exploration"], true)], usage: "<member:member>", args: [GuildMember], description: commandDescriptions.affiliate, staff: true, group: CommandCategories["Affiliation Management"] })
-  async affiliate(message: Message, member: GuildMember): Promise<Message> {
+  async affiliate(message: Message, member: GuildMember): Promise<Message|void> {
     if (message.guild.id !== MAIN_GUILD_ID) return;
-    if (member === message.member) return message.channel.send(strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
-    if (member.user.bot) return message.channel.send(strings.general.error(strings.modules.affiliate.cantAffiliateBots));
+    if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
+    if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
     if (member.roles.cache.has(ROLES.AFFILIATE)) return message.channel.send(strings.modules.affiliate.affiliate.denied);
     await member.roles.add(ROLES.AFFILIATE, strings.modules.affiliate.affiliate.audit(message.author));
     return message.channel.send(strings.general.success(strings.modules.affiliate.affiliate.success(member.user)), { allowedMentions: { roles: [], users: [] } });
   }
 
   @command({ inhibitors: [inhibitors.serverGrowthLeadOnly, inhibitors.canOnlyBeExecutedInChannels(["server-growth-exploration"], true)], usage: "<member:member>", args: [GuildMember], description: commandDescriptions.removeaffiliate, aliases: ["ra"], staff: true, group: CommandCategories["Affiliation Management"] })
-  async removeaffiliate(message: Message, member: GuildMember): Promise<Message> {
+  async removeaffiliate(message: Message, member: GuildMember): Promise<Message|void> {
     if (message.guild.id !== MAIN_GUILD_ID) return;
-    if (member === message.member) return message.channel.send(strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
-    if (member.user.bot) return message.channel.send(strings.general.error(strings.modules.affiliate.cantAffiliateBots));
+    if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
+    if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
     if (!member.roles.cache.has(ROLES.AFFILIATE)) return message.channel.send(strings.modules.affiliate.affiliate.denied);
     await member.roles.remove(ROLES.AFFILIATE, strings.modules.affiliate.removeaffiliate.audit(message.author));
     return message.channel.send(strings.general.success(strings.modules.affiliate.removeaffiliate.success(member.user)), { allowedMentions: { roles: [], users: [] } });

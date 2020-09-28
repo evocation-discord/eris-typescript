@@ -1,4 +1,4 @@
-import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional, monitor, MAIN_GUILD_ID } from "@lib/utils";
+import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional, monitor, MAIN_GUILD_ID, errorMessage } from "@lib/utils";
 import { Message, MessageReaction, User } from "discord.js";
 import { Giveaway, LevelRole } from "@database/models";
 import Duration from "@lib/utils/arguments/Duration";
@@ -53,10 +53,10 @@ export default class GiveawayModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.reroll, usage: "[messageid:string]" })
   async reroll(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
-      if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
+      if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
       const message = await msg.channel.messages.fetch(messageId);
       if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid))
-        return msg.channel.send(strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
+        return errorMessage(msg, strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
 
       const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
       const reaction = message.reactions.resolve(emotes.giveaway.giftreactionid);
@@ -76,7 +76,7 @@ export default class GiveawayModule extends Module {
         .filter(m => m.reactions.cache.has(emotes.giveaway.giftreactionid))
         .first();
 
-      if (!message) return msg.channel.send(strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
+      if (!message) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
 
       const reaction = message.reactions.resolve(emotes.giveaway.giftreactionid);
       const __users = await reaction.users.fetch();
@@ -93,14 +93,14 @@ export default class GiveawayModule extends Module {
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.end, usage: "[messageid:string]" })
   async end(msg: Message, messageId?: string): Promise<Message | void> {
     if (messageId) {
-      if (!messageId.match("\\d{17,20}")) return msg.channel.send(strings.general.error(strings.modules.giveaway.notValidMessageID));
+      if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
       try {
         const message = await msg.channel.messages.fetch(messageId);
         if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid))
-          return msg.channel.send(strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
+          return errorMessage(msg, strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked));
 
         const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-        if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
+        if (giveaway.ended) return errorMessage(msg, strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
         await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
       } catch (e) {
         const giveaway = await Giveaway.findOne({ where: { messageId: messageId } });
@@ -117,10 +117,10 @@ export default class GiveawayModule extends Module {
         .filter(m => m.reactions.cache.has(emotes.giveaway.giftreactionid))
         .first();
 
-      if (!message) return msg.channel.send(strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
+      if (!message) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
 
       const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-      if (giveaway.ended) return msg.channel.send(strings.general.error(strings.modules.giveaway.mostRecentGiveawayAlreadyEnded));
+      if (giveaway.ended) return errorMessage(msg, strings.general.error(strings.modules.giveaway.mostRecentGiveawayAlreadyEnded));
       await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
     }
   }
@@ -134,7 +134,7 @@ export default class GiveawayModule extends Module {
       messageArray.push(strings.modules.giveaway.giveawayListMap(index, giveaway));
     }
 
-    if (messageArray.length === 1) return msg.channel.send(strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
+    if (messageArray.length === 1) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
 
     await msg.channel.send(messageArray.join("\n\n"), { allowedMentions: { users: [] } });
   }
@@ -156,7 +156,7 @@ export default class GiveawayModule extends Module {
       endedGiveaways.push();
     }
 
-    if (endedGiveaways.length === 1) return msg.channel.send(strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
+    if (endedGiveaways.length === 1) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
 
     await msg.channel.send(endedGiveaways.join("\n\n"), { allowedMentions: { users: [] } });
   }

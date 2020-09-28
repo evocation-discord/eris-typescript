@@ -1,4 +1,4 @@
-import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation } from "@lib/utils";
+import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation, errorMessage } from "@lib/utils";
 import { Message, GuildMember, Role, User, TextChannel } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { UserXP, XPExclusion, LevelRole, XPMultiplier } from "@lib/utils/database/models";
@@ -134,8 +134,8 @@ export default class LevelModule extends Module {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
-      if (typeof role === "string") return msg.channel.send(strings.general.error(role));
-      if (msg.member.roles.cache.has(role.id)) return msg.channel.send(strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
+      if (typeof role === "string") return errorMessage(msg, strings.general.error(role));
+      if (msg.member.roles.cache.has(role.id)) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
       await XPExclusion.create({
         type: "role",
         id: role.id
@@ -143,7 +143,7 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("role")));
     } else if (type === "channel") {
       const channel = await channelParser(id, msg);
-      if (typeof channel === "string") return msg.channel.send(strings.general.error(channel));
+      if (typeof channel === "string") return errorMessage(msg, strings.general.error(channel));
       await XPExclusion.create({
         type: "channel",
         id: channel.id
@@ -151,7 +151,7 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("channel")));
     } else if (type === "category") {
       const channel = await channelParser(id, msg, true);
-      if (typeof channel === "string") return msg.channel.send(strings.general.error(channel));
+      if (typeof channel === "string") return errorMessage(msg, strings.general.error(channel));
       await XPExclusion.create({
         type: "category",
         id: channel.id
@@ -161,7 +161,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], aliases: ["xpe"], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role|category] [ID/mention]" })
-  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel" | "category", id?: string): Promise<Message> {
+  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel" | "category", id?: string): Promise<Message|void> {
     if (!what) {
       const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
       const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
@@ -172,23 +172,23 @@ export default class LevelModule extends Module {
         .addField(strings.modules.levels.exclusionEmbedName("Role"), roleExclusions.map(r => strings.modules.levels.exclusionMapping(r)).join("\n") || strings.modules.levels.noRolesExcluded);
       return msg.channel.send(embed);
     }
-    if (!["remove"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
+    if (!["remove"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
 
     if (what === "remove") {
-      if (!type || !["channel", "role", "category"].includes(type) || !id) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
+      if (!type || !["channel", "role", "category"].includes(type) || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
       if (type === "role") {
         const exclusion = await XPExclusion.findOne({ where: { id: id, type: "role" } });
-        if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.roleNotExcluded));
+        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.roleNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForRole));
       } else if (type === "channel") {
         const exclusion = await XPExclusion.findOne({ where: { id: id, type: "channel" } });
-        if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.channelNotExcluded));
+        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.channelNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForChannel));
       } else if (type === "category") {
         const exclusion = await XPExclusion.findOne({ where: { id: id, type: "category" } });
-        if (!exclusion) return msg.channel.send(strings.general.error(strings.modules.levels.categoryNotExcluded));
+        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.categoryNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForCategory));
       }
@@ -238,7 +238,7 @@ export default class LevelModule extends Module {
         await this.levelRoleCheck(member, xpData.xp);
       }
       msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("role", roles.length, members.length)));
-    } else return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
+    } else return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], aliases: ["ae"], staff: true, description: commandDescriptions.addexperience, usage: "<amount:number> [users:...user]" })
@@ -354,16 +354,16 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role|channel] [user|role|channel]" })
-  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role" | "channel", id?: string): Promise<Message> {
+  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role" | "channel", id?: string): Promise<Message|void> {
     await msg.delete();
-    if (!["exhaust", "list"].includes(what)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
+    if (!["exhaust", "list"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
 
     if (what === "exhaust") {
-      if (!type || !["user", "server", "role", "channel"].includes(type)) return msg.channel.send(strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
+      if (!type || !["user", "server", "role", "channel"].includes(type)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
       if (type === "user") {
-        if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingUserId));
+        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingUserId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
-        if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "server") {
@@ -371,15 +371,15 @@ export default class LevelModule extends Module {
         await multipliers.map(m => m.remove());
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "role") {
-        if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingRoleId));
+        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingRoleId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "role" } });
-        if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "channel") {
-        if (!id) return msg.channel.send(strings.general.error(strings.modules.levels.missingChannelId));
+        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingChannelId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "channel" } });
-        if (!multiplier) return msg.channel.send(strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       }
@@ -399,8 +399,8 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelledrole, usage: "<role:role> <level:number>", aliases: ["alr"] })
-  async addlevelledrole(msg: Message, role: Role, level: number): Promise<Message> {
-    if (await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
+  async addlevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
+    if (await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
     await LevelRole.create({
       id: role.id,
       level: level
@@ -409,15 +409,15 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role>", aliases: ["rlr"] })
-  async removelevelledrole(msg: Message, role: Role): Promise<Message> {
-    if (!await LevelRole.findOne({ where: { id: role.id } })) return msg.channel.send(strings.general.error(strings.modules.levels.levelRole.doesNotExist));
+  async removelevelledrole(msg: Message, role: Role): Promise<Message|void> {
+    if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     await levelrole.remove();
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.remove(role)), { allowedMentions: { roles: [] } });
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelledroles, aliases: ["llr"] })
-  async listlevelledroles(msg: Message): Promise<Message> {
+  async listlevelledroles(msg: Message): Promise<Message|void> {
     const levelroles = await LevelRole.find();
     const embed = new Embed()
       .setAuthor(strings.modules.levels.levelRole.levelledRolesEmbedTitle)

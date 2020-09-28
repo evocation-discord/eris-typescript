@@ -162,3 +162,9 @@ export const channelParser = async (arg: string, msg: Message, category = false)
   if (querySearch.length === 0) return category ? strings.arguments.couldNotFindCategory : strings.arguments.couldNotFindTextChannel;
   return querySearch[0];
 };
+
+
+export const errorMessage = async (message: Message, error: string): Promise<void> => {
+  const msg = await message.channel.send(error);
+  msg.delete({ timeout: 5000 });
+};

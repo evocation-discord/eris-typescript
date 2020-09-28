@@ -1,4 +1,4 @@
-import { Module, CommandCategories, command, inhibitors, Remainder, messageLinkRegex, commandDescriptions, strings, Embed, emotes } from "@lib/utils";
+import { Module, CommandCategories, command, inhibitors, Remainder, messageLinkRegex, commandDescriptions, strings, Embed, emotes, errorMessage } from "@lib/utils";
 import { TextChannel, Message, PresenceStatusData } from "discord.js";
 import { inspect } from "util";
 import { DisabledCommand } from "@database/models";
@@ -13,7 +13,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>", description: commandDescriptions.setstatus })
-  setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message> {
+  setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message|void> {
     const discordStatus = status as PresenceStatusData;
     switch (discordStatus) {
     case "online":
@@ -36,14 +36,14 @@ export default class BotOwner extends Module {
       break;
 
     default:
-      return msg.channel.send(strings.general.error(strings.modules.util.statusError));
+      return errorMessage(msg, strings.general.error(strings.modules.util.statusError));
 
     }
     return msg.channel.send(strings.general.success(strings.modules.util.statusSet(status)));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>", description: commandDescriptions.setgame })
-  setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message> {
+  setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message|void> {
     switch (type) {
     case "listening":
       this.client.user.setActivity(game, { type: "LISTENING" });
@@ -55,25 +55,25 @@ export default class BotOwner extends Module {
       this.client.user.setActivity(game, { type: "PLAYING" });
       break;
     default:
-      return msg.channel.send(strings.general.error(strings.modules.util.gameError));
+      return errorMessage(msg, strings.general.error(strings.modules.util.gameError));
     }
     return msg.channel.send(strings.general.success(strings.modules.util.gameSet(type, game)));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit })
-  async edit(msg: Message, messageLink: string, newContent: string): Promise<Message> {
+  async edit(msg: Message, messageLink: string, newContent: string): Promise<Message|void> {
     let isError = false;
     const executedRegex = messageLinkRegex.exec(messageLink);
-    if (!executedRegex) return msg.channel.send(strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
+    if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
     const [, guildId, channelId, messageId] = executedRegex;
     const guild = this.client.guilds.resolve(guildId);
-    if (!guild) return msg.channel.send(strings.general.error(strings.modules.util.guildWasNotFound(guildId)));
+    if (!guild) return errorMessage(msg, strings.general.error(strings.modules.util.guildWasNotFound(guildId)));
     const channel = guild.channels.resolve(channelId) as TextChannel;
-    if (!channel) return msg.channel.send(strings.general.error(strings.modules.util.channelWasNotFound(channelId)));
+    if (!channel) return errorMessage(msg, strings.general.error(strings.modules.util.channelWasNotFound(channelId)));
     const message = await channel.messages.fetch(messageId);
-    if (!message) return msg.channel.send(strings.general.error(strings.modules.util.messageWasNotFound(messageId)));
+    if (!message) return errorMessage(msg, strings.general.error(strings.modules.util.messageWasNotFound(messageId)));
     await message.edit(newContent).catch(_ => isError = true);
-    if (isError) return msg.channel.send(strings.general.error(strings.general.somethingWentWrong));
+    if (isError) return errorMessage(msg, strings.general.error(strings.general.somethingWentWrong));
     return msg.channel.send(strings.general.success(strings.modules.util.messageEdited));
   }
 
@@ -101,11 +101,11 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>" })
-  async disablecmd(msg: Message, cmd: string): Promise<Message> {
-    if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return msg.channel.send(strings.general.error(strings.modules.util.cantdisablecommands));
+  async disablecmd(msg: Message, cmd: string): Promise<Message|void> {
+    if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return errorMessage(msg, strings.general.error(strings.modules.util.cantdisablecommands));
     const command = this.client.commandManager.getByTrigger(cmd);
     const commandName = command.triggers[0];
-    if (await DisabledCommand.findOne({ where: { commandName: commandName } })) return msg.channel.send(strings.general.error(strings.modules.util.alreadydisabled));
+    if (await DisabledCommand.findOne({ where: { commandName: commandName } })) return errorMessage(msg, strings.general.error(strings.modules.util.alreadydisabled));
     await DisabledCommand.create({
       disabledBy: msg.author.id,
       commandName: cmd
@@ -114,14 +114,14 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.enablecmd, usage: "<command:string>" })
-  async enablecmd(msg: Message, cmd: string): Promise<Message> {
+  async enablecmd(msg: Message, cmd: string): Promise<Message|void> {
     const command = this.client.commandManager.getByTrigger(cmd);
     const commandName = command.triggers[0];
     if (await DisabledCommand.findOne({ where: { commandName: commandName } })) {
       const disabled = await DisabledCommand.findOne({ where: { commandName: commandName } });
       await disabled.remove();
       return msg.channel.send(strings.general.success(strings.modules.util.undisabledcommand));
-    } else return msg.channel.send(strings.general.error(strings.modules.util.notdisabledcommand));
+    } else return errorMessage(msg, strings.general.error(strings.modules.util.notdisabledcommand));
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], aliases: ["ldc"], admin: true, description: commandDescriptions.listdisabledcmds })

@@ -1,4 +1,4 @@
-import { monitor, Module, ErisClient, MAIN_GUILD_ID, ROLES, command, inhibitors, strings, CommandCategories, commandDescriptions, messageLinkRegex } from "@lib/utils";
+import { monitor, Module, ErisClient, MAIN_GUILD_ID, ROLES, command, inhibitors, strings, CommandCategories, commandDescriptions, messageLinkRegex, errorMessage } from "@lib/utils";
 import { GuildMember, Message, User } from "discord.js";
 
 export default class PurchaseableRolesModule extends Module {
@@ -26,10 +26,10 @@ export default class PurchaseableRolesModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI"]), inhibitors.userCooldown(600000)], usage: "<user:user>", args: [User], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.cancel })
-  async cancel(message: Message, user: User): Promise<Message> {
+  async cancel(message: Message, user: User): Promise<Message|void> {
     const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
-    if (message.author === user) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
-    if (user.id === message.client.user.id) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelEris));
+    if (message.author === user) return errorMessage(message, strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
+    if (user.id === message.client.user.id) return errorMessage(message, strings.general.error(strings.modules.purchaseableroles.cantCancelEris));
     if (guild.members.resolve(user).roles.cache.has(ROLES.ADMINISTRATORS) || guild.members.resolve(user).roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelAdmins));
     const random = Math.round(Math.random());
     if (random === 1) return message.channel.send(strings.general.success(strings.modules.purchaseableroles.cancel_0(user)));

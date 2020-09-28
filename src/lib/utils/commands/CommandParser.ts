@@ -3,7 +3,7 @@ import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
 import { getArgumentParser } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
-import { escapeRegex, emotes } from "..";
+import { escapeRegex, emotes, errorMessage } from "..";
 import { monitor } from "../monitor/decorator";
 import { Blacklist, DisabledCommand } from "../database/models";
 import { strings } from "../messages";
@@ -30,7 +30,7 @@ export class CommandParserModule extends Module {
     const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
     if (!cmd) return;
 
-    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return msg.channel.send(strings.general.error(strings.general.commandDisabled));
+    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return errorMessage(msg, strings.general.error(strings.general.commandDisabled));
 
     // blacklists, woohoo
     const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
@@ -43,7 +43,7 @@ export class CommandParserModule extends Module {
       if (reason) {
         // It inhibited
         if (reason === "Silent") return;
-        msg.channel.send(strings.general.error(reason));
+        errorMessage(msg, strings.general.error(reason));
         return;
       }
     }
@@ -63,7 +63,7 @@ export class CommandParserModule extends Module {
           if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
             await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
           }
-          return msg.channel.send(strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`)));
+          return errorMessage(msg, strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`)));
         } catch (_) {
           // Do nothing. The user doesn't have the correct arguments.
           return;
