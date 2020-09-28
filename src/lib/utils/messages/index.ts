@@ -452,7 +452,7 @@ export const commandDescriptions = {
   affiliate: "Assigns a user the 'Affiliate Representative' role.",
   removeaffiliate: "Removes an Evocation affiliate.",
   listaffiliate: "Returns a list of users with the 'Affiliate Representative' role.",
-  checkmultipliers: "Checks if any server, user or role multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users."
+  checkmultipliers: "Checks if any server, role, channel or user multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users."
 };
 
 const rankEmoji = (rank: number): string => {
