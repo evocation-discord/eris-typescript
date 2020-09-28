@@ -455,7 +455,7 @@ export default class LevelModule extends Module {
   async checkmultipliers(message: Message, user: User): Promise<void|Message> {
     const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (!user) user = message.author;
-    if (!roleValidation(message, ROLES.STAFF)) user = message.author;
+    if (!await roleValidation(message, ROLES.STAFF)) user = message.author;
     const userMultipliers = await XPMultiplier.find({ where: { type: "user", thingID: user.id } });
     let roleMultipliers = await XPMultiplier.find({ where: { type: "role" } });
     roleMultipliers = roleMultipliers.filter(r => guild.members.resolve(user.id).roles.cache.has(r.thingID));
@@ -471,7 +471,7 @@ export default class LevelModule extends Module {
       .addField(strings.modules.levels.multiplierEmbedName("Channel"), channelMultipliers.map(u => strings.modules.levels.multiplierMapping(u)).join("\n▬▬▬\n") || strings.modules.levels.noMultipliers)
       .setFooter(user.id === message.author.id ? strings.modules.levels.checkmultipliers.noUserProvided : strings.modules.levels.checkmultipliers.userProvided);
 
-    if (roleValidation(message, ROLES.STAFF) && user.id !== message.author.id) {
+    if (await roleValidation(message, ROLES.STAFF) && user.id !== message.author.id) {
       try {
         await message.author.send(embed);
         await message.channel.send(strings.general.success(strings.general.checkdms));
