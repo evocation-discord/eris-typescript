@@ -27,8 +27,10 @@ export default class PurchaseableRolesModule extends Module {
 
   @command({ inhibitors: [inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI"]), inhibitors.userCooldown(600000)], usage: "<user:user>", args: [User], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.cancel })
   async cancel(message: Message, user: User): Promise<Message> {
+    const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (message.author === user) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
     if (user.id === message.client.user.id) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelEris));
+    if (guild.members.resolve(user).roles.cache.has(ROLES.ADMINISTRATORS) || guild.members.resolve(user).roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelAdmins));
     const random = Math.round(Math.random());
     if (random === 1) return message.channel.send(strings.general.success(strings.modules.purchaseableroles.cancel_0(user)));
     if (random === 0) return message.channel.send(strings.modules.purchaseableroles.cancel_1(user));
