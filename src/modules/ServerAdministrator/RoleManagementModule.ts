@@ -3,7 +3,7 @@ import { DethronedUser } from "@lib/utils/database/models/DethronedUser";
 import { Message, GuildMember, TextChannel, Role } from "discord.js";
 
 export default class RoleManagementModule extends Module {
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Remainder(String)], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.dethrone })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.dethrone })
   async dethrone(msg: Message, _members: string): Promise<void> {
     await msg.delete();
     const members: GuildMember[] = [];
@@ -24,7 +24,7 @@ export default class RoleManagementModule extends Module {
     await channel.send(strings.modules.rolemanagement.dethrone.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Remainder(String)], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.crown })
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.crown })
   async crown(msg: Message, _members: string): Promise<void> {
     await msg.delete();
     const members: GuildMember[] = [];
