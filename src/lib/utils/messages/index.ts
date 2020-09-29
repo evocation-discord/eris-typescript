@@ -391,6 +391,30 @@ export const strings = {
         "This channel is intended as a secure medium of liaison - you can communicate updates to your listing or questions about affiliation. Please also use this channel to notify us about anything that you believe may be of significance in relation to the future operation of your server that may influence your association with our server.",
         "This channel's access is restricted to **Administrators**, the **Server Growth Lead** and **Affiliate Representatives**."
       ].join("\n\n")
+    },
+    rolemanagement: {
+      dethrone: {
+        auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
+        success: "I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.",
+        log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
+          const strArray = [`${emotes.uncategorised.leave} **${members.length}** member${members.length === 1 ? "": "s"} got dethroned by ${executor} (${executor.id}).`];
+          for (const { member, roles } of members) {
+            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
+          }
+          return strArray.join("\n");
+        }
+      },
+      crown: {
+        auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
+        success: "I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.",
+        log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
+          const strArray = [`${emotes.uncategorised.enter} **${members.length}** member${members.length === 1 ? "": "s"} got crowned by ${executor} (${executor.id}).`];
+          for (const { member, roles } of members) {
+            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
+          }
+          return strArray.join("\n");
+        }
+      }
     }
   },
   commandGroups: {}
@@ -452,7 +476,9 @@ export const commandDescriptions = {
   affiliate: "Assigns a user the 'Affiliate Representative' role.",
   removeaffiliate: "Removes an Evocation affiliate.",
   listaffiliate: "Returns a list of users with the 'Affiliate Representative' role.",
-  checkmultipliers: "Checks if any server, role, channel or user multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users."
+  checkmultipliers: "Checks if any server, role, channel or user multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users.",
+  dethrone: "Removes all roles from (an) user(s).",
+  crown: "Re-assigns roles that were removed using the `e!dethrone` conmand."
 };
 
 const rankEmoji = (rank: number): string => {

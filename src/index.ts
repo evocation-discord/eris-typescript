@@ -5,10 +5,10 @@ dotenv.config();
 import "module-alias/register";
 import "@lib/utils/types/discord";
 
-import EventModule from "@modules/Init/EventModule";
 import { ErisClient } from "@lib/utils";
-import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
 import { setupDatabase } from "@database/index";
+import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
+import EventModule from "@modules/Init/EventModule";
 import BotOwner from "@modules/BotOwner/BotOwner";
 import DirectMessageModule from "@modules/BotOwner/DirectMessageModule";
 import EmojiModule from "@modules/Logging/EmojiModule";
@@ -23,6 +23,7 @@ import UtilCommandModule from "@modules/UtilCommands";
 import LevelModule from "@modules/Levels/LevelModule";
 import ModerationModule from "@modules/Staff/ModerationModule";
 import AffiliateModule from "@modules/Staff/AffiliateModule";
+import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -46,6 +47,7 @@ client
   .registerModule(DonationModule)
   .registerModule(ExclusionsModule)
   .registerModule(GiveawayModule)
+  .registerModule(RoleManagementModule)
   // Staff Modules
   .registerModule(PermissionsModule)
   .registerModule(ModerationModule)

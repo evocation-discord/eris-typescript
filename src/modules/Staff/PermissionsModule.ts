@@ -1,4 +1,4 @@
-import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, CommandCategories, commandDescriptions, strings } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, CommandCategories, commandDescriptions, strings, codeblockMember } from "@lib/utils";
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
@@ -19,7 +19,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblock(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback })
@@ -39,7 +39,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Feedback")), codeblock(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Feedback")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
@@ -59,7 +59,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Reaction")), codeblock(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Reaction")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
@@ -79,7 +79,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Media")), codeblock(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Media")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
@@ -99,13 +99,6 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Experience")), codeblock(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Experience")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 }
-
-const codeblock = (added: GuildMember[], removed: GuildMember[]) => [
-  "```diff",
-  ...added.map(r => `+ ${r.user.tag}`),
-  ...removed.map(r => `- ${r.user.tag}`),
-  "```"
-].join("\n");

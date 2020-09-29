@@ -5,7 +5,7 @@ import { Command } from "./commands/Command";
 import { CommandManager } from "./commands/CommandManager";
 import { CommandParserModule } from "./commands/CommandParser";
 import { GiveawayArgs } from "./GiveawayManager";
-import { MessageEmbed, MessageEmbedOptions, Message, Role, User, TextChannel, GuildChannel } from "discord.js";
+import { MessageEmbed, MessageEmbedOptions, Message, Role, User, TextChannel, GuildChannel, GuildMember } from "discord.js";
 import { resolveRole, resolveUser, resolveChannel } from "./arguments/supportedArgs";
 import { strings } from "./messages";
 
@@ -168,3 +168,10 @@ export const errorMessage = async (message: Message, error: string): Promise<voi
   const msg = await message.channel.send(error);
   msg.delete({ timeout: 5000 });
 };
+
+export const codeblockMember = (added: GuildMember[], removed: GuildMember[]): string => [
+  "```diff",
+  ...added.map(r => `+ ${r.user.tag}`),
+  ...removed.map(r => `- ${r.user.tag}`),
+  "```"
+].join("\n");
