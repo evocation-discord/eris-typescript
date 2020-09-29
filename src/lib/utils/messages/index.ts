@@ -397,7 +397,7 @@ export const strings = {
         auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
         success: "I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.",
         log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
-          const strArray = [`${emotes.uncategorised.leave} **${members.length}** member${members.length === 1 ? "": "s"} got dethroned by ${executor} (\`${executor.id}\`).`];
+          const strArray = [`\`[${timeFormatter()}]\` ${emotes.uncategorised.leave} **${members.length}** member${members.length === 1 ? "": "s"} got dethroned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
             strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
           }
@@ -408,7 +408,7 @@ export const strings = {
         auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
         success: "I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.",
         log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
-          const strArray = [`${emotes.uncategorised.enter} **${members.length}** member${members.length === 1 ? "": "s"} got crowned by ${executor} (\`${executor.id}\`).`];
+          const strArray = [`\`[${timeFormatter()}]\` ${emotes.uncategorised.enter} **${members.length}** member${members.length === 1 ? "": "s"} got crowned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
             strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
           }
