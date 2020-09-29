@@ -1,7 +1,7 @@
 import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation, errorMessage } from "@lib/utils";
 import { Message, GuildMember, Role, User, TextChannel } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
-import { UserXP, XPExclusion, LevelRole, XPMultiplier } from "@lib/utils/database/models";
+import { UserXP, XPExclusion, LevelRole, XPMultiplier, DethronedUser } from "@lib/utils/database/models";
 import Duration from "@lib/utils/arguments/Duration";
 
 export default class LevelModule extends Module {
@@ -107,6 +107,7 @@ export default class LevelModule extends Module {
 
   async levelRoleCheck(member: GuildMember, xp: number): Promise<void> {
     if (member.roles.cache.find(r => r.name === "Muted")) return;
+    if (await DethronedUser.findOne({ where: { id: member.user.id } })) return;
     const userLevel = levelConstants.getLevelFromXP(xp);
     if (xp === 0) {
       const rolesData = await LevelRole.find();
