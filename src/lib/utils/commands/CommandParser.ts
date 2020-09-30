@@ -58,6 +58,7 @@ export class CommandParserModule extends Module {
         else if (p.length === 0) args.push(undefined);
         else args.push(p);
       } catch (err) {
+        console.error(err);
         // Return a error.
         try {
           if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
@@ -83,13 +84,13 @@ export class CommandParserModule extends Module {
       }
     } catch (err) {
       console.error(
-        `error while executing command ${cmd.id}! executed by ${msg.author.tag}/${msg.author.id} in guild ${msg.guild?.name}/${msg.guild?.id}\n`,
+        `error while executing command ${cmd.id} executed by ${msg.author.tag}/${msg.author.id} in guild ${msg.guild?.name}/${msg.guild?.id}\n`,
         err
       );
       if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
         await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
       }
-      cmd.onError(msg, err);
+      errorMessage(msg, strings.general.error(strings.general.somethingWentWrong));
     }
   }
 }

@@ -16,6 +16,5 @@ export interface Command {
     inhibitors: Inhibitor[],
     group: CommandCategories,
     staff?: boolean,
-    admin?: boolean,
-    onError: (msg: Message, error: Error) => void
+    admin?: boolean
 }

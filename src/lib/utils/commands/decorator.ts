@@ -11,7 +11,6 @@ export interface ICommandDecoratorOptions {
   aliases: string[],
   inhibitors: Inhibitor[],
   group: CommandCategories,
-  onError: (msg: Message, error: Error) => void,
   staff?: boolean,
   admin?: boolean,
   args: (supportedArgs | Remainder | Optional)[]
@@ -49,12 +48,7 @@ export function command(
       group: opts.group || CommandCategories.Informational,
       args: opts.args,
       usage: opts.usage,
-      inhibitors: opts.inhibitors || [],
-      onError:
-        opts.onError ||
-        (msg => {
-          msg.reply(":grey_exclamation: **COMMAND INHIBITED**: An error was encountered while executing this command. You should never see this response. Please Direct Message <@747105315840983212> with this message link so we can investigate.");
-        })
+      inhibitors: opts.inhibitors || []
     };
 
     const targetMetas: ICommandDecorator[] =

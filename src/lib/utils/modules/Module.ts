@@ -46,8 +46,7 @@ export class Module {
             id.toLowerCase()
           ),
           module: this,
-          inhibitors: meta.inhibitors,
-          onError: meta.onError
+          inhibitors: meta.inhibitors
         } as Command)
     );
     return cmds;
