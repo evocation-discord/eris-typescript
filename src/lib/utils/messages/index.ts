@@ -88,12 +88,12 @@ export const strings = {
       }
     },
     emojis: {
-      emojiAdded: (emoji: GuildEmoji) => `${emotes.uncategorised.enter} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.uncategorised.enter} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      emojiDeleted: (emoji: GuildEmoji) => `${emotes.uncategorised.leave} **EMOJI REMOVED**: \`:${emoji.name}:\``,
-      animatedEmojiAdded: (emoji: GuildEmoji) => `${emotes.uncategorised.enter} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.uncategorised.enter} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      animatedEmojiDeleted: (emoji: GuildEmoji) => `${emotes.uncategorised.leave} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
+      emojiAdded: (emoji: GuildEmoji) => `${emotes.logging.emojis.addemoji} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.logging.emojis.updateemoji} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      emojiDeleted: (emoji: GuildEmoji) => `${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
+      animatedEmojiAdded: (emoji: GuildEmoji) => `${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      animatedEmojiDeleted: (emoji: GuildEmoji) => `${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
     },
     events: {
       announcementMessages: (message: Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
@@ -169,6 +169,16 @@ export const strings = {
     },
     permissions: {
       negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback") => `${type} negations have been executed for the specified users.`
+    },
+    botowner: {
+      emojis: {
+        notInServer: "I cannot retrieve emoji information about that server. Are you sure I'm in it?",
+        messageHeader: (server: Guild) => [
+          "__**EMOJI**__\n",
+          `**SERVER**: ${server.name}`,
+          `**SERVER ID**: ${server.id}\n`
+        ].join("\n")
+      }
     },
     util: {
       statusError: "Status needs to be `online`, `dnd`, `idle` or `invisible`.",
@@ -479,7 +489,8 @@ export const commandDescriptions = {
   listaffiliate: "Returns a list of users with the 'Affiliate Representative' role.",
   checkmultipliers: "Checks if any server, role, channel or user multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users.",
   dethrone: "Removes all roles from (an) user(s).",
-  crown: "Re-assigns roles that were removed using the `e!dethrone` conmand."
+  crown: "Re-assigns roles that were removed using the `e!dethrone` conmand.",
+  emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server."
 };
 
 const rankEmoji = (rank: number): string => {

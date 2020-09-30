@@ -18,7 +18,17 @@ const logging = {
   messageedit: "<:messageedit:737207518727503912>",
   nameupdate: "<:nameupdate:747771679488606359>",
   unlockchannel: "<:unlockchannel:737019540478623804>",
-  channelarchived: "<:channelarchived:752268602354434160>"
+  channelarchived: "<:channelarchived:752268602354434160>",
+  emojis: {
+    addemoji: "<:addmember:760584350013063198>",
+    updateemoji: "<:updateemoji:760589916731473991>",
+    deleteemoji: "<:deleteemoji:760589916395667456>",
+  },
+  members: {
+    addmember: "<:addmember:760584350013063198>",
+    updatemember: "<:updatemember:760584350122246164>",
+    disconnectmember: "<:disconnectmember:760584349799940138>",
+  }
 };
 
 const relics = {

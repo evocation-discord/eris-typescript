@@ -1,8 +1,7 @@
-import { Module, CommandCategories, command, inhibitors, Remainder, messageLinkRegex, commandDescriptions, strings, Embed, emotes, errorMessage } from "@lib/utils";
-import { TextChannel, Message, PresenceStatusData } from "discord.js";
+import { Module, CommandCategories, command, inhibitors, Remainder, messageLinkRegex, commandDescriptions, strings, Embed, emotes, errorMessage, Optional } from "@lib/utils";
+import { TextChannel, Message, PresenceStatusData, Client, Guild } from "discord.js";
 import { inspect } from "util";
 import { DisabledCommand } from "@database/models";
-import { Client } from "discord.js";
 
 export default class BotOwner extends Module {
 
@@ -149,6 +148,13 @@ export default class BotOwner extends Module {
       }
     }
     await message.channel.send(list.join("\n"), { split: true });
+  }
+
+  @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.emojis, usage: "[server:guild]", args: [new Optional(Guild)] })
+  async emojis(message: Message, server?: Guild): Promise<void> {
+    if (!server) server = message.guild;
+    const emojis = server.emojis.cache.array();
+    await message.channel.send([strings.modules.botowner.emojis.messageHeader(server), emojis.map(emoji => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
   }
 }
 
