@@ -418,7 +418,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role> <level:number>", aliases: ["elr"] })
-  async elevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
+  async editlevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
     if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     levelrole.level = level;
