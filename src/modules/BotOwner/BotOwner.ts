@@ -152,6 +152,7 @@ export default class BotOwner extends Module {
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.emojis, usage: "[server:guild]", args: [new Optional(Guild)] })
   async emojis(message: Message, server?: Guild): Promise<void> {
+    await message.delete();
     if (!server) server = message.guild;
     const emojis = server.emojis.cache.array();
     await message.channel.send([strings.modules.botowner.emojis.messageHeader(server), emojis.sort((a, b) => a.name.localeCompare(b.name)).map(emoji => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
