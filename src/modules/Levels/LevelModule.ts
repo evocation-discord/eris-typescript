@@ -417,6 +417,15 @@ export default class LevelModule extends Module {
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.remove(role)), { allowedMentions: { roles: [] } });
   }
 
+  @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role> <level:number>", aliases: ["elr"] })
+  async elevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
+    if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
+    const levelrole = await LevelRole.findOne({ where: { id: role.id } });
+    levelrole.level = level;
+    await levelrole.save();
+    return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.edit(role, level)), { allowedMentions: { roles: [] } });
+  }
+
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelledroles, aliases: ["llr"] })
   async listlevelledroles(msg: Message): Promise<Message|void> {
     const levelroles = await LevelRole.find();

@@ -340,6 +340,7 @@ export const strings = {
       levelRole: {
         add: (role: Role, level: number) => `Registered **${role}** as a levelled role. It will be automatically awarded to users at **LEVEL ${level}**.`,
         remove: (role: Role) => `Removed **${role}** from the levelled roles registry.`,
+        edit: (role: Role, level: number) => `Updated **${role}** to **LEVEL ${level}**.`,
         alreadyRegistered: "This role is already registered as a level role.",
         doesNotExist: "This role is not configured to be awarded upon meeting an experience threshold.",
         noLevelledRoles: "No levelled roles have been configured.",
