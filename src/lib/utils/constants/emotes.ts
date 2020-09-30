@@ -28,7 +28,9 @@ const logging = {
     addmember: "<:addmember:760584350013063198>",
     updatemember: "<:updatemember:760584350122246164>",
     disconnectmember: "<:disconnectmember:760584349799940138>",
-  }
+  },
+  crown: "<:crown:760595946861494304>",
+  dethrone: "<:dethrone:760595947238588446>"
 };
 
 const relics = {
