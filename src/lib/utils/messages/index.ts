@@ -406,7 +406,7 @@ export const strings = {
     rolemanagement: {
       dethrone: {
         auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
-        success: "I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.",
+        success: `${emotes.logging.dethrone} **SUCCESS**: I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.`,
         log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
           const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.dethrone} **${members.length}** member${members.length === 1 ? "": "s"} was/were dethroned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
@@ -417,7 +417,7 @@ export const strings = {
       },
       crown: {
         auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
-        success: "I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.",
+        success: `${emotes.logging.crown} **SUCCESS**: I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.`,
         log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
           const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.crown} **${members.length}** member${members.length === 1 ? "": "s"} was/were crowned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {

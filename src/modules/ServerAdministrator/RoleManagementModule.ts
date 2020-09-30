@@ -19,7 +19,7 @@ export default class RoleManagementModule extends Module {
       logObject.push({ member, roles });
       await member.roles.remove(roles, strings.modules.rolemanagement.dethrone.auditLogReason(msg.author));
     }
-    await msg.channel.send([strings.general.success(strings.modules.rolemanagement.dethrone.success), codeblockMember([], logObject.map(o => o.member))].join("\n"), { split: true });
+    await msg.channel.send([strings.modules.rolemanagement.dethrone.success, codeblockMember([], logObject.map(o => o.member))].join("\n"), { split: true });
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
     await channel.send(strings.modules.rolemanagement.dethrone.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
   }
@@ -37,7 +37,7 @@ export default class RoleManagementModule extends Module {
       await member.roles.add(user.roles.map(r => msg.guild.roles.resolve(r)), strings.modules.rolemanagement.crown.auditLogReason(msg.author));
       await user.remove();
     }
-    await msg.channel.send([strings.general.success(strings.modules.rolemanagement.crown.success), codeblockMember(logObject.map(o => o.member), [])].join("\n"), { split: true });
+    await msg.channel.send([strings.modules.rolemanagement.crown.success, codeblockMember(logObject.map(o => o.member), [])].join("\n"), { split: true });
     const channel = await msg.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
     await channel.send(strings.modules.rolemanagement.crown.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
   }
