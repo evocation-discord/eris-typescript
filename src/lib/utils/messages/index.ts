@@ -464,7 +464,7 @@ export const commandDescriptions = {
   muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
   channels: "Returns a list of all existing channels (categories, text and voice) within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands.",
   datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality.",
-  xpignore: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
+  addxpexclusion: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
   xpexclusions: "Removes a role/channel from being ignored or lists active exclusions categorically. Identifiers will only be parsed as arguments, not mentions.",
   leaderboard: "Returns a list of levelled users, showing their rank and total experience.",
   activateservermultiplier: "Activates a multiplier that affects the entire server.",

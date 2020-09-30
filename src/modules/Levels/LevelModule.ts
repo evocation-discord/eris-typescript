@@ -130,8 +130,8 @@ export default class LevelModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["xpi"], staff: true, description: commandDescriptions.xpignore, usage: "<category|channel|role> <ID/mention>" })
-  async xpignore(msg: Message, type: "channel" | "role" | "category", id: string): Promise<void | Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["axe"], staff: true, description: commandDescriptions.addxpexclusion, usage: "<category|channel|role> <ID/mention>" })
+  async addxpexclusion(msg: Message, type: "channel" | "role" | "category", id: string): Promise<void | Message> {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
