@@ -154,7 +154,7 @@ export default class BotOwner extends Module {
   async emojis(message: Message, server?: Guild): Promise<void> {
     if (!server) server = message.guild;
     const emojis = server.emojis.cache.array();
-    await message.channel.send([strings.modules.botowner.emojis.messageHeader(server), emojis.map(emoji => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
+    await message.channel.send([strings.modules.botowner.emojis.messageHeader(server), emojis.sort((a, b) => a.name.localeCompare(b.name)).map(emoji => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
   }
 }
 
