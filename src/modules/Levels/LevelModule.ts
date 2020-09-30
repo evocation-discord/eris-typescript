@@ -461,7 +461,7 @@ export default class LevelModule extends Module {
     await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
   }
 
-  @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.checkmultipliers, usage: "[user:user]", args: [new Optional(User)] })
+  @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.checkmultipliers, usage: "[user:user]", args: [new Optional(User)], aliases: ["cm"] })
   async checkmultipliers(message: Message, user: User): Promise<void|Message> {
     const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (!user) user = message.author;
