@@ -17,7 +17,21 @@ export class ErisClient extends Client {
   public modules: Set<Module> = new Set();
   readonly botAdmins: string[];
   constructor(opts: Partial<ErisClientOptions> = {}) {
-    super({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
+    super({ partials: ["MESSAGE", "CHANNEL", "REACTION"], ws: { intents: [
+      "GUILDS",
+      "GUILD_MEMBERS",
+      "GUILD_BANS",
+      "GUILD_EMOJIS",
+      "GUILD_INTEGRATIONS",
+      "GUILD_WEBHOOKS",
+      "GUILD_INVITES",
+      "GUILD_VOICE_STATES",
+      "GUILD_PRESENCES",
+      "GUILD_MESSAGES",
+      "GUILD_MESSAGE_REACTIONS",
+      "DIRECT_MESSAGES",
+      "DIRECT_MESSAGE_REACTIONS"
+    ] } });
     this.botAdmins = opts.botAdmins || [];
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);
@@ -93,11 +107,11 @@ export class ErisClient extends Client {
           console.log(`Auto reloaded module in file ${file}`);
         } else {
           throw new TypeError(
-            `Module ${file}'s default export is not of a Module.`
+            `Module ${file}"s default export is not of a Module.`
           );
         }
       } else {
-        throw new Error(`Module ${file} doesn't have a default export`);
+        throw new Error(`Module ${file} doesn"t have a default export`);
       }
     });
   }
@@ -113,11 +127,11 @@ export class ErisClient extends Client {
           this.registerModule(module.default);
         } else {
           throw new TypeError(
-            `Module ${fn}'s default export is not of a Module.`
+            `Module ${fn}"s default export is not of a Module.`
           );
         }
       } else {
-        throw new Error(`Module ${fn} doesn't have a default export`);
+        throw new Error(`Module ${fn} doesn"t have a default export`);
       }
     });
   }

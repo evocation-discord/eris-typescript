@@ -7,6 +7,7 @@ export default class LoggingModule extends Module {
   @monitor({ event: "message" })
   async onCommand(msg: Message): Promise<Message> {
     if (msg.author && msg.author.bot) return;
+    if (msg.channel.type === "dm") return;
     if (msg.guild.id !== MAIN_GUILD_ID) return;
 
     const prefix = process.env.PREFIX;

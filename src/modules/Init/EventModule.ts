@@ -57,6 +57,8 @@ export default class EventModule extends Module {
 
   @monitor({ event: "message" })
   async onAnnouncementMessage(message: Message): Promise<void> {
+    if (message.channel.type === "dm") return;
+    if (message.guild.id !== MAIN_GUILD_ID) return;
     const { options: { http } } = this.client;
     if (message.channel.type === "news") {
       await fetch(
