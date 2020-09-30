@@ -88,12 +88,12 @@ export const strings = {
       }
     },
     emojis: {
-      emojiAdded: (emoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      emojiDeleted: (emoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
-      animatedEmojiAdded: (emoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      animatedEmojiDeleted: (emoji: GuildEmoji) => ``\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
+      emojiAdded: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      emojiDeleted: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
+      animatedEmojiAdded: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      animatedEmojiDeleted: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
     },
     events: {
       announcementMessages: (message: Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
