@@ -30,7 +30,8 @@ export const CHANNELS = {
   MODERATION_LOG: process.env.MODERATION_LOG,
   DENOMINATION_LOG: process.env.DENOMINATION_LOG,
   ERIS_SYSTEM_LOG: process.env.ERIS_SYSTEM_LOG,
-  AFFILIATE_LOUNGE: process.env.AFFILIATE_LOUNGE
+  AFFILIATE_LOUNGE: process.env.AFFILIATE_LOUNGE,
+  EMOJI_LOG: process.env.EMOJI_LOG
 };
 
 export const NEGATIONS = {
