@@ -55,4 +55,10 @@ Some of our emoji may originate from the official Blob Emoji server(s), which ar
 
 :enter: __**SELF-ASSIGNABLE ROLES**__
 
-Run `-roles` to retrieve a list of roles that you can add to yourself. Use `-ar <roles...>` to assign roles to yourself. `-removerole <role>` can be used to remove a previously-assigned role from yourself.
+**Possible roles**:
+<@&733969828674535557> - `Fantasy Games`
+<@&734077215020417084> - `FantasyArt`
+<@&733944265511796818> - `DarkFantasy`
+<@&733969828674535557> `MagicalRealism`
+<@&733944385326022699> - `ScienceFantasy`
+Use `!join <role>` to assign roles to yourself. `!leave <role>` can be used to remove a previously-assigned role from yourself.
