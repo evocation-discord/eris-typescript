@@ -20,7 +20,7 @@ const logging = {
   unlockchannel: "<:unlockchannel:737019540478623804>",
   channelarchived: "<:channelarchived:752268602354434160>",
   emojis: {
-    addemoji: "<:addmember:760584350013063198>",
+    addemoji: "<:createemoji:760589916475228211>",
     updateemoji: "<:updateemoji:760589916731473991>",
     deleteemoji: "<:deleteemoji:760589916395667456>",
   },
