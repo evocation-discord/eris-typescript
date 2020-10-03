@@ -1,5 +1,5 @@
 import { Module, CommandCategories, command, inhibitors, Remainder, messageLinkRegex, commandDescriptions, strings, Embed, emotes, errorMessage, Optional } from "@lib/utils";
-import { TextChannel, Message, PresenceStatusData, Client, Guild } from "discord.js";
+import { TextChannel, Message, PresenceStatusData, Client, Guild, BufferResolvable, Base64Resolvable, Collection, Snowflake, Role, RoleResolvable, DataResolver } from "discord.js";
 import { inspect } from "util";
 import { DisabledCommand } from "@database/models";
 
@@ -12,7 +12,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>", description: commandDescriptions.setstatus })
-  setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message|void> {
+  setstatus(msg: Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Message | void> {
     const discordStatus = status as PresenceStatusData;
     switch (discordStatus) {
     case "online":
@@ -42,7 +42,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Remainder(String)], admin: true, usage: "<status:watching|playing|listening>", description: commandDescriptions.setgame })
-  setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message|void> {
+  setgame(msg: Message, type: "watching" | "playing" | "listening", game: string): Promise<Message | void> {
     switch (type) {
     case "listening":
       this.client.user.setActivity(game, { type: "LISTENING" });
@@ -60,7 +60,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit })
-  async edit(msg: Message, messageLink: string, newContent: string): Promise<Message|void> {
+  async edit(msg: Message, messageLink: string, newContent: string): Promise<Message | void> {
     let isError = false;
     const executedRegex = messageLinkRegex.exec(messageLink);
     if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
@@ -81,6 +81,27 @@ export default class BotOwner extends Module {
     const client = msg.client;
     const isErisCool = () => true;
     const isErisFunny = () => true;
+    const createEmoji = async (attachment: BufferResolvable | Base64Resolvable, name: string, { roles, reason }: { roles?: Collection<Snowflake, Role> | RoleResolvable[], reason?: string } = {}) => {
+      attachment = await DataResolver.resolveImage(attachment);
+      if (!attachment) throw new TypeError("REQ_RESOURCE_TYPE");
+
+      const data: { image: string, name: string, roles?: string[] } = { image: attachment, name };
+      if (roles) {
+        data.roles = [];
+        for (let role of roles instanceof Collection ? roles.values() : roles) {
+          role = msg.guild.roles.resolve(role);
+          if (!role) {
+            return Promise.reject(
+              new Error("options.roles isnt Array or Collection of Roles or Snowflakes")
+            );
+          }
+          data.roles.push(role.id);
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return msg.client.api.guilds(msg.guild.id).emojis.post({ data, reason });
+    };
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Discord = require("discord.js");
     try {
@@ -100,7 +121,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>" })
-  async disablecmd(msg: Message, cmd: string): Promise<Message|void> {
+  async disablecmd(msg: Message, cmd: string): Promise<Message | void> {
     if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return errorMessage(msg, strings.general.error(strings.modules.util.cantdisablecommands));
     const command = this.client.commandManager.getByTrigger(cmd);
     const commandName = command.triggers[0];
@@ -113,7 +134,7 @@ export default class BotOwner extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.enablecmd, usage: "<command:string>" })
-  async enablecmd(msg: Message, cmd: string): Promise<Message|void> {
+  async enablecmd(msg: Message, cmd: string): Promise<Message | void> {
     const command = this.client.commandManager.getByTrigger(cmd);
     const commandName = command.triggers[0];
     if (await DisabledCommand.findOne({ where: { commandName: commandName } })) {
