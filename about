@@ -57,6 +57,9 @@ Some of our emoji may originate from the official Blob Emoji server(s), which ar
 
 Use `!join <role>` to assign a role to yourself. `!leave <role>` can be used to remove a previously-assigned role from yourself. Please take note of the fact that spaces are not used within the second syntactic parameter of these commands.
 
+<@&762015217755881492> **➜** `!leave Events` (This role is added to all users by default.)
+<@&727558105705086976> **➜** `!join Giveaways`
+<@&755081688757043273> **➜** `!join Multipliers`
 <@&733944265511796818> **➜** `!join DarkFantasy`
 <@&734077215020417084> **➜** `!join FantasyArt`
 <@&733969828674535557> **➜** `!join FantasyGames`
