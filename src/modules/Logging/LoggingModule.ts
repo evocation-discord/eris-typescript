@@ -45,6 +45,7 @@ export default class LoggingModule extends Module {
         if (link.startsWith("https://discord.com/")) continue;
         if ((_link.startsWith("https://m.youtube.com/") || _link.startsWith("http://m.youtube.com/") && link.startsWith("https://www.youtube.com"))) continue;
         if ((_link.startsWith("https://youtu.be/") || _link.startsWith("http://youtu.be/") && link.startsWith("https://www.youtube.com"))) continue;
+        if (link.startsWith("https://tenor.com") && (_link.startsWith("https://tenor.com/") || _link.startsWith("http://tenor.com/"))) continue;
         const diff = getDifference(_link, link);
         if (diff && diff === "www.") continue;
         if (link === _link) continue;
