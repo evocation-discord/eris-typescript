@@ -51,11 +51,3 @@ _You can see a list of all commands that you have access to by running `e!help`.
 **Alias**: `e!nr`
 
 `e!negateart <userID/mention> [userID/mention...]` **»** Appends/removes the <@&741394456179114044> role to/from the specified user(s).
-
-:alert: __**NOTES**__
-
-We use Auttaja's note system to track changes to users' behaviour and anything worthy of recording for future reference. These commands are restricted to the **<@&528619896762794004>** role (users who are hierarchically above them also have access).
-
-`-addnote <ID/@mention> <note>` **»** Adds a note to a user.
-`-removenote <note ID>` **»** Removes a note from a user.
-`-viewnotes <ID/@mention>` **»** Returns active notes on a user.
