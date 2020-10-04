@@ -24,6 +24,7 @@ import LevelModule from "@modules/Levels/LevelModule";
 import ModerationModule from "@modules/Staff/ModerationModule";
 import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
+import HalloweenModule from "@modules/HalloweenModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -57,4 +58,6 @@ client
   .registerModule(PurchaseableRolesModule)
   .registerModule(UtilCommandModule)
   .registerModule(LevelModule)
+  // Event Modules
+  .registerModule(HalloweenModule)
   .login(process.env.DISCORD_TOKEN);
