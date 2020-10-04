@@ -84,10 +84,10 @@ export default class UtilCommandModule extends Module {
   async staff(msg: Message): Promise<void> {
     const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     const members = mainGuild.members.cache;
-    const admins = members.filter(m => m.roles.cache.has(ROLES.ADMINISTRATORS) || m.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)).array();
-    const mods = members.filter(m => m.roles.cache.has(ROLES.MODERATOR) && !admins.includes(m)).array();
-    const serverGrowthLead = members.filter(m => m.roles.cache.has(ROLES.SERVER_GROWTH_LEAD)).array();
-    const developers = members.filter(m => m.roles.cache.has(ROLES.ERIS_DEVELOPER)).array();
+    const admins = members.filter(m => m.roles.cache.has(ROLES.ADMINISTRATORS) || m.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const mods = members.filter(m => m.roles.cache.has(ROLES.MODERATOR) && !admins.includes(m)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const serverGrowthLead = members.filter(m => m.roles.cache.has(ROLES.SERVER_GROWTH_LEAD)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const developers = members.filter(m => m.roles.cache.has(ROLES.ERIS_DEVELOPER)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
 
     const embed = new Embed()
       .setAuthor("Evocation Staff")
