@@ -10,7 +10,7 @@ export const strings = {
     success: (text: string) => `${emotes.commandresponses.success} **SUCCESS**: ${text}`,
     error: (text: string) => `${emotes.commandresponses.denial} **COMMAND INHIBITED**: ${text}`,
     commandSyntax: (text: string) => `Syntactic fallacy detected. **COMMAND SYNTAX**: \`${text}\``,
-    somethingWentWrong: "Something went wrong. You should never see this response. Please Direct Message <@747105315840983212> with this message link so we can investigate.",
+    somethingWentWrong: "Something went wrong. You should never see this response.",
     commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`).",
     version: `${emotes.commandresponses.version} **VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY).`,
     commandSyntaxError: (usage: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\``,
