@@ -12,7 +12,8 @@ const EventArray: (keyof ClientEvents)[] = [
   "guildMemberUpdate",
   "userUpdate",
   "guildMemberRoleRemove",
-  "guildMemberRoleAdd"
+  "guildMemberRoleAdd",
+  "guildMemberAdd"
 ];
 
 export default class ListenerMonitorInit extends Module {

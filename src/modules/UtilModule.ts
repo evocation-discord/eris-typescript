@@ -1,5 +1,5 @@
-import { Message } from "discord.js";
-import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage } from "@lib/utils";
+import { Message, GuildMember, TextChannel } from "discord.js";
+import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage, CHANNELS } from "@lib/utils";
 
 export default class UtilCommandModule extends Module {
 
@@ -78,5 +78,11 @@ export default class UtilCommandModule extends Module {
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.version })
   async version(msg: Message): Promise<void> {
     msg.channel.send(strings.general.version);
+  }
+
+  @monitor({ event: "guildMemberAdd" })
+  async guildMemberAdd(member: GuildMember): Promise<void> {
+    const channel = await member.client.channels.fetch(CHANNELS.LOUNGE) as TextChannel;
+    channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>.`)
   }
 }

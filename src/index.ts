@@ -19,7 +19,7 @@ import GiveawayModule from "@modules/ServerAdministrator/GiveawayModule";
 import PermissionsModule from "@modules/Staff/PermissionsModule";
 import HelpModule from "@modules/HelpModule";
 import PurchaseableRolesModule from "@modules/PurchaseableRolesModule";
-import UtilCommandModule from "@modules/UtilCommands";
+import UtilModule from "@modules/UtilModule";
 import LevelModule from "@modules/Levels/LevelModule";
 import ModerationModule from "@modules/Staff/ModerationModule";
 import AffiliateModule from "@modules/Staff/AffiliateModule";
@@ -56,7 +56,7 @@ client
   // Other Modules
   .registerModule(HelpModule)
   .registerModule(PurchaseableRolesModule)
-  .registerModule(UtilCommandModule)
+  .registerModule(UtilModule)
   .registerModule(LevelModule)
   // Event Modules
   .registerModule(HalloweenModule)
