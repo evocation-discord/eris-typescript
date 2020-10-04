@@ -489,7 +489,8 @@ export const commandDescriptions = {
   checkmultipliers: "Checks if any server, role, channel or user multipliers are affecting the invoking user. If an argument is provided, the invoking user will be able to see multipliers that are affecting other users.",
   dethrone: "Removes all roles from (an) user(s).",
   crown: "Re-assigns roles that were removed using the `e!dethrone` conmand.",
-  emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server."
+  emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server.",
+  staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position."
 };
 
 const rankEmoji = (rank: number): string => {

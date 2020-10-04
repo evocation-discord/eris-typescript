@@ -1,5 +1,5 @@
 import { Message, GuildMember, TextChannel } from "discord.js";
-import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage, CHANNELS } from "@lib/utils";
+import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage, CHANNELS, Embed, MAIN_GUILD_ID, emotes } from "@lib/utils";
 
 export default class UtilCommandModule extends Module {
 
@@ -80,9 +80,40 @@ export default class UtilCommandModule extends Module {
     msg.channel.send(strings.general.version);
   }
 
+  @command({ group: CommandCategories.Informational, description: commandDescriptions.staff })
+  async staff(msg: Message): Promise<void> {
+    const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+    const members = mainGuild.members.cache;
+    const admins = members.filter(m => m.roles.cache.has(ROLES.ADMINISTRATORS) || m.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)).array();
+    const mods = members.filter(m => m.roles.cache.has(ROLES.MODERATOR) && !admins.includes(m)).array();
+    const serverGrowthLead = members.filter(m => m.roles.cache.has(ROLES.SERVER_GROWTH_LEAD)).array();
+    const developers = members.filter(m => m.roles.cache.has(ROLES.ERIS_DEVELOPER)).array();
+
+    const embed = new Embed()
+      .setAuthor("Evocation Staff")
+      .addField("Administrators", admins.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
+      .addField("Moderators", mods.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
+      .addField("Eris Developers", developers.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
+      .addField("Server Growth Lead", serverGrowthLead.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
+      .setFooter("This command output updates automatically, dependent upon role attribution.");
+    await msg.channel.send(embed);
+  }
+
+  formatStaffMessage(member: GuildMember): string {
+    const status: string[] = [];
+    const presence = member.user.presence;
+    if (presence.activities.some((a) => a.type === "STREAMING")) status.push(emotes.commandresponses.badges.streaming);
+    if (presence.status === "dnd") status.push(emotes.commandresponses.badges.donotdisturb);
+    if (presence.status === "idle") status.push(emotes.commandresponses.badges.idle);
+    if (presence.status === "offline") status.push(emotes.commandresponses.badges.offline);
+    if (presence.status === "online") status.push(emotes.commandresponses.badges.online);
+    status.push(`${member.user} (**\`${member.user.tag}\`** | \`${member.user.id}\`)`);
+    return status.join(" ");
+  }
+
   @monitor({ event: "guildMemberAdd" })
   async guildMemberAdd(member: GuildMember): Promise<void> {
     const channel = await member.client.channels.fetch(CHANNELS.LOUNGE) as TextChannel;
-    channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>.`)
+    channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>.`);
   }
 }
