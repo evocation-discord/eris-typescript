@@ -25,6 +25,7 @@ import ModerationModule from "@modules/Staff/ModerationModule";
 import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 import HalloweenModule from "@modules/HalloweenModule";
+import SoulstoneModule from "@modules/SoulstoneModule";
 
 export const client = new ErisClient({
   botAdmins: [
@@ -58,6 +59,7 @@ client
   .registerModule(PurchaseableRolesModule)
   .registerModule(UtilModule)
   .registerModule(LevelModule)
+  .registerModule(SoulstoneModule)
   // Event Modules
   .registerModule(HalloweenModule)
   .login(process.env.DISCORD_TOKEN);

@@ -175,3 +175,9 @@ export const codeblockMember = (added: GuildMember[], removed: GuildMember[]): s
   ...removed.map(r => `- ${r.user.tag}`),
   "```"
 ].join("\n");
+
+export const getRandomInt = (min: number, max: number): number => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
