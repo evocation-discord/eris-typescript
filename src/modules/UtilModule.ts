@@ -114,7 +114,8 @@ export default class UtilCommandModule extends Module {
   @monitor({ event: "guildMemberAdd" })
   async guildMemberAdd(member: GuildMember): Promise<void> {
     if (member.guild.id !== MAIN_GUILD_ID) return;
+    if (member.user.bot) return;
     const channel = await member.client.channels.fetch(CHANNELS.LOUNGE) as TextChannel;
-    channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>. We now have **${member.guild.memberCount}>** members.);
+    channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>. We now have **${member.guild.memberCount}>** members.`);
   }
 }
