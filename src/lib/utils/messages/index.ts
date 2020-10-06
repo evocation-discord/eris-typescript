@@ -425,6 +425,9 @@ export const strings = {
           return strArray.join("\n");
         }
       }
+    },
+    soulstones: {
+      generationMessage: (soulstones: number) => `**${soulstones}** ${emotes.commandresponses.soulstones} have emerged. Type \`${process.env.PREFIX}collect\` to have them bound to you.`
     }
   },
   commandGroups: {}
