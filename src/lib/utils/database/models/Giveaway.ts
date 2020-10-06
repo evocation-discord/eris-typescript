@@ -27,7 +27,7 @@ export class Giveaway extends BaseEntity {
   @Column()
   winners: number;
 
-  @Column("text")
+  @Column()
   prize: string;
 
   @Column("bigint")
