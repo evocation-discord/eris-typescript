@@ -10,4 +10,10 @@ export class PlantedSoulstones extends BaseEntity {
 
   @Column()
   code: string;
+
+  @Column()
+  message: string;
+
+  @Column()
+  channel: string;
 }

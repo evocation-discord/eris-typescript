@@ -427,7 +427,16 @@ export const strings = {
       }
     },
     soulstones: {
-      generationMessage: (soulstones: number) => `**${soulstones}** ${emotes.commandresponses.soulstones} have emerged. Type \`${process.env.PREFIX}collect\` to have them bound to you.`
+      generationMessage: (soulstones: number, code: string) => `**${soulstones}** ${emotes.commandresponses.soulstones} have emerged. Type \`${process.env.PREFIX}collect ${code}\` to have them bound to you.`,
+      commands: {
+        gc: {
+          enabled: (channel: TextChannel) => `Enabled currencry generation in ${channel}.`,
+          disabled: (channel: TextChannel) => `Disabled currencry generation in ${channel}.`
+        },
+        collect: {
+          claim: (author: User, amount: number) => `**${author.tag}** collected **${amount}** ${emotes.commandresponses.soulstones}.`
+        }
+      }
     }
   },
   commandGroups: {}
@@ -493,7 +502,9 @@ export const commandDescriptions = {
   dethrone: "Removes all roles from (an) user(s).",
   crown: "Re-assigns roles that were removed using the `e!dethrone` conmand.",
   emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server.",
-  staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position."
+  staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position.",
+  gc: "Toggles currency generation in the specified channel. If no arguments are provided, Eris should make the channel in which the command is being run in, a currency generation channel.",
+  collect: "Collects Soulstones that have been placed automatically."
 };
 
 const rankEmoji = (rank: number): string => {
