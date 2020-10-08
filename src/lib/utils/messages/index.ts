@@ -193,11 +193,9 @@ export const strings = {
       shutdown: "I can feel my Drearian Spirit fading...",
       aboutCommand: [
         "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n",
-        "__**PRIMARY CONTRIBUTORS**__\n",
-        "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>\n", // Stijn
-        "__**SECONDARY CONTRIBUTORS**__\n",
-        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>", // Ace
-        "**ABSTRACTION CONFIDANT**: <@700418258687230083>" // yesfromskribbl
+        "__**CONTRIBUTORS**__\n",
+        "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
+        "**CHARACTER CONCEPTUALIST**: <@369497100834308106>" // Ace
       ].join("\n"),
       pinging: `${emotes.commandresponses.server} Pinging...`,
       pingResponse: (ms: number, discordPing: number) => `${emotes.commandresponses.server} **PONG**: My command latency is **${ms}** milliseconds. It took me **${discordPing}** milliseconds to receive a response from the Discord API.`,
