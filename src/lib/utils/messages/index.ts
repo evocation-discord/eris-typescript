@@ -435,6 +435,10 @@ export const strings = {
         },
         collect: {
           claim: (author: User, amount: number) => `**${author.tag}** collected **${amount}** ${emotes.commandresponses.soulstones}.`
+        },
+        leaderboard: {
+          header: `${emotes.commandresponses.soulstones} **SOULSTONE LEADERBOARD**\n`,
+          row: (rank: number, user: User, soulstones: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **\`${soulstones}\` SOULSTONES**`
         }
       }
     }
@@ -504,7 +508,8 @@ export const commandDescriptions = {
   emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server.",
   staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position.",
   gc: "Toggles currency generation in the specified channel. If no arguments are provided, Eris should make the channel in which the command is being run in, a currency generation channel.",
-  collect: "Collects Soulstones that have been placed automatically."
+  collect: "Collects Soulstones that have been placed automatically.",
+  soulstoneleaderboard: "Leaderboard for Soulstones."
 };
 
 const rankEmoji = (rank: number): string => {

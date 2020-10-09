@@ -1,4 +1,4 @@
-import { command, commandDescriptions, cron, escapeRegex, getRandomInt, inhibitors, MAIN_GUILD_ID, Module, monitor, Optional, PV, strings } from "@lib/utils";
+import { command, CommandCategories, commandDescriptions, cron, escapeRegex, getRandomInt, inhibitors, MAIN_GUILD_ID, Module, monitor, Optional, PV, ROLES, strings } from "@lib/utils";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { PlantedSoulstones, Soulstone, SoulstoneGenerationChannel } from "@lib/utils/database/models";
 import Discord from "discord.js";
@@ -25,7 +25,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.botAdminsOnly, inhibitors.guildsOnly], admin: true, description: commandDescriptions.gc, usage: "[channel:channel]", args: [new Optional(Discord.TextChannel)] })
+  @command({ group: CommandCategories["Currency (Soulstones)"], inhibitors: [inhibitors.botAdminsOnly, inhibitors.guildsOnly], admin: true, description: commandDescriptions.gc, usage: "[channel:channel]", args: [new Optional(Discord.TextChannel)] })
   async gc(message: Discord.Message, channel?: Discord.TextChannel): PV<void> {
     if (!channel) channel = message.channel as Discord.TextChannel;
     if (await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } })) {
@@ -38,7 +38,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ description: commandDescriptions.collect, usage: "<code:string>", args: [String] })
+  @command({ group: CommandCategories["Currency (Soulstones)"], description: commandDescriptions.collect, usage: "<code:string>", args: [String] })
   async collect(message: Discord.Message, code: string): PV<void> {
     await message.delete();
     const planted = await PlantedSoulstones.findOne({ where: { code: code } });
@@ -55,11 +55,63 @@ export default class SoulstoneModule extends Module {
 
   @cron({ cronTime: "0 */6 * * *" })
   async eachSixHourSoulstoneJob(): PV<void> {
-    console.log(this.client.user.username);
+    const guild = this.client.guilds.resolve(MAIN_GUILD_ID);
+    const members = await guild.members.fetch();
+    const scionsofElysiumMembers = members.filter(member => member.roles.cache.has(ROLES.SCIONS_OF_ELYSIUM)).array();
+    for await (const member of scionsofElysiumMembers) {
+      let soulstoneData = await Soulstone.findOne({ where: { id: member.user.id } });
+      if (!soulstoneData) soulstoneData = await Soulstone.create({ id: member.user.id }).save();
+      soulstoneData.soulstones += 75;
+      await soulstoneData.save();
+    }
   }
 
   @cron({ cronTime: "0 */5 * * *" })
   async eachFiveHourSoulstoneJob(): PV<void> {
-    console.log(this.client.user.username);
+    const guild = this.client.guilds.resolve(MAIN_GUILD_ID);
+    const members = await guild.members.fetch();
+    const sentriesofDescensusMembers = members.filter(member => member.roles.cache.has(ROLES.SENTRIES_OF_DESCENSUS)).array();
+    for await (const member of sentriesofDescensusMembers) {
+      let soulstoneData = await Soulstone.findOne({ where: { id: member.user.id } });
+      if (!soulstoneData) soulstoneData = await Soulstone.create({ id: member.user.id }).save();
+      soulstoneData.soulstones += 175;
+      await soulstoneData.save();
+    }
+
+    const wisteriaMembers = members.filter(member => member.roles.cache.has(ROLES.WISTERIA)).array();
+    for await (const member of wisteriaMembers) {
+      let soulstoneData = await Soulstone.findOne({ where: { id: member.user.id } });
+      if (!soulstoneData) soulstoneData = await Soulstone.create({ id: member.user.id }).save();
+      soulstoneData.soulstones += 500;
+      await soulstoneData.save();
+    }
+  }
+
+  @command({ group: CommandCategories["Currency (Soulstones)"], description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"] })
+  async soulstoneleaderboard(msg: Discord.Message): PV<void> {
+    const guild = msg.client.guilds.resolve(MAIN_GUILD_ID);
+    let soulstoneData = await Soulstone.find();
+    soulstoneData = soulstoneData.sort((a, b) => b.soulstones - a.soulstones);
+    soulstoneData = soulstoneData.slice(0, 10);
+
+    const message: string[] = [strings.modules.soulstones.commands.leaderboard.header];
+
+    for await (const data of soulstoneData) {
+      const user = await msg.client.users.fetch(data.id);
+      const info = await userInfo(user);
+      message.push(strings.modules.soulstones.commands.leaderboard.row(info.rank, user, info.soulstones));
+    }
+    await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
   }
 }
+
+const userInfo = async (user: Discord.User) => {
+  let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+  if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
+  let allData = await Soulstone.find();
+  allData = allData.sort((a, b) => b.soulstones - a.soulstones);
+  return {
+    soulstones: soulstoneData.soulstones,
+    rank: allData.findIndex(a => a.id === user.id) + 1
+  };
+};
