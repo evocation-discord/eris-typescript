@@ -25,7 +25,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ group: CommandCategories["Currency (Soulstones)"], inhibitors: [inhibitors.botAdminsOnly, inhibitors.guildsOnly], admin: true, description: commandDescriptions.gc, usage: "[channel:channel]", args: [new Optional(Discord.TextChannel)] })
+  @command({ group: CommandCategories["Soulstones"], inhibitors: [inhibitors.botAdminsOnly, inhibitors.guildsOnly], admin: true, description: commandDescriptions.gc, usage: "[channel:channel]", args: [new Optional(Discord.TextChannel)] })
   async gc(message: Discord.Message, channel?: Discord.TextChannel): PV<void> {
     if (!channel) channel = message.channel as Discord.TextChannel;
     if (await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } })) {
@@ -38,7 +38,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ group: CommandCategories["Currency (Soulstones)"], description: commandDescriptions.collect, usage: "<code:string>", args: [String] })
+  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.collect, usage: "<code:string>", args: [String] })
   async collect(message: Discord.Message, code: string): PV<void> {
     await message.delete();
     const planted = await PlantedSoulstones.findOne({ where: { code: code } });
@@ -87,7 +87,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ group: CommandCategories["Currency (Soulstones)"], description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"] })
+  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"] })
   async soulstoneleaderboard(msg: Discord.Message): PV<void> {
     const guild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     let soulstoneData = await Soulstone.find();
