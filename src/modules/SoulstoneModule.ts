@@ -31,10 +31,10 @@ export default class SoulstoneModule extends Module {
     if (await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } })) {
       const gc = await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } });
       await gc.remove();
-      await message.channel.send(strings.modules.soulstones.commands.gc.disabled(channel));
+      await message.channel.send(strings.general.success(strings.modules.soulstones.commands.gc.disabled(channel)));
     } else {
       await SoulstoneGenerationChannel.create({ channel: channel.id }).save();
-      await message.channel.send(strings.modules.soulstones.commands.gc.enabled(channel));
+      await message.channel.send(strings.general.success(strings.modules.soulstones.commands.gc.enabled(channel)));
     }
   }
 
