@@ -1,33 +1,33 @@
 import * as discord from "discord.js";
 import Duration from "./Duration";
-import { regExpEsc } from "..";
+import { P, regExpEsc } from "..";
 import { strings } from "../messages";
 
 // All supported arguments.
 export type supportedArgs = typeof discord.GuildMember | typeof discord.User | typeof discord.Role | typeof discord.Guild | typeof discord.TextChannel | typeof String | typeof Number | typeof Duration;
 
 // Defines all parsers.
-export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => Promise<unknown>> = new Map();
+export const allParsers: Map<supportedArgs, (arg: string, msg: discord.Message) => P<unknown>> = new Map();
 
 const USER_REGEXP = /^(?:<@!?)?(\d{17,19})>?$/;
 const ROLE_REGEXP = /^(?:<@&)?(\d{17,19})>?$/;
 const CHANNEL_REGEXP = /^(?:<#)?(\d{17,19})>?$/;
 
 // Used to parse a number.
-const numberParser = async (arg: string): Promise<number> => {
+const numberParser = async (arg: string): P<number> => {
   if (isInt(arg)) return parseInt(arg);
   throw new Error(strings.general.error(strings.arguments.invalidNumber));
 };
 allParsers.set(Number, numberParser);
 
 // Used to parse a duration.
-const durationParser = async (arg: string): Promise<Duration> => {
+const durationParser = async (arg: string): P<Duration> => {
   return new Duration(arg);
 };
 allParsers.set(Duration, durationParser);
 
 // Used to parse a guild member.
-export const guildMemberParser = async (arg: string, msg: discord.Message): Promise<discord.GuildMember> => {
+export const guildMemberParser = async (arg: string, msg: discord.Message): P<discord.GuildMember> => {
   const resMember = await resolveMember(arg, msg.guild);
   if (resMember) return resMember;
 
@@ -52,7 +52,7 @@ export const guildMemberParser = async (arg: string, msg: discord.Message): Prom
 allParsers.set(discord.GuildMember, guildMemberParser);
 
 // Used to parse a user.
-const userParser = async (arg: string, msg: discord.Message): Promise<discord.User> => {
+const userParser = async (arg: string, msg: discord.Message): P<discord.User> => {
   const resUser = await resolveUser(arg, msg.guild);
   if (resUser) return resUser;
 
@@ -77,7 +77,7 @@ const userParser = async (arg: string, msg: discord.Message): Promise<discord.Us
 allParsers.set(discord.User, userParser);
 
 // Used to parse a guild.
-const guildParser = async (arg: string, msg: discord.Message): Promise<discord.Guild> => {
+const guildParser = async (arg: string, msg: discord.Message): P<discord.Guild> => {
   try {
     const x = msg.client.guilds.cache.get(arg);
     if (!x) throw new Error();
@@ -88,7 +88,7 @@ const guildParser = async (arg: string, msg: discord.Message): Promise<discord.G
 };
 allParsers.set(discord.Guild, guildParser);
 
-const textChannelParser = async (arg: string, msg: discord.Message): Promise<discord.TextChannel> => {
+const textChannelParser = async (arg: string, msg: discord.Message): P<discord.TextChannel> => {
   const resChannel = resolveChannel(arg, msg.guild);
   if (resChannel) return resChannel;
 
@@ -114,7 +114,7 @@ const textChannelParser = async (arg: string, msg: discord.Message): Promise<dis
 };
 allParsers.set(discord.TextChannel, textChannelParser);
 
-export const roleParser = async (arg: string, msg: discord.Message): Promise<discord.Role> => {
+export const roleParser = async (arg: string, msg: discord.Message): P<discord.Role> => {
   const resRole = await resolveRole(arg, msg);
   if (resRole) return resRole;
 
@@ -141,7 +141,7 @@ allParsers.set(discord.Role, roleParser);
 // Handle string parsing.
 allParsers.set(String, async x => x);
 
-export const resolveUser = async (query: string | discord.User, guild: discord.Guild): Promise<discord.User> => {
+export const resolveUser = async (query: string | discord.User, guild: discord.Guild): P<discord.User> => {
   if (query instanceof discord.User) return query;
   if (typeof query === "string") {
     if (USER_REGEXP.test(query)) return guild.client.users.fetch(USER_REGEXP.exec(query)[1]);
@@ -153,7 +153,7 @@ export const resolveUser = async (query: string | discord.User, guild: discord.G
   return null;
 };
 
-const resolveMember = async (query: string | discord.GuildMember | discord.User, guild: discord.Guild): Promise<discord.GuildMember> => {
+const resolveMember = async (query: string | discord.GuildMember | discord.User, guild: discord.Guild): P<discord.GuildMember> => {
   if (query instanceof discord.GuildMember) return query;
   if (query instanceof discord.User) return guild.members.fetch(query);
   if (typeof query === "string") {
@@ -166,7 +166,7 @@ const resolveMember = async (query: string | discord.GuildMember | discord.User,
   return null;
 };
 
-export const resolveChannel = (query: string | discord.Channel | discord.Message, guild: discord.Guild): discord.TextChannel => {
+export const resolveChannel = async (query: string | discord.Channel | discord.Message, guild: discord.Guild): P<discord.TextChannel> => {
   if (query instanceof discord.Channel && query.type === "text") return guild.channels.cache.has(query.id) ? query as discord.TextChannel : null;
   if (query instanceof discord.Channel && query.type === "news") return guild.channels.cache.has(query.id) ? query as discord.TextChannel : null;
   if (query instanceof discord.Message) return query.guild.id === guild.id ? query.channel as discord.TextChannel : null;
@@ -179,7 +179,7 @@ export const resolveChannel = (query: string | discord.Channel | discord.Message
   return null;
 };
 
-export const resolveRole = async (query: string | discord.Role, msg: discord.Message): Promise<discord.Role> => {
+export const resolveRole = async (query: string | discord.Role, msg: discord.Message): P<discord.Role> => {
   if (query instanceof discord.Role) return query;
   if (typeof query === "string" && ROLE_REGEXP.test(query)) return msg.guild.roles.resolve(ROLE_REGEXP.exec(query)[1]);
   return null;

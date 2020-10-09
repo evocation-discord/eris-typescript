@@ -1,9 +1,9 @@
-import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings, commandDescriptions, errorMessage } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, CHANNELS, ROLES, monitor, MAIN_GUILD_ID, CommandCategories, strings, commandDescriptions, errorMessage, PV } from "@lib/utils";
 import { GuildMember, Message, TextChannel } from "discord.js";
 
 export default class DonationModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     if (!oldMember.roles.cache.has(ROLES.WHITE_HALLOWS) && newMember.roles.cache.has(ROLES.WHITE_HALLOWS)) {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
@@ -36,7 +36,7 @@ export default class DonationModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember], staff: true, usage: "<member:member|snowflake>", description: commandDescriptions.miraculum })
-  async miraculum(msg: Message, member: GuildMember): Promise<void> {
+  async miraculum(msg: Message, member: GuildMember): PV<void> {
     await member.roles.add(ROLES.EVOCATION_MIRACULUM);
     msg.channel.send(strings.general.success(strings.modules.donations.commands.awardMiraculum(member.user)), { allowedMentions: { roles: [], users: [] } });
   }

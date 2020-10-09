@@ -1,14 +1,14 @@
-import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors, CommandCategories, commandDescriptions, strings, userParser, roleParser, errorMessage } from "@lib/utils";
+import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors, CommandCategories, commandDescriptions, strings, userParser, roleParser, errorMessage, PV } from "@lib/utils";
 import { Message, Role, User } from "discord.js";
 import { Blacklist } from "@database/models";
 
 export default class ExclusionsModule extends Module {
   constructor(client: ErisClient) {
-    super(client);
+    super(client); 
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.exclude, usage: "[user|role] [ID/mention]" })
-  async exclude(msg: Message, type?: "user" | "role", id?: string): Promise<void | Message> {
+  async exclude(msg: Message, type?: "user" | "role", id?: string): PV<void> {
     if (msg.channel.type === "dm") return;
     if (!type || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
     if (type === "role") {
@@ -35,7 +35,7 @@ export default class ExclusionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions, usage: "[remove|clear] [user|role] [ID/mention]" })
-  async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message|void> {
+  async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): PV<Message> {
     if (!what) {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
       const userBlacklists = await Blacklist.find({ where: { type: "user" } });

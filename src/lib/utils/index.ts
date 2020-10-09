@@ -36,6 +36,9 @@ export * from "./messages";
 
 export * from "./scheduler/Scheduler";
 
+export type PV<T> = Promise<void | T>;
+export type P<T> = Promise<T>;
+
 export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const timeFormatter = (date?: Date): string => {
@@ -94,7 +97,7 @@ export class Embed extends MessageEmbed {
   }
 }
 
-export const roleParser = async (arg: string, msg: Message): Promise<string | Role> => {
+export const roleParser = async (arg: string, msg: Message): P<string | Role> => {
   const resRole = await resolveRole(arg, msg);
   if (resRole) return resRole;
 
@@ -116,7 +119,7 @@ export const roleParser = async (arg: string, msg: Message): Promise<string | Ro
   return querySearch[0];
 };
 
-export const userParser = async (arg: string, msg: Message): Promise<string | User> => {
+export const userParser = async (arg: string, msg: Message): P<string | User> => {
   const resUser = await resolveUser(arg, msg.guild);
   if (resUser) return resUser;
 
@@ -139,7 +142,7 @@ export const userParser = async (arg: string, msg: Message): Promise<string | Us
   return querySearch[0];
 };
 
-export const channelParser = async (arg: string, msg: Message, category = false): Promise<string | TextChannel> => {
+export const channelParser = async (arg: string, msg: Message, category = false): P<string | TextChannel> => {
   const resChannel = await resolveChannel(arg, msg.guild);
   if (resChannel) return resChannel;
 
@@ -164,7 +167,7 @@ export const channelParser = async (arg: string, msg: Message, category = false)
 };
 
 
-export const errorMessage = async (message: Message, error: string): Promise<void> => {
+export const errorMessage = async (message: Message, error: string): PV<void> => {
   const msg = await message.channel.send(error);
   msg.delete({ timeout: 5000 });
 };

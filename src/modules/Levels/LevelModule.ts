@@ -1,4 +1,4 @@
-import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation, errorMessage } from "@lib/utils";
+import { monitor, Module, MAIN_GUILD_ID, levelConstants, strings, roleParser, inhibitors, command, Optional, Remainder, CommandCategories, commandDescriptions, channelParser, Embed, NEGATIONS, guildMemberParser, ROLES, escapeRegex, roleValidation, errorMessage, PV, P } from "@lib/utils";
 import { Message, GuildMember, Role, User, TextChannel } from "discord.js";
 import RedisClient from "@lib/utils/client/RedisClient";
 import { UserXP, XPExclusion, LevelRole, XPMultiplier, DethronedUser } from "@lib/utils/database/models";
@@ -7,7 +7,7 @@ import Duration from "@lib/utils/arguments/Duration";
 export default class LevelModule extends Module {
 
   @monitor({ event: "guildMemberRoleRemove" })
-  async onGuildMemberRoleRemove(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
+  async onGuildMemberRoleRemove(oldMember: GuildMember, newMember: GuildMember, role: Role): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const xpData = await UserXP.findOne({ where: { id: newMember.id } });
     if (!xpData) return;
@@ -34,7 +34,7 @@ export default class LevelModule extends Module {
   }
 
   @monitor({ event: "guildMemberRoleAdd" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const levelData = await LevelRole.find();
     const roles = levelData.map(r => r.id);
@@ -44,7 +44,7 @@ export default class LevelModule extends Module {
   }
 
   @monitor({ event: "guildMemberRoleAdd" })
-  async onGuildMemberRoleAdd2(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
+  async onGuildMemberRoleAdd2(oldMember: GuildMember, newMember: GuildMember, role: Role): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const levelData = await LevelRole.find();
     const roles = levelData.map(r => r.id);
@@ -58,7 +58,7 @@ export default class LevelModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onMessage(message: Message): Promise<void> {
+  async onMessage(message: Message): PV<void> {
     if (message.author.bot) return;
     if (!message.guild) return;
     if (message.guild.id !== MAIN_GUILD_ID) return;
@@ -105,7 +105,7 @@ export default class LevelModule extends Module {
     await RedisClient.set(`player:${message.author.id}:check`, "1", "ex", 60);
   }
 
-  async levelRoleCheck(member: GuildMember, xp: number): Promise<void> {
+  async levelRoleCheck(member: GuildMember, xp: number): PV<void> {
     if (member.roles.cache.find(r => r.name === "Muted")) return;
     if (await DethronedUser.findOne({ where: { id: member.user.id } })) return;
     const userLevel = levelConstants.getLevelFromXP(xp);
@@ -131,7 +131,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Remainder(String)], group: CommandCategories["Server Administrator"], aliases: ["axe"], staff: true, description: commandDescriptions.addxpexclusion, usage: "<category|channel|role> <ID/mention>" })
-  async addxpexclusion(msg: Message, type: "channel" | "role" | "category", id: string): Promise<void | Message> {
+  async addxpexclusion(msg: Message, type: "channel" | "role" | "category", id: string): PV<Message> {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
@@ -162,7 +162,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], aliases: ["xpe"], staff: true, description: commandDescriptions.exclusions, usage: "[remove] [channel|role|category] [ID/mention]" })
-  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel" | "category", id?: string): Promise<Message|void> {
+  async xpexclusions(msg: Message, what?: "remove", type?: "role" | "channel" | "category", id?: string): PV<Message> {
     if (!what) {
       const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
       const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
@@ -197,7 +197,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [String, new Optional(new Remainder(String))], staff: true, aliases: ["resetxp"], description: commandDescriptions.resetxp, usage: "<user|role|server> [users:...user]" })
-  async resetexperience(msg: Message, type: "role" | "user" | "server", _members: string): Promise<void | Message> {
+  async resetexperience(msg: Message, type: "role" | "user" | "server", _members: string): PV<Message> {
     if (type === "server") {
       await msg.channel.send(strings.modules.levels.resetxp.serverReset);
       let members = 0;
@@ -243,7 +243,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], aliases: ["ae"], staff: true, description: commandDescriptions.addexperience, usage: "<amount:number> [users:...user]" })
-  async addexperience(msg: Message, amount: number, _members: string): Promise<void | Message> {
+  async addexperience(msg: Message, amount: number, _members: string): PV<Message> {
     if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -258,7 +258,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(new Remainder(String))], aliases: ["de"], staff: true, description: commandDescriptions.deductexperience, usage: "<amount:number> [users:...user]" })
-  async deductexperience(msg: Message, amount: number, _members: string): Promise<void | Message> {
+  async deductexperience(msg: Message, amount: number, _members: string): PV<Message> {
     if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -274,7 +274,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [GuildMember, Number], staff: true, description: commandDescriptions.setlevel, usage: "<user:user> <level:number>" })
-  async setlevel(msg: Message, member: GuildMember, level: number): Promise<void | Message> {
+  async setlevel(msg: Message, member: GuildMember, level: number): PV<Message> {
     if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
 
     let xpData = await UserXP.findOne({ where: { id: member.id } });
@@ -292,7 +292,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], args: [new Optional(GuildMember)], description: commandDescriptions.rank, usage: "[user:user]", aliases: ["xp"], group: CommandCategories["Levelling System"] })
-  async rank(msg: Message, member?: GuildMember): Promise<void | Message> {
+  async rank(msg: Message, member?: GuildMember): PV<Message> {
     if (!member) member = msg.member;
     if (member.user.bot) return;
     const data = await userInfo(member.user);
@@ -307,7 +307,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Number, new Optional(Duration)], staff: true, aliases: ["asm"], description: commandDescriptions.activateservermultiplier, usage: "<multiplier> [duration]" })
-  async activateservermultiplier(msg: Message, multiplier: number, duration?: Duration): Promise<void> {
+  async activateservermultiplier(msg: Message, multiplier: number, duration?: Duration): PV<void> {
     await msg.delete();
     const xpmultiplier = await XPMultiplier.create({
       type: "server",
@@ -318,7 +318,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [User, Number, new Optional(Duration)], staff: true, aliases: ["aum"], description: commandDescriptions.activateusermultiplier, usage: "<user:user> <multiplier> [duration]" })
-  async activateusermultiplier(msg: Message, user: User, multiplier: number, duration?: Duration): Promise<void> {
+  async activateusermultiplier(msg: Message, user: User, multiplier: number, duration?: Duration): PV<void> {
     await msg.delete();
     const xpmultiplier = await XPMultiplier.create({
       type: "user",
@@ -331,7 +331,7 @@ export default class LevelModule extends Module {
 
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [Role, Number, new Optional(Duration)], staff: true, aliases: ["arm"], description: commandDescriptions.activaterolemultiplier, usage: "<role:role> <multiplier> [duration]" })
-  async activaterolemultiplier(msg: Message, role: Role, multiplier: number, duration?: Duration): Promise<void> {
+  async activaterolemultiplier(msg: Message, role: Role, multiplier: number, duration?: Duration): PV<void> {
     await msg.delete();
     const xpmultiplier = await XPMultiplier.create({
       type: "role",
@@ -343,7 +343,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [TextChannel, Number, new Optional(Duration)], staff: true, aliases: ["acm"], description: commandDescriptions.activaterolemultiplier, usage: "<channel:channel> <multiplier> [duration]" })
-  async activatechannelmultiplier(msg: Message, channel: TextChannel, multiplier: number, duration?: Duration): Promise<void> {
+  async activatechannelmultiplier(msg: Message, channel: TextChannel, multiplier: number, duration?: Duration): PV<void> {
     await msg.delete();
     const xpmultiplier = await XPMultiplier.create({
       type: "channel",
@@ -355,7 +355,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [String, new Optional(String), new Optional(String)], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.multiplier, usage: "<exhaust|list> [user|server|role|channel] [user|role|channel]" })
-  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role" | "channel", id?: string): Promise<Message|void> {
+  async multiplier(msg: Message, what?: "exhaust" | "list", type?: "user" | "server" | "role" | "channel", id?: string): PV<Message> {
     await msg.delete();
     if (!["exhaust", "list"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
 
@@ -400,7 +400,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelledrole, usage: "<role:role> <level:number>", aliases: ["alr"] })
-  async addlevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
+  async addlevelledrole(msg: Message, role: Role, level: number): PV<Message> {
     if (await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
     await LevelRole.create({
       id: role.id,
@@ -410,7 +410,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role>", aliases: ["rlr"] })
-  async removelevelledrole(msg: Message, role: Role): Promise<Message|void> {
+  async removelevelledrole(msg: Message, role: Role): PV<Message> {
     if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     await levelrole.remove();
@@ -418,7 +418,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role> <level:number>", aliases: ["elr"] })
-  async editlevelledrole(msg: Message, role: Role, level: number): Promise<Message|void> {
+  async editlevelledrole(msg: Message, role: Role, level: number): PV<Message> {
     if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     levelrole.level = level;
@@ -427,7 +427,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.listlevelledroles, aliases: ["llr"] })
-  async listlevelledroles(msg: Message): Promise<Message|void> {
+  async listlevelledroles(msg: Message): P<Message> {
     const levelroles = await LevelRole.find();
     const embed = new Embed()
       .setAuthor(strings.modules.levels.levelRole.levelledRolesEmbedTitle)
@@ -437,7 +437,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.leaderboard, aliases: ["lb", "levels"] })
-  async leaderboard(msg: Message): Promise<void> {
+  async leaderboard(msg: Message): PV<void> {
     const guild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     let xpData = await UserXP.find();
     xpData = xpData.sort((a, b) => b.xp - a.xp);
@@ -462,7 +462,7 @@ export default class LevelModule extends Module {
   }
 
   @command({ group: CommandCategories["Levelling System"], description: commandDescriptions.checkmultipliers, usage: "[user:user]", args: [new Optional(User)], aliases: ["cm"] })
-  async checkmultipliers(message: Message, user: User): Promise<void|Message> {
+  async checkmultipliers(message: Message, user: User): PV<Message> {
     const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (!user) user = message.author;
     if (!await roleValidation(message, ROLES.STAFF)) user = message.author;

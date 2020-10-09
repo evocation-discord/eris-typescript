@@ -1,11 +1,11 @@
-import { Module, monitor, escapeRegex, CHANNELS, linkRegex, ROLES, strings, MAIN_GUILD_ID } from "@lib/utils";
+import { Module, monitor, escapeRegex, CHANNELS, linkRegex, ROLES, strings, MAIN_GUILD_ID, PV, P } from "@lib/utils";
 import { Message, TextChannel, User, GuildMember } from "discord.js";
 import { linkResolver } from "@lib/utils/linkResolver/linkResolver";
 import { DisabledCommand } from "@database/models";
 
 export default class LoggingModule extends Module {
   @monitor({ event: "message" })
-  async onCommand(msg: Message): Promise<Message> {
+  async onCommand(msg: Message): PV<Message> {
     if (msg.author && msg.author.bot) return;
     if (msg.channel.type === "dm") return;
     if (msg.guild.id !== MAIN_GUILD_ID) return;
@@ -31,7 +31,7 @@ export default class LoggingModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onLink(msg: Message): Promise<Message> {
+  async onLink(msg: Message): PV<void> {
     if (msg.author && msg.author.bot) return;
     if (msg.channel.type === "dm") return;
     if (msg.guild.id !== MAIN_GUILD_ID) return;
@@ -55,7 +55,7 @@ export default class LoggingModule extends Module {
   }
 
   @monitor({ event: "userUpdate" })
-  async onUsernameUpdate(oldUser: User, newUser: User): Promise<Message> {
+  async onUsernameUpdate(oldUser: User, newUser: User): PV<void> {
     if (newUser.bot) return;
     if (oldUser.username !== newUser.username) {
       const channel = await this.client.channels.fetch(CHANNELS.DENOMINATION_LOG) as TextChannel;
@@ -64,7 +64,7 @@ export default class LoggingModule extends Module {
   }
 
   @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     if (!oldMember.roles.cache.has(ROLES.WISTERIA) && newMember.roles.cache.has(ROLES.WISTERIA)) {
       const channel = newMember.guild.channels.cache.find(c => c.name === "lounge") as TextChannel;
@@ -73,7 +73,7 @@ export default class LoggingModule extends Module {
   }
 
   @monitor({ event: "guildMemberUpdate" })
-  async onDisboardRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  async onDisboardRoleAdd(oldMember: GuildMember, newMember: GuildMember): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     const role = newMember.guild.roles.cache.find(r => r.name === "[BOT] DISBOARD");
     if (!role) return;

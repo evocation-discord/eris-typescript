@@ -1,27 +1,27 @@
 import { Message, GuildMember, TextChannel } from "discord.js";
-import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage, CHANNELS, Embed, MAIN_GUILD_ID, emotes } from "@lib/utils";
+import { command, Module, inhibitors, monitor, ROLES, CommandCategories, strings, commandDescriptions, errorMessage, CHANNELS, Embed, MAIN_GUILD_ID, emotes, PV, P } from "@lib/utils";
 
 export default class UtilCommandModule extends Module {
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.about })
-  about(msg: Message): Promise<Message> {
+  about(msg: Message): P<Message> {
     return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.ping })
-  async ping(msg: Message): Promise<void> {
+  async ping(msg: Message): PV<void> {
     const message = await msg.channel.send(strings.modules.util.pinging);
     await message.edit(strings.modules.util.pingResponse(message.createdTimestamp - msg.createdTimestamp, msg.client.ws.ping));
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.ping })
-  async heartbeat(msg: Message): Promise<void> {
+  async heartbeat(msg: Message): PV<void> {
     const message = await msg.channel.send(strings.modules.util.pinging);
     await message.edit(strings.modules.util.heartBeatResponse(msg.client.ws.ping));
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.privacypolicy, aliases: ["privacy"] })
-  async privacypolicy(msg: Message): Promise<void> {
+  async privacypolicy(msg: Message): PV<void> {
     try {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
       await msg.author.send(strings.modules.util.privacypolicy.message2);
@@ -71,17 +71,17 @@ export default class UtilCommandModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.datamine })
-  async datamine(msg: Message): Promise<void> {
+  async datamine(msg: Message): PV<void> {
     msg.channel.send(strings.modules.util.datamine);
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.version })
-  async version(msg: Message): Promise<void> {
+  async version(msg: Message): PV<void> {
     msg.channel.send(strings.general.version);
   }
 
   @command({ group: CommandCategories.Informational, description: commandDescriptions.staff })
-  async staff(msg: Message): Promise<void> {
+  async staff(msg: Message): PV<void> {
     const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     const members = mainGuild.members.cache;
     const admins = members.filter(m => m.roles.cache.has(ROLES.ADMINISTRATORS) || m.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
@@ -112,7 +112,7 @@ export default class UtilCommandModule extends Module {
   }
 
   @monitor({ event: "guildMemberAdd" })
-  async guildMemberAdd(member: GuildMember): Promise<void> {
+  async guildMemberAdd(member: GuildMember): PV<void> {
     const channel = await member.client.channels.fetch(CHANNELS.LOUNGE) as TextChannel;
     channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>.`);
   }

@@ -1,13 +1,13 @@
-import { CHANNELS, codeblockMember, command, CommandCategories, commandDescriptions, Embed, errorMessage, guildMemberParser, inhibitors, messageLinkRegex, Module, Remainder, ROLES, strings } from "@lib/utils";
+import { CHANNELS, codeblockMember, command, CommandCategories, commandDescriptions, Embed, errorMessage, guildMemberParser, inhibitors, messageLinkRegex, Module, PV, Remainder, ROLES, strings } from "@lib/utils";
 import { DethronedUser } from "@lib/utils/database/models/DethronedUser";
 import { Message, GuildMember, TextChannel, Role } from "discord.js";
 
 export default class RoleManagementModule extends Module {
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.dethrone })
-  async dethrone(msg: Message, _members: string): Promise<void> {
+  async dethrone(msg: Message, _members: string): PV<void> {
     await msg.delete();
     const members: GuildMember[] = [];
-    const logObject: { member: GuildMember, roles: Role[]}[] = [];
+    const logObject: { member: GuildMember, roles: Role[] }[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     for await (const member of members) {
       const roles = member.roles.cache.filter(r => !r.managed && msg.guild.me.roles.highest.position > r.position && r.id !== msg.guild.roles.everyone.id).array();
@@ -25,10 +25,10 @@ export default class RoleManagementModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.crown })
-  async crown(msg: Message, _members: string): Promise<void> {
+  async crown(msg: Message, _members: string): PV<void> {
     await msg.delete();
     const members: GuildMember[] = [];
-    const logObject: { member: GuildMember, roles: Role[]}[] = [];
+    const logObject: { member: GuildMember, roles: Role[] }[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     for await (const member of members) {
       const user = await DethronedUser.findOne({ where: { id: member.user.id } });

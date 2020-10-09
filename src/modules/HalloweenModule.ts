@@ -1,4 +1,4 @@
-import { monitor, Module } from "@lib/utils";
+import { monitor, Module, P } from "@lib/utils";
 import { Message, MessageAttachment, User, MessageReaction } from "discord.js";
 
 const kittyEmojiId = "762242961483890709";
@@ -9,7 +9,7 @@ const halloweenChannel = process.env.HALLOWEEN_CHANNEL;
 export default class HalloweenModule extends Module {
 
   @monitor({ event: "message" })
-  async onMessage(message: Message): Promise<void|Message> {
+  async onMessage(message: Message): P<void|Message> {
     if (message.channel.id !== halloweenChannel) return;
     const channelMessages = await message.channel.messages.fetch({});
     if (channelMessages.filter(m => m.author.id === message.author.id).size > 1) return message.delete();
@@ -29,7 +29,7 @@ export default class HalloweenModule extends Module {
   }
 
   @monitor({ event: "messageReactionAdd" })
-  async messageReactionAdd(reaction: MessageReaction, user: User): Promise<void|MessageReaction> {
+  async messageReactionAdd(reaction: MessageReaction, user: User): P<void|MessageReaction> {
     await reaction.message.fetch();
     if (reaction.message.channel.id !== halloweenChannel) return;
     if (reaction.message.author.id === user.id) return reaction.users.remove(user);

@@ -2,6 +2,7 @@ import ArgTextProcessor from "./ArgumentProcessor";
 import { supportedArgs, allParsers } from "./supportedArgs";
 import * as discord from "discord.js";
 import { strings } from "../messages";
+import { P } from "..";
 
 // Handles remainder parsing.
 export class Remainder {
@@ -14,7 +15,7 @@ export class Remainder {
   }
 
   // Handle the parsing of this.
-  async parse(parser: ArgTextProcessor, msg: discord.Message): Promise<unknown[]> {
+  async parse(parser: ArgTextProcessor, msg: discord.Message): P<unknown[]> {
     // Get the parser for the type.
     const typeParser = allParsers.get(this.type);
 
@@ -41,7 +42,7 @@ export class Optional {
   }
 
   // Handles the parsing.
-  async parse(parser: ArgTextProcessor, msg: discord.Message): Promise<unknown[]> {
+  async parse(parser: ArgTextProcessor, msg: discord.Message): P<unknown[]> {
     try {
       // Return all transformed arguments.
       return await getArgumentParser(this.arg)(parser, msg);
@@ -53,7 +54,7 @@ export class Optional {
 }
 
 
-export const getArgumentParser = (arg: supportedArgs | Remainder | Optional): ((parser: ArgTextProcessor, msg: discord.Message) => Promise<unknown[]>) => {
+export const getArgumentParser = (arg: supportedArgs | Remainder | Optional): ((parser: ArgTextProcessor, msg: discord.Message) => P<unknown[]>) => {
   // Return the parser.
   if (arg instanceof Remainder || arg instanceof Optional) return async (parser: ArgTextProcessor, msg: discord.Message) => arg.parse.bind(arg)(parser, msg);
 

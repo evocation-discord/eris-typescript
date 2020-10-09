@@ -3,7 +3,7 @@ import { Module } from "../modules/Module";
 import { ErisClient } from "../client/ErisClient";
 import { getArgumentParser } from "../arguments/Arguments";
 import ArgTextProcessor from "../arguments/ArgumentProcessor";
-import { escapeRegex, emotes, errorMessage } from "..";
+import { escapeRegex, emotes, errorMessage, PV } from "..";
 import { monitor } from "../monitor/decorator";
 import { Blacklist, DisabledCommand } from "../database/models";
 import { strings } from "../messages";
@@ -15,7 +15,7 @@ export class CommandParserModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onMessage(msg: Message): Promise<Message|void> {
+  async onMessage(msg: Message): PV<Message> {
     if (msg.author && msg.author.bot) return;
 
     const prefix = process.env.PREFIX;

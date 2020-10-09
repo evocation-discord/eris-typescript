@@ -1,10 +1,10 @@
 import { Module } from "../modules/Module";
-import { CronJob } from "cron";
+import { Job } from "node-schedule";
 
 export interface Cron {
     id: string,
     module: Module,
     func: Function,
     cronTime: string | Date,
-    cronJob?: CronJob
+    cronJob?: Job
 }

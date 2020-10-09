@@ -1,14 +1,14 @@
-import { command, CommandCategories, commandDescriptions, Embed, errorMessage, inhibitors, messageLinkRegex, Module, strings } from "@lib/utils";
+import { command, CommandCategories, commandDescriptions, Embed, errorMessage, inhibitors, messageLinkRegex, Module, PV, strings } from "@lib/utils";
 import { Message, TextChannel } from "discord.js";
 
 export default class ModerationModule extends Module {
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote })
-  async quote(msg: Message, messageLink: string): Promise<void | Message> {
+  async quote(msg: Message, messageLink: string): PV<Message> {
     msg.delete();
-    const executedRegex = messageLinkRegex.exec(messageLink);
+    const executedRegex = messageLinkRegex.test(messageLink);
     if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
-    const [, guildId, channelId, messageId] = executedRegex;
+    const [, guildId, channelId, messageId] = messageLinkRegex.exec(messageLink);
     try {
       const guild = this.client.guilds.resolve(guildId);
       if (!guild) return errorMessage(msg, strings.general.error(strings.modules.util.guildWasNotFound(guildId)));
@@ -25,7 +25,7 @@ export default class ModerationModule extends Module {
         .setDescription(message.content)
         .attachFiles(message.attachments.map(a => a))
         .setFooter(strings.modules.moderation.quote.embedFooter(message.id, channel.name));
-      msg.channel.send(embed);
+      return msg.channel.send(embed);
     } catch (e) {
       errorMessage(msg, strings.general.error(strings.modules.moderation.quote.unknownError));
     }

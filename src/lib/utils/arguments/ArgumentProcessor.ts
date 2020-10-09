@@ -1,4 +1,5 @@
 import * as discord from "discord.js";
+import { P } from "..";
 import { strings } from "../messages";
 
 class ArgConstructor {
@@ -58,7 +59,7 @@ export default class ArgTextProcessor {
   }
 
   // Get one argument.
-  async one(parser: (arg: string, msg: discord.Message) => Promise<unknown>, msg: discord.Message): Promise<unknown> {
+  async one(parser: (arg: string, msg: discord.Message) => P<unknown>, msg: discord.Message): P<unknown> {
     // Get the argument if we can.
     const x = this.getArgumentString();
     if (!x) throw new Error(strings.general.error(strings.arguments.noArgumentSupplied));

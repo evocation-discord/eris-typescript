@@ -1,10 +1,10 @@
-import { CHANNELS, command, CommandCategories, commandDescriptions, Embed, errorMessage, inhibitors, MAIN_GUILD_ID, messageLinkRegex, Module, monitor, ROLES, strings } from "@lib/utils";
-import { Message, GuildMember, Role,TextChannel } from "discord.js";
+import { CHANNELS, command, CommandCategories, commandDescriptions, Embed, errorMessage, inhibitors, MAIN_GUILD_ID, messageLinkRegex, Module, monitor, P, PV, ROLES, strings } from "@lib/utils";
+import { Message, GuildMember, Role, TextChannel } from "discord.js";
 
 export default class AffiliateModule extends Module {
 
   @monitor({ event: "guildMemberRoleAdd" })
-  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<GuildMember|void> {
+  async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember, role: Role): PV<GuildMember> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     if (role.id !== ROLES.AFFILIATE) return;
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
@@ -15,7 +15,7 @@ export default class AffiliateModule extends Module {
   }
 
   @monitor({ event: "guildMemberRoleRemove" })
-  async onGuildMemberRoleRemove(oldMember: GuildMember, newMember: GuildMember, role: Role): Promise<void> {
+  async onGuildMemberRoleRemove(oldMember: GuildMember, newMember: GuildMember, role: Role): PV<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
     if (role.id !== ROLES.AFFILIATE) return;
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
@@ -25,7 +25,7 @@ export default class AffiliateModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.serverGrowthLeadOnly, inhibitors.canOnlyBeExecutedInChannels(["server-growth-exploration"], true)], usage: "<member:member>", args: [GuildMember], description: commandDescriptions.affiliate, staff: true, group: CommandCategories["Affiliation Management"] })
-  async affiliate(message: Message, member: GuildMember): Promise<Message|void> {
+  async affiliate(message: Message, member: GuildMember): PV<Message> {
     if (message.guild.id !== MAIN_GUILD_ID) return;
     if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
     if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
@@ -35,7 +35,7 @@ export default class AffiliateModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.serverGrowthLeadOnly, inhibitors.canOnlyBeExecutedInChannels(["server-growth-exploration"], true)], usage: "<member:member>", args: [GuildMember], description: commandDescriptions.removeaffiliate, aliases: ["ra"], staff: true, group: CommandCategories["Affiliation Management"] })
-  async removeaffiliate(message: Message, member: GuildMember): Promise<Message|void> {
+  async removeaffiliate(message: Message, member: GuildMember): PV<Message> {
     if (message.guild.id !== MAIN_GUILD_ID) return;
     if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
     if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
@@ -45,7 +45,7 @@ export default class AffiliateModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.serverGrowthLeadOnly, inhibitors.canOnlyBeExecutedInChannels(["server-growth-exploration"], true)], description: commandDescriptions.listaffiliate, staff: true, group: CommandCategories["Affiliation Management"] })
-  async listaffiliates(message: Message): Promise<Message> {
+  async listaffiliates(message: Message): P<Message> {
     const members = message.client.guilds.resolve(MAIN_GUILD_ID).roles.resolve(ROLES.AFFILIATE).members.array();
     const embed = new Embed()
       .addField(strings.modules.affiliate.listaffiliates.embedFieldTitle, members.map(u => strings.modules.affiliate.listaffiliates.affiliateMap(u)).join("\n") || strings.modules.affiliate.listaffiliates.noAffiliate);

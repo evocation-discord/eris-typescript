@@ -1,10 +1,10 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions, Embed } from "@lib/utils";
+import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions, Embed, PV } from "@lib/utils";
 import { Message, TextChannel, User } from "discord.js";
 
 export default class DirectMessageModule extends Module {
 
   @monitor({ event: "message" })
-  async DM_receiver(message: Message): Promise<void> {
+  async DM_receiver(message: Message): PV<void> {
     if (message.author.bot) return;
     if (message.partial) message = await message.fetch();
     if (message.channel.type !== "dm") return;
@@ -20,7 +20,7 @@ export default class DirectMessageModule extends Module {
   }
 
   @monitor({ event: "messageUpdate" })
-  async DM_receiver_on_edit(oldMsg: Message, newMsg: Message): Promise<void> {
+  async DM_receiver_on_edit(oldMsg: Message, newMsg: Message): PV<void> {
     if (newMsg.partial) newMsg = await newMsg.fetch();
     if (newMsg.author.bot) return;
     if (newMsg.channel.type !== "dm") return;
@@ -37,7 +37,7 @@ export default class DirectMessageModule extends Module {
   }
 
   @monitor({ event: "messageDelete" })
-  async DM_receiver_on_delete(msg: Message): Promise<void> {
+  async DM_receiver_on_delete(msg: Message): PV<void> {
     if (msg.partial) return;
     if (msg.author.bot) return;
     if (msg.channel.type !== "dm") return;
@@ -53,7 +53,7 @@ export default class DirectMessageModule extends Module {
   }
 
   @command({ aliases: ["dm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage })
-  async directmessage(message: Message, user: User, content: string): Promise<void> {
+  async directmessage(message: Message, user: User, content: string): PV<void> {
     await message.delete();
     const msg = await user.send(content);
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
@@ -67,7 +67,7 @@ export default class DirectMessageModule extends Module {
     message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageSent(user, msg.content)));
   }
   @command({ aliases: ["deletedm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage })
-  async deletedirectmessage(message: Message, user: User, messageId: string): Promise<void> {
+  async deletedirectmessage(message: Message, user: User, messageId: string): PV<void> {
     await message.delete();
     const dmchannel = await user.createDM();
     const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;

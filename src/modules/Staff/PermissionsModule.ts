@@ -1,9 +1,9 @@
-import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, CommandCategories, commandDescriptions, strings, codeblockMember } from "@lib/utils";
+import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, CommandCategories, commandDescriptions, strings, codeblockMember, PV } from "@lib/utils";
 import { GuildMember, Message } from "discord.js";
 
 export default class PermissionsModule extends Module {
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart })
-  async negateart(msg: Message, _members: string): Promise<void> {
+  async negateart(msg: Message, _members: string): PV<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -23,7 +23,7 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback })
-  async negatefeedback(msg: Message, _members: string): Promise<void> {
+  async negatefeedback(msg: Message, _members: string): PV<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -43,7 +43,7 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
-  async negatereaction(msg: Message, _members: string): Promise<void> {
+  async negatereaction(msg: Message, _members: string): PV<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -63,7 +63,7 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
-  async negatemedia(msg: Message, _members: string): Promise<void> {
+  async negatemedia(msg: Message, _members: string): PV<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
@@ -83,7 +83,7 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
-  async negateexperience(msg: Message, _members: string): Promise<void> {
+  async negateexperience(msg: Message, _members: string): PV<void> {
     msg.delete();
     const members: GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));

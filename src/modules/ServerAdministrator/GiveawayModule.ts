@@ -1,4 +1,4 @@
-import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional, monitor, MAIN_GUILD_ID, errorMessage } from "@lib/utils";
+import { Module, ErisClient, command, inhibitors, scheduler, GiveawayArgs, emotes, CommandCategories, Remainder, commandDescriptions, strings, Optional, monitor, MAIN_GUILD_ID, errorMessage, PV } from "@lib/utils";
 import { Message, MessageReaction, User } from "discord.js";
 import { Giveaway, LevelRole } from "@database/models";
 import Duration from "@lib/utils/arguments/Duration";
@@ -10,7 +10,7 @@ export default class GiveawayModule extends Module {
   }
 
   @monitor({ event: "messageReactionAdd" })
-  async messageReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
+  async messageReactionAdd(reaction: MessageReaction, user: User): PV<void> {
     if (reaction.partial) reaction = await reaction.fetch();
     if (reaction.message.guild.id !== MAIN_GUILD_ID) return;
     if (user.bot) return;
@@ -22,7 +22,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [Duration, Number, new Remainder(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.start, usage: "<duration:duration> <winners:number> <prize:...string>" })
-  async start(msg: Message, duration: Duration, winners: number, prize: string): Promise<void> {
+  async start(msg: Message, duration: Duration, winners: number, prize: string): PV<void> {
     msg.delete();
     const giveawayMsg = await msg.channel.send(strings.modules.giveaway.loadingMessage);
     giveawayMsg.react(emotes.giveaway.giftreactionid);
@@ -51,7 +51,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.reroll, usage: "[messageid:string]" })
-  async reroll(msg: Message, messageId?: string): Promise<Message | void> {
+  async reroll(msg: Message, messageId?: string): PV<void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
       const message = await msg.channel.messages.fetch(messageId);
@@ -91,7 +91,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String)], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.end, usage: "[messageid:string]" })
-  async end(msg: Message, messageId?: string): Promise<Message | void> {
+  async end(msg: Message, messageId?: string): PV<void> {
     if (messageId) {
       if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
       try {
@@ -104,7 +104,7 @@ export default class GiveawayModule extends Module {
         await handleGiveawayWin({ channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null }, giveaway);
       } catch (e) {
         const giveaway = await Giveaway.findOne({ where: { messageId: messageId } });
-        if (!giveaway) return msg.channel.send(strings.modules.giveaway.notValidMessageID);
+        if (!giveaway) return errorMessage(msg, strings.modules.giveaway.notValidMessageID);
         giveaway.ended = true;
         await giveaway.save();
         msg.channel.send(strings.modules.giveaway.giveawayEnded);
@@ -126,7 +126,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.list })
-  async list(msg: Message): Promise<void | Message> {
+  async list(msg: Message): PV<void> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const messageArray = [strings.modules.giveaway.activeGiveaways];
 
@@ -140,7 +140,7 @@ export default class GiveawayModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories.Giveaways, staff: true, description: commandDescriptions.endall })
-  async endall(msg: Message): Promise<void | Message> {
+  async endall(msg: Message): PV<void> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
     const endedGiveaways = [strings.modules.giveaway.endedGivewaways];
 

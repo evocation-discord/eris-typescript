@@ -1,5 +1,6 @@
 import request from "request";
-export const linkResolver = (link: string): Promise<string> => new Promise(resolve => {
+import { P } from "..";
+export const linkResolver = (link: string): P<string> => new Promise(resolve => {
   const redirects = [];
   request({
     url: link.startsWith("http") ? link : `http://${link}`,

@@ -4,7 +4,7 @@ import { ErisClient } from "../client/ErisClient";
 import { TextChannel } from "discord.js";
 import { MAIN_GUILD_ID, ROLES } from "../constants";
 import { strings } from "../messages";
-import { Command } from "..";
+import { Command, P } from "..";
 import RedisClient from "../client/RedisClient";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
@@ -81,7 +81,7 @@ const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
   };
 };
 
-export const roleValidation = async (msg: Message, roleID: string): Promise<boolean> => {
+export const roleValidation = async (msg: Message, roleID: string): P<boolean> => {
   if (!msg.member) return false;
   const mainGuild = msg.client.guilds.resolve(MAIN_GUILD_ID);
   return mainGuild.members.resolve(msg.author.id).roles.cache.has(roleID);
@@ -108,7 +108,7 @@ const canOnlyBeExecutedInChannels = (channels: string[], silent = false): Inhibi
 export type Inhibitor = (
   msg: Message,
   command?: Command,
-) => Promise<string | undefined>;
+) => P<string | undefined>;
 export const inhibitors = {
   botAdminsOnly,
   guildsOnly,

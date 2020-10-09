@@ -1,6 +1,6 @@
 import { Snowflake } from "discord.js";
 import { Giveaway } from "../database/models";
-import { scheduler, Embed, ROLES, getDuration } from "..";
+import { scheduler, Embed, getDuration, PV } from "..";
 import { client } from "../../..";
 import { TextChannel } from "discord.js";
 import { emotes } from "../constants";
@@ -14,7 +14,7 @@ export interface GiveawayArgs {
   endTime: number
 }
 
-export default async (args: GiveawayArgs): Promise<void> => {
+export default async (args: GiveawayArgs): PV<void> => {
   // Get the current timestamp.
   const timestamp = Math.round(Date.now());
   const _timestamp = Math.round(Date.now() / 1000);
@@ -69,7 +69,7 @@ const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
   await message.edit(strings.giveaway.embed.giveawayEndedHeader, { embed: embed });
 };
 
-export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
+export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): PV<void> => {
   const embed = new Embed()
     .setColor("#36393F");
   const channel = await client.channels.fetch(args.channelId) as TextChannel;

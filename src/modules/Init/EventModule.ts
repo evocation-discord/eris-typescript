@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed, MAIN_GUILD_ID, ROLES, emotes } from "@lib/utils";
+import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed, MAIN_GUILD_ID, ROLES, emotes, PV } from "@lib/utils";
 import { Guild, Message, TextChannel, GuildMember, Role, User, MessageReaction } from "discord.js";
 import fetch from "node-fetch";
 
@@ -15,7 +15,7 @@ export default class EventModule extends Module {
   @listener({ event: "ready" })
   onReady(): void {
     scheduler.loadEvents();
-    Array.from(this.client.cronManager.crons).map(cron => cron.cronJob.fireOnTick());
+    // Array.from(this.client.cronManager.crons).map(cron => cron.cronJob.fireOnTick());
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
 
@@ -56,7 +56,7 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onAnnouncementMessage(message: Message): Promise<void> {
+  async onAnnouncementMessage(message: Message): PV<void> {
     if (message.channel.type === "dm") return;
     if (message.guild.id !== MAIN_GUILD_ID) return;
     const { options: { http } } = this.client;
@@ -75,7 +75,7 @@ export default class EventModule extends Module {
     }
   }
 
-  async sendControlMessage(data: Embed): Promise<void> {
+  async sendControlMessage(data: Embed): PV<void> {
     const embed = new Embed(data)
       .setFooter(`Eris ${process.env.PRODUCTION ? "Production" : "Testing"}`)
       .setTimestamp();
@@ -87,7 +87,7 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberUpdate(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
+  async onGuildMemberUpdate(oldMember: GuildMember, newMember: GuildMember): PV<void> {
     const addedRoles: Role[] = [];
     newMember.roles.cache.forEach(role => {
       if (!oldMember.roles.cache.has(role.id)) addedRoles.push(role);
@@ -101,7 +101,7 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onFeedbackMessage(message: Message): Promise<void> {
+  async onFeedbackMessage(message: Message): PV<void> {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
     message.channel = message.channel as TextChannel;
@@ -113,7 +113,7 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "messageReactionAdd" })
-  async onFeedbackMessageReaction(reaction: MessageReaction, user: User): Promise<void> {
+  async onFeedbackMessageReaction(reaction: MessageReaction, user: User): PV<void> {
     if (user.bot) return;
     if (reaction.message.channel.type === "dm") return;
     reaction.message.channel = reaction.message.channel as TextChannel;
