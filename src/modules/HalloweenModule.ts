@@ -1,4 +1,4 @@
-import { monitor, Module } from "@lib/utils";
+import { monitor, Module, MAIN_GUILD_ID, ROLES } from "@lib/utils";
 import { Message, MessageAttachment, User, MessageReaction } from "discord.js";
 
 const kittyEmojiId = "762242961483890709";
@@ -10,7 +10,9 @@ export default class HalloweenModule extends Module {
 
   @monitor({ event: "message" })
   async onMessage(message: Message): Promise<void|Message> {
+    const mainGuild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (message.channel.id !== halloweenChannel) return;
+    if (mainGuild.members.resolve(message.author.id).roles.cache.some(role => [ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
     const channelMessages = await message.channel.messages.fetch({});
     if (channelMessages.filter(m => m.author.id === message.author.id).size > 1) return message.delete();
     if (message.attachments.size > 0) {
