@@ -104,6 +104,8 @@ export default class BotOwner extends Module {
     };
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Discord = require("discord.js");
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { default: RedisClient } = require("@lib/utils/client/RedisClient");
     try {
       const evaled = eval(code);
       const clean = await codeclean(msg.client, evaled);

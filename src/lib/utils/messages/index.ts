@@ -437,6 +437,12 @@ export const strings = {
         leaderboard: {
           header: `${emotes.commandresponses.soulstones} **SOULSTONE LEADERBOARD**\n`,
           row: (rank: number, user: User, soulstones: number) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **\`${soulstones}\` SOULSTONES**`
+        },
+        redeeminducements: {
+          success: "You have redeemed **25** Soulstones."
+        },
+        soulstones: {
+          success: (user: User, soulstones: number) => `${emotes.commandresponses.soulstones} **BALANCE**: **${user.username}**#${user.discriminator} has **${soulstones}** Soulstone(s).`
         }
       }
     }
@@ -507,7 +513,9 @@ export const commandDescriptions = {
   staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position.",
   gc: "Toggles currency generation in the specified channel. If no arguments are provided, Eris should make the channel in which the command is being run in, a currency generation channel.",
   collect: "Collects Soulstones that have been placed automatically.",
-  soulstoneleaderboard: "Leaderboard for Soulstones."
+  soulstoneleaderboard: "Leaderboard for Soulstones.",
+  redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
+  soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned."
 };
 
 const rankEmoji = (rank: number): string => {

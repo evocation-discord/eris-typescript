@@ -87,7 +87,7 @@ export default class SoulstoneModule extends Module {
     }
   }
 
-  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"] })
+  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands] })
   async soulstoneleaderboard(msg: Discord.Message): PV<void> {
     const guild = msg.client.guilds.resolve(MAIN_GUILD_ID);
     let soulstoneData = await Soulstone.find();
@@ -102,6 +102,20 @@ export default class SoulstoneModule extends Module {
       message.push(strings.modules.soulstones.commands.leaderboard.row(info.rank, user, info.soulstones));
     }
     await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
+  }
+
+  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.redeeminducements, aliases: ["ri"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.userCooldown(21600000, false)] })
+  async redeeminducements(message: Discord.Message): PV<void> {
+    const soulstoneData = await Soulstone.findOne({ where: { id: message.author.id } });
+    soulstoneData.soulstones += 25;
+    await soulstoneData.save();
+    await message.channel.send(strings.general.success(strings.modules.soulstones.commands.redeeminducements.success));
+  }
+
+  @command({ group: CommandCategories["Soulstones"], description: commandDescriptions.soulstones, aliases: ["s"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Optional(Discord.User)] })
+  async soulstones(message: Discord.Message, user = message.author): PV<void> {
+    const soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+    await message.channel.send(strings.modules.soulstones.commands.soulstones.success(user, soulstoneData.soulstones));
   }
 }
 
