@@ -377,12 +377,12 @@ export const strings = {
       cantAffiliateYourself: "You cannot execute affiliate commands on yourself.",
       cantAffiliateBots: "You may only use this command on users, not bots. Please only use these affiliation commands with necessity. Thank you.",
       affiliate: {
-        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has been awarded the <@&${ROLES.AFFILIATE}> role.`,
+        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has been awarded the **<@&${ROLES.AFFILIATE}>** role.`,
         denied: `${emotes.commandresponses.denial} That user is already an Evocation affiliate.`,
         audit: (user: User) => `User was selected to represent an affiliated server by ${user.tag}.`
       },
       removeaffiliate: {
-        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has had their <@&${ROLES.AFFILIATE}> role removed.`,
+        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has had their **<@&${ROLES.AFFILIATE}>** role removed.`,
         denied: `${emotes.commandresponses.denial} That user is not an Evocation affiliate.`,
         audit: (user: User) => `Representative for a server is being changed/affiliation is being dissolved. Responsible User: ${user.tag}.`
       },
