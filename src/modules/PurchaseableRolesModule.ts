@@ -9,7 +9,7 @@ export default class PurchaseableRolesModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
   async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
-    const roles = [ROLES.SENTRIES_OF_DESCENSUS, ROLES.SCIONS_OF_ELYSIUM, ROLES.ORION, ROLES.CHONUS];
+    const roles = [ROLES.SENTRIES_OF_DESCENSUS, ROLES.SCIONS_OF_ELYSIUM, ROLES.ORION, ROLES.CHRONOS];
     for (const role of roles) {
       if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
         const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
@@ -36,7 +36,7 @@ export default class PurchaseableRolesModule extends Module {
     if (random === 0) return message.channel.send(strings.modules.purchaseableroles.cancel_1(user));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS", "ORION", "CHONUS"])], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.educateme, aliases: ["enlighten", "enlightenme", "educate"] })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS", "ORION", "CHRONOS"])], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.educateme, aliases: ["enlighten", "enlightenme", "educate"] })
   async educateme(message: Message): Promise<void> {
     message.channel.send([strings.modules.purchaseableroles.educatemePrefix, strings.modules.purchaseableroles.educateme[Math.floor(Math.random() * strings.modules.purchaseableroles.educateme.length)]].join(" "));
   }
