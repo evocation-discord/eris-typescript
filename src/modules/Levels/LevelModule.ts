@@ -448,9 +448,9 @@ export default class LevelModule extends Module {
     for await (const data of xpData) {
       const user = await msg.client.users.fetch(data.id);
       const info = await userInfo(user);
-      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.total_xp, guild.members.resolve(user.id).roles.cache.has(ROLES.WISTERIA)));
+      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.total_xp, guild.members.resolve(user.id).roles.cache.has(ROLES.EOS)));
     }
-    const boosters = guild.members.cache.filter(m => xpData.find(xp => xp.id === m.id) ? false : true).filter(m => !m.user.bot).filter(m => m.roles.cache.has(ROLES.WISTERIA));
+    const boosters = guild.members.cache.filter(m => xpData.find(xp => xp.id === m.id) ? false : true).filter(m => !m.user.bot).filter(m => m.roles.cache.has(ROLES.EOS));
     if (boosters.size > 0) {
       message.push(strings.modules.levels.leaderboard.boosterHeader);
     }

@@ -9,7 +9,7 @@ export default class PurchaseableRolesModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
   async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
-    const roles = [ROLES.SENTRIES_OF_DESCENSUS, ROLES.SCIONS_OF_ELYSIUM, ROLES.EVOCATION_OCULI, ROLES.EVOCATION_LACUNAE];
+    const roles = [ROLES.SENTRIES_OF_DESCENSUS, ROLES.SCIONS_OF_ELYSIUM, ROLES.ORION, ROLES.CHONUS];
     for (const role of roles) {
       if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
         const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
@@ -20,12 +20,12 @@ export default class PurchaseableRolesModule extends Module {
     }
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA"]), inhibitors.userCooldown(30000)], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.muse })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS"]), inhibitors.userCooldown(30000)], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.muse })
   async muse(message: Message): Promise<void> {
     message.channel.send(strings.modules.purchaseableroles.museCommand[Math.floor(Math.random() * strings.modules.purchaseableroles.museCommand.length)]);
   }
 
-  @command({ inhibitors: [inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI"]), inhibitors.userCooldown(600000)], usage: "<user:user>", args: [User], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.cancel })
+  @command({ inhibitors: [inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS", "ORION"]), inhibitors.userCooldown(600000)], usage: "<user:user>", args: [User], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.cancel })
   async cancel(message: Message, user: User): Promise<Message|void> {
     const guild = message.client.guilds.resolve(MAIN_GUILD_ID);
     if (message.author === user) return errorMessage(message, strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
@@ -36,7 +36,7 @@ export default class PurchaseableRolesModule extends Module {
     if (random === 0) return message.channel.send(strings.modules.purchaseableroles.cancel_1(user));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "WISTERIA", "EVOCATION OCULI", "EVOCATION LACUNAE"])], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.educateme, aliases: ["enlighten", "enlightenme", "educate"] })
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS", "ORION", "CHONUS"])], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.educateme, aliases: ["enlighten", "enlightenme", "educate"] })
   async educateme(message: Message): Promise<void> {
     message.channel.send([strings.modules.purchaseableroles.educatemePrefix, strings.modules.purchaseableroles.educateme[Math.floor(Math.random() * strings.modules.purchaseableroles.educateme.length)]].join(" "));
   }

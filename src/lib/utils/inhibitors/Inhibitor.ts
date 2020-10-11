@@ -74,9 +74,9 @@ const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => {
     if (roles.includes("STAFF") && await roleValidation(msg, ROLES.STAFF)) return undefined;
     if (roles.includes("SCIONS OF ELYSIUM") && await roleValidation(msg, ROLES.SCIONS_OF_ELYSIUM)) return undefined;
     if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, ROLES.SENTRIES_OF_DESCENSUS)) return undefined;
-    if (roles.includes("EVOCATION OCULI") && await roleValidation(msg, ROLES.EVOCATION_OCULI)) return undefined;
-    if (roles.includes("EVOCATION LACUNAE") && await roleValidation(msg, ROLES.EVOCATION_LACUNAE)) return undefined;
-    if (roles.includes("WISTERIA") && await roleValidation(msg, ROLES.WISTERIA)) return undefined;
+    if (roles.includes("ORION") && await roleValidation(msg, ROLES.ORION)) return undefined;
+    if (roles.includes("CHONUS") && await roleValidation(msg, ROLES.CHONUS)) return undefined;
+    if (roles.includes("EOS") && await roleValidation(msg, ROLES.EOS)) return undefined;
     return strings.inhibitors.noPermission;
   };
 };
@@ -122,4 +122,4 @@ export const inhibitors = {
   canOnlyBeExecutedInChannels
 };
 
-type PermissionRole = "STAFF" | "WISTERIA" | "SCIONS OF ELYSIUM" | "SENTRIES OF DESCENSUS" | "EVOCATION LACUNAE" | "EVOCATION OCULI";
+type PermissionRole = "STAFF" | "EOS" | "SCIONS OF ELYSIUM" | "SENTRIES OF DESCENSUS" | "CHONUS" | "ORION";

@@ -66,7 +66,7 @@ export default class LoggingModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
   async onGuildMemberRoleAdd(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
     if (newMember.guild.id !== MAIN_GUILD_ID) return;
-    if (!oldMember.roles.cache.has(ROLES.WISTERIA) && newMember.roles.cache.has(ROLES.WISTERIA)) {
+    if (!oldMember.roles.cache.has(ROLES.EOS) && newMember.roles.cache.has(ROLES.EOS)) {
       const channel = newMember.guild.channels.cache.find(c => c.name === "lounge") as TextChannel;
       channel.send(strings.modules.logging.userBoost(newMember.user));
     }

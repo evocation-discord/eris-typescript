@@ -81,8 +81,8 @@ export const strings = {
       auditLogDonationRoleAdd: "[FORCED REVOCATION] Authenticity cannot be verified.",
       commands: {
         logdonationBotError: "The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.",
-        logdonationAlreadyWhiteHallows: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
-        logdonationNewWhiteHallows: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.WHITE_HALLOWS}>** role.`,
+        logdonationAlreadyHyperion: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.HYPERION}>** role.`,
+        logdonationNewHyperion: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.HYPERION}>** role.`,
         awardMiraculum: (user: User) => `I have awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role. Please take into consideration that this message will be returned even if the user already has the role prior to the command invocation being sent.`,
         logdonationLogEntry: (user: User, item: string, executor: User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
       }
@@ -157,7 +157,7 @@ export const strings = {
       userBoost: (user: User) => [
         `Thank you for boosting **EVOCATION**, ${user}! You now have access to change your own nickname, embed links, attach files and stream into the server. If these permissions seem familiar to you, that means you are **LEVEL 3** or above.\n`,
         "**SUCCESSFULLY UNLOCKED**:",
-        `${emotes.commandresponses.soulstones} Coloured **WISTERIA** Role [HOISTED]`,
+        `${emotes.commandresponses.soulstones} Coloured **EOS** Role [HOISTED]`,
         `${emotes.commandresponses.soulstones} Permanent x**2 EXPERIENCE MULTIPLIER**`,
         `${emotes.commandresponses.soulstones} Permanent Appearance in Server Leaderboard`,
         `${emotes.commandresponses.soulstones} Special Badge Appended to Your Entry in Server Leaderboard`,
@@ -440,7 +440,7 @@ export const commandDescriptions = {
   deletedirectmessage: "Deletes a Direct Message sent by Eris.",
   about: "Returns information about the bot, its conception and contributors.",
   help: "Returns information about available commands.",
-  logdonation: "Logs a donation and awards the 'White Hallows' role to the specified user, if they don't already have it.",
+  logdonation: "Logs a donation and awards the **HYPERION** role to the specified user, if they don't already have it.",
   negateart: "Appends/removes the '[NEGATION] Art' role to/from the specified user(s).",
   negatefeedback: "Appends/removes the '[NEGATION] Feedback' role to/from the specified user(s).",
   negatereaction: "Appends/removes the '[NEGATION] Reactions' role to/from the specified user(s).",
@@ -458,7 +458,7 @@ export const commandDescriptions = {
   disablecmd: "Forcibly disables a command to all users, regardless of defaulted permission inhibitors.",
   enablecmd: "Enables a previously-disabled command, forcing restoration of default inhibitors.",
   listdisabledcmds: "Lists all disabled commands.",
-  muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **WISTERIA** or **EVOCATION STAFF** to run this command.",
+  muse: "Eris returns what's on her mind - take that as you will. You require **SENTRIES OF DESCENSUS**, **SCIONS OF ELYSIUM**, **EOS** or **EVOCATION STAFF** to run this command.",
   channels: "Returns a list of all existing channels (categories, text and voice) within the server. For maintenance of confidentiality, this command can only be run in a specific channel intended for administrative usage of commands.",
   datamine: "Returns information about the server's `#datamining-feed` channel, its purpose and functionality.",
   addxpexclusion: "Excludes a channel/role. Users will not be able to gain any experience within these channels/if they have an excluded role.",
