@@ -1,4 +1,4 @@
-# Getting started as a Eris Developer
+# Getting Started as an Eris Developer
 
 ### Prerequisites
 Eris is built to run on any kind of environment or operating system.
@@ -18,8 +18,8 @@ Eris is built to run on any kind of environment or operating system.
 6. Clone this repository to your local drive by running `git clone git@github.com:Evocation-Discord/Eris.git Eris` in the directory you wish to clone Eris in.
 7. Run `yarn install` to install all dependencies.
 
-### Useful commands
+### Useful Commands
 
-### Repository structure
+### Repository Structure
 
-### Done
+### Conclusion
