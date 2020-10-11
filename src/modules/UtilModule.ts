@@ -39,7 +39,7 @@ export default class UtilCommandModule extends Module {
   onErisMessage(message: Message): void {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
-    if (!message.member.roles.cache.some(r => [ROLES.CHONUS, ROLES.ORION, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
+    if (!message.member.roles.cache.some(r => [ROLES.CHRONOS, ROLES.ORION, ROLES.SCIONS_OF_ELYSIUM, ROLES.SENTRIES_OF_DESCENSUS, ROLES.STAFF].includes(r.id))) return;
     if (["528593099971100672", "728243965987389442"].includes(message.channel.parentID)) return;
     const thankYouEris = () => {
       const random = Math.floor(Math.random() * 100 + 1);
