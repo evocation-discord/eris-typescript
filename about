@@ -55,7 +55,7 @@ Some of our emoji may originate from the official Blob Emoji server(s), which ar
 
 :enter: __**SELF-ASSIGNABLE ROLES**__
 
-Use `!join <role>` to assign a role to yourself. `!leave <role>` can be used to remove a previously-assigned role from yourself. Please take note of the fact that spaces are not used within the second syntactic parameter of these commands.
+Use `hjoin <role>` to assign a role to yourself. `hleave <role>` can be used to remove a previously-assigned role from yourself. Please take note of the fact that spaces are not used within the second syntactic parameter of these commands.
 
 <@&762015217755881492> **➜** `hleave Events` (This role is added to all users by default.)
 <@&727558105705086976> **➜** `hjoin Giveaways`
