@@ -35,6 +35,7 @@
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
     "eslint": "^7.5.0",
+    "nodemon": "^2.0.4",
     "typescript": "^3.9.7"
   },
   "_moduleAliases": {
@@ -43,6 +44,9 @@
     "@database": "dist/lib/utils/database"
   },
   "scripts": {
-    "build": "swc src -d dist"
+    "build": "swc src -d dist",
+    "build:watch": "swc src -d dist -w",
+    "start": "node dist",
+    "dev": "nodemon dist"
   }
 }
