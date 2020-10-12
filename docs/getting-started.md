@@ -14,7 +14,7 @@ Eris is built to run on any kind of environment or operating system.
 2. Install [Docker](https://www.docker.com/get-started), [docker-compose](https://docs.docker.com/compose/install/), [Yarn](https://yarnpkg.com/en/docs/install) and [Git](https:/git-scm.com).
 3. [Generate a SSH key](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 4. [Add the SSH key to your GitHub account](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account).
-5. Install Node.js v12.18.4, preferably through [Node Version Manager](https://github.com/nvm-sh/nvm#installation-and-update).
+5. Install Node.js v12, if possible through [Node Version Manager](https://github.com/nvm-sh/nvm#installation-and-update) ([windows](https://github.com/coreybutler/nvm-windows#installation--upgrades) click here).
 6. Clone this repository to your local drive by running `git clone git@github.com:Evocation-Discord/Eris.git Eris` in the directory you wish to clone Eris in.
 7. Run `yarn install` to install all dependencies.
 
