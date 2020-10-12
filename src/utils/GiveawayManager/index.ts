@@ -14,7 +14,7 @@ export interface GiveawayArgs {
   endTime: number
 }
 
-export default async (args: GiveawayArgs): Promise<void> => {
+export default async function (args: GiveawayArgs): Promise<void> {
   // Get the current timestamp.
   const timestamp = Math.round(Date.now());
   const _timestamp = Math.round(Date.now() / 1000);

@@ -1,4 +1,4 @@
-export const ROLES = {
+const ROLES = {
   HYPERION: process.env.WHITE_HALLOWS,
   SENTRIES_OF_DESCENSUS: process.env.SENTRIES_OF_DESCENSUS_ROLE,
   SCIONS_OF_ELYSIUM: process.env.SCIONS_OF_ELYSIUM_ROLE,
@@ -23,7 +23,7 @@ export const ROLES = {
   ERIS_DEVELOPER: process.env.ERIS_DEVELOPER_ROLE
 };
 
-export const CHANNELS = {
+const CHANNELS = {
   DONATION_LOG: process.env.DONATION_LOG,
   DIRECT_MESSAGE_LOG: process.env.DIRECT_MESSAGE_LOG,
   ERIS_LOG: process.env.ERIS_LOG,
@@ -36,7 +36,7 @@ export const CHANNELS = {
   LOUNGE: process.env.LOUNGE_CHANNEL
 };
 
-export const NEGATIONS = {
+const NEGATIONS = {
   EXPERIENCE: process.env.NEGATION_EXPERIENCE,
   MEDIA: process.env.NEGATION_MEDIA,
   REACTIONS: process.env.NEGATION_REACTIONS,
@@ -44,11 +44,19 @@ export const NEGATIONS = {
   FEEDBACK: process.env.NEGATION_FEEDBACK
 };
 
-export const DATABASE_INFO = {
+const DATABASE_INFO = {
   HOST: process.env.DB_HOST,
   DATABASE: process.env.DB_DATABASE,
   USERNAME: process.env.DB_USERNAME,
   PASSWORD: process.env.DB_PASSWORD,
 };
 
-export const MAIN_GUILD_ID = process.env.MAIN_GUILD_ID;
+const MAIN_GUILD_ID = process.env.MAIN_GUILD_ID;
+
+export default {
+  ROLES,
+  CHANNELS,
+  NEGATIONS,
+  DATABASE_INFO,
+  MAIN_GUILD_ID
+};

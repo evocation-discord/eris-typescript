@@ -1,5 +1,5 @@
 import path from "path";
-import RedisClient from "../client/RedisClient";
+import { RedisClient } from "../client";
 
 interface Event {
   timestamp: number,
@@ -45,4 +45,4 @@ class Scheduler {
   }
 }
 
-export const scheduler = new Scheduler();
+export default new Scheduler();

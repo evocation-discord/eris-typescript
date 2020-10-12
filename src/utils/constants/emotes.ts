@@ -124,7 +124,7 @@ const uncategorised = {
 
 
 
-export const emotes = {
+export default {
   giveaway,
   logging,
   relics,

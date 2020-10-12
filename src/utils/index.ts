@@ -1,40 +1,6 @@
-export * from "./constants";
-
-import { ErisClient } from "./client/ErisClient";
-import { Command } from "./commands/Command";
-import { CommandManager } from "./commands/CommandManager";
-import { CommandParserModule } from "./commands/CommandParser";
-import { GiveawayArgs } from "./GiveawayManager";
 import { MessageEmbed, MessageEmbedOptions, Message, Role, User, TextChannel, GuildChannel, GuildMember } from "discord.js";
 import { resolveRole, resolveUser, resolveChannel } from "./arguments/supportedArgs";
 import { strings } from "./messages";
-
-export { ErisClient, Command, CommandManager, CommandParserModule, GiveawayArgs };
-
-export * from "./arguments/ArgumentProcessor";
-export * from "./arguments/Arguments";
-export * from "./arguments/supportedArgs";
-
-export * from "./commands/decorator";
-
-export * from "./inhibitors/Inhibitor";
-export * from "./listener/Listener";
-export * from "./listener/ListenerManager";
-export * from "./listener/decorator";
-
-export * from "./monitor/Monitor";
-export * from "./monitor/MonitorManager";
-export * from "./monitor/decorator";
-
-export * from "./cron/Cron";
-export * from "./cron/CronManager";
-export * from "./cron/decorator";
-
-export * from "./modules/Module";
-
-export * from "./messages";
-
-export * from "./scheduler/Scheduler";
 
 export const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
