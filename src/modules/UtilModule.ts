@@ -94,7 +94,7 @@ export default class UtilCommandModule extends Module {
       .addField("Administrators", admins.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
       .addField("Moderators", mods.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
       .addField("Eris Developers", developers.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
-      .addField("Server Growth Lead", serverGrowthLead.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
+      .addField("Outreach Lead", serverGrowthLead.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
       .setFooter("This command output updates automatically, dependent upon role attribution.");
     await msg.channel.send(embed);
   }
