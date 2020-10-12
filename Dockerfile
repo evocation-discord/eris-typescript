@@ -1,5 +1,6 @@
 FROM node:12
+WORKDIR /usr/local/eris-bot
 COPY . .
-RUN npm i
-RUN npm run build
-ENTRYPOINT node dist
+RUN yarn install
+RUN yarn build
+CMD [ "yarn", "start" ]
