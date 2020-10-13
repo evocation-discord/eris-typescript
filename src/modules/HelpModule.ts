@@ -1,5 +1,10 @@
-import { Message } from "discord.js";
-import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings, emotes, errorMessage } from "@lib/utils";
+import { command, CommandCategories } from "@utils/commands";
+import { Command } from "@utils/commands/Command";
+import { emotes, env } from "@utils/constants";
+import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import * as Arguments from "@utils/arguments";
+import Discord from "discord.js";
 
 const commandGroupsWithEmojis = {
   "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
@@ -14,8 +19,8 @@ const commandGroupsWithEmojis = {
 
 export default class HelpModule extends Module {
 
-  @command({ group: CommandCategories.Informational, args: [new Optional(String)], usage: "[command:string]", description: commandDescriptions.help })
-  async help(msg: Message, command?: string): Promise<void|Message> {
+  @command({ group: CommandCategories.Informational, args: [new Arguments.Optional(String)], usage: "[command:string]", description: commandDescriptions.help })
+  async help(msg: Discord.Message, command?: string): Promise<void|Discord.Message> {
     const commands = Array.from(this.client.commandManager.cmds);
     if (!command) {
       const commandGroups: CommandCategories[] = [
@@ -48,7 +53,7 @@ export default class HelpModule extends Module {
         if (!this.client.botAdmins.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
       } else {
         if (cmd.staff) {
-          if (!msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
+          if (!msg.member.roles.cache.some(role => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
         }
       }
       const triggers = [...cmd.triggers];
@@ -65,7 +70,7 @@ export default class HelpModule extends Module {
     }
   }
 
-  filterAdminCommands(msg: Message, commands: Command[]): Command[] {
+  filterAdminCommands(msg: Discord.Message, commands: Command[]): Command[] {
     const cmds: Command[] = [];
 
     commands.forEach(command => {
@@ -77,12 +82,12 @@ export default class HelpModule extends Module {
     return cmds;
   }
 
-  filterStaffCommands(msg: Message, commands: Command[]): Command[] {
+  filterStaffCommands(msg: Discord.Message, commands: Command[]): Command[] {
     const cmds: Command[] = [];
 
     commands.forEach(command => {
       if (command.staff) {
-        if (msg.member.roles.cache.some(role => [ROLES.MODERATOR, ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(command);
+        if (msg.member.roles.cache.some(role => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(command);
       } else cmds.push(command);
     });
 

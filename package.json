@@ -39,9 +39,9 @@
     "typescript": "^3.9.7"
   },
   "_moduleAliases": {
-    "@lib": "dist/lib",
+    "@utils": "dist/utils",
     "@modules": "dist/modules",
-    "@database": "dist/lib/utils/database"
+    "@database": "dist/utils/database"
   },
   "scripts": {
     "build": "swc src -d dist",

@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import "module-alias/register";
-import "@lib/utils/types/discord";
+import "@utils/types/discord";
 
-import { ErisClient } from "@lib/utils";
+import { ErisClient } from "@utils/client";
 import { setupDatabase } from "@database/index";
 import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
 import EventModule from "@modules/Init/EventModule";
