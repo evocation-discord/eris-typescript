@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { listener, Module, ErisClient, monitor, scheduler, CHANNELS, strings, Embed, MAIN_GUILD_ID, ROLES, emotes } from "@lib/utils";
-import { Guild, Message, TextChannel, GuildMember, Role, User, MessageReaction } from "discord.js";
+import { emotes, env } from "@utils/constants";
+import Embed from "@utils/embed";
+import { listener } from "@utils/listener";
+import { strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import { monitor } from "@utils/monitor";
+import scheduler from "@utils/scheduler";
+import Discord from "discord.js";
 import fetch from "node-fetch";
 
 export default class EventModule extends Module {
-  constructor(client: ErisClient) {
-    super(client);
-  }
   @listener({ event: "guildUpdate" })
-  onGuildUpdate(oldGuild: Guild, newGuild: Guild): void {
+  onGuildUpdate(oldGuild: Discord.Guild, newGuild: Discord.Guild): void {
     if (newGuild.id === process.env.MAIN_GUILD_ID && newGuild.name !== process.env.MAIN_GUILD_NAME) newGuild.edit({ name: process.env.MAIN_GUILD_NAME });
   }
 
@@ -56,9 +59,9 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onAnnouncementMessage(message: Message): Promise<void> {
+  async onAnnouncementMessage(message: Discord.Message): Promise<void> {
     if (message.channel.type === "dm") return;
-    if (message.guild.id !== MAIN_GUILD_ID) return;
+    if (message.guild.id !== env.MAIN_GUILD_ID) return;
     const { options: { http } } = this.client;
     if (message.channel.type === "news") {
       await fetch(
@@ -70,7 +73,7 @@ export default class EventModule extends Module {
           },
         },
       );
-      const channel = await this.client.channels.fetch(CHANNELS.ERIS_LOG) as TextChannel;
+      const channel = await this.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
       channel.send(strings.modules.events.announcementMessages(message));
     }
   }
@@ -81,19 +84,19 @@ export default class EventModule extends Module {
       .setTimestamp();
 
     if (!embed.color) embed.setColor("#779ecb");
-    const channel = await this.client.channels.fetch(CHANNELS.ERIS_SYSTEM_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.ERIS_SYSTEM_LOG) as Discord.TextChannel;
     if (!channel) return;
     channel.send({ embed });
   }
 
   @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberUpdate(oldMember: GuildMember, newMember: GuildMember): Promise<void> {
-    const addedRoles: Role[] = [];
+  async onGuildMemberUpdate(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
+    const addedRoles: Discord.Role[] = [];
     newMember.roles.cache.forEach(role => {
       if (!oldMember.roles.cache.has(role.id)) addedRoles.push(role);
     });
     addedRoles.forEach(role => this.client.emit("guildMemberRoleAdd", oldMember, newMember, role));
-    const removedRoles: Role[] = [];
+    const removedRoles: Discord.Role[] = [];
     oldMember.roles.cache.forEach(role => {
       if (!newMember.roles.cache.has(role.id)) removedRoles.push(role);
     });
@@ -101,23 +104,23 @@ export default class EventModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onFeedbackMessage(message: Message): Promise<void> {
+  async onFeedbackMessage(message: Discord.Message): Promise<void> {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
-    message.channel = message.channel as TextChannel;
-    if (message.guild.id !== MAIN_GUILD_ID) return;
+    message.channel = message.channel as Discord.TextChannel;
+    if (message.guild.id !== env.MAIN_GUILD_ID) return;
     if (message.channel.name !== "feedback") return;
-    if (message.member.roles.cache.has(ROLES.ADMINISTRATORS) || message.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
+    if (message.member.roles.cache.has(env.ROLES.ADMINISTRATORS) || message.member.roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)) return;
     await message.react(message.client.emojis.resolve(emotes.uncategorised.yyid));
     await message.react(emotes.uncategorised.nnid);
   }
 
   @monitor({ event: "messageReactionAdd" })
-  async onFeedbackMessageReaction(reaction: MessageReaction, user: User): Promise<void> {
+  async onFeedbackMessageReaction(reaction: Discord.MessageReaction, user: Discord.User): Promise<void> {
     if (user.bot) return;
     if (reaction.message.channel.type === "dm") return;
-    reaction.message.channel = reaction.message.channel as TextChannel;
-    if (reaction.message.guild.id !== MAIN_GUILD_ID) return;
+    reaction.message.channel = reaction.message.channel as Discord.TextChannel;
+    if (reaction.message.guild.id !== env.MAIN_GUILD_ID) return;
     if (reaction.message.channel.name !== "feedback") return;
     if (reaction.message.author.id === user.id) reaction.users.remove(user);
   }

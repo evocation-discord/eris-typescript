@@ -1,14 +1,21 @@
-import { Module, monitor, command, inhibitors, Remainder, colors, CHANNELS, CommandCategories, strings, commandDescriptions, Embed } from "@lib/utils";
-import { Message, TextChannel, User } from "discord.js";
+import { command, CommandCategories } from "@utils/commands";
+import { emotes, env, regex, colors } from "@utils/constants";
+import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import * as Arguments from "@utils/arguments";
+import Discord from "discord.js";
+import { inhibitors } from "@utils/inhibitors/Inhibitor";
+import Embed from "@utils/embed";
+import { monitor } from "@utils/monitor";
 
 export default class DirectMessageModule extends Module {
 
   @monitor({ event: "message" })
-  async DM_receiver(message: Message): Promise<void> {
+  async DM_receiver(message: Discord.Message): Promise<void> {
     if (message.author.bot) return;
     if (message.partial) message = await message.fetch();
     if (message.channel.type !== "dm") return;
-    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.DIRECT_MESSAGE_LOG) as Discord.TextChannel;
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
@@ -20,11 +27,11 @@ export default class DirectMessageModule extends Module {
   }
 
   @monitor({ event: "messageUpdate" })
-  async DM_receiver_on_edit(oldMsg: Message, newMsg: Message): Promise<void> {
+  async DM_receiver_on_edit(oldMsg: Discord.Message, newMsg: Discord.Message): Promise<void> {
     if (newMsg.partial) newMsg = await newMsg.fetch();
     if (newMsg.author.bot) return;
     if (newMsg.channel.type !== "dm") return;
-    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.DIRECT_MESSAGE_LOG) as Discord.TextChannel;
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_EDITED_MESSAGE)
@@ -37,11 +44,11 @@ export default class DirectMessageModule extends Module {
   }
 
   @monitor({ event: "messageDelete" })
-  async DM_receiver_on_delete(msg: Message): Promise<void> {
+  async DM_receiver_on_delete(msg: Discord.Message): Promise<void> {
     if (msg.partial) return;
     if (msg.author.bot) return;
     if (msg.channel.type !== "dm") return;
-    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.DIRECT_MESSAGE_LOG) as Discord.TextChannel;
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
@@ -52,11 +59,11 @@ export default class DirectMessageModule extends Module {
     channel.send(strings.modules.directmessages.directMessageDeleted, embed);
   }
 
-  @command({ aliases: ["dm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, new Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage })
-  async directmessage(message: Message, user: User, content: string): Promise<void> {
+  @command({ aliases: ["dm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [Arguments.User, new Arguments.Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage })
+  async directmessage(message: Discord.Message, user: Discord.User, content: string): Promise<void> {
     await message.delete();
     const msg = await user.send(content);
-    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.DIRECT_MESSAGE_LOG) as Discord.TextChannel;
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
@@ -66,11 +73,11 @@ export default class DirectMessageModule extends Module {
     channel.send(strings.modules.directmessages.commands.directMessageSentExecution(message, user), embed);
     message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageSent(user, msg.content)));
   }
-  @command({ aliases: ["deletedm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage })
-  async deletedirectmessage(message: Message, user: User, messageId: string): Promise<void> {
+  @command({ aliases: ["deletedm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [Arguments.User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage })
+  async deletedirectmessage(message: Discord.Message, user: Discord.User, messageId: string): Promise<void> {
     await message.delete();
     const dmchannel = await user.createDM();
-    const channel = await this.client.channels.fetch(CHANNELS.DIRECT_MESSAGE_LOG) as TextChannel;
+    const channel = await this.client.channels.fetch(env.CHANNELS.DIRECT_MESSAGE_LOG) as Discord.TextChannel;
     const dmMessage = await dmchannel.messages.fetch(messageId);
     if (!dmMessage) return;
 
