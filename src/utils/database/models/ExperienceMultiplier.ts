@@ -1,5 +1,4 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { Snowflake } from "discord.js";
 
 @Entity("xpmultiplier")
 export class XPMultiplier extends BaseEntity {
@@ -10,7 +9,7 @@ export class XPMultiplier extends BaseEntity {
   type: "user" | "server" | "role" | "channel";
 
   @Column({ nullable: true })
-  thingID: Snowflake;
+  thingID: string;
 
   @Column()
   multiplier: number;

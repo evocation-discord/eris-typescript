@@ -1,5 +1,4 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { Snowflake } from "discord.js";
 
 @Entity("giveaways")
 export class Giveaway extends BaseEntity {
@@ -31,5 +30,5 @@ export class Giveaway extends BaseEntity {
   prize: string;
 
   @Column("bigint")
-  startedBy: Snowflake;
+  startedBy: string;
 }

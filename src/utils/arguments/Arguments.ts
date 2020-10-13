@@ -22,7 +22,7 @@ export class Remainder {
     const remainder = parser.remainder();
     if (remainder === "") {
       // Argument is blank.
-      throw new Error(strings.general.error(strings.arguments.remainderBlank));
+      throw new Error(strings.arguments.remainderBlank);
     }
 
     // Call the parser.

@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const ROLES = {
   HYPERION: process.env.WHITE_HALLOWS,
   SENTRIES_OF_DESCENSUS: process.env.SENTRIES_OF_DESCENSUS_ROLE,

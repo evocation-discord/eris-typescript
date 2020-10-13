@@ -61,7 +61,7 @@ export default class ArgTextProcessor {
   async one(parser: (arg: string, msg: Discord.Message) => Promise<unknown>, msg: Discord.Message): Promise<unknown> {
     // Get the argument if we can.
     const x = this.getArgumentString();
-    if (!x) throw new Error(strings.general.error(strings.arguments.noArgumentSupplied));
+    if (!x) throw new Error(strings.arguments.noArgumentSupplied);
 
     try {
       // Attempt to parse this argument.

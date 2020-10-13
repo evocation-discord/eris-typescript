@@ -12,7 +12,7 @@ export const allParsers: Map<supportedArgs, (arg: string, msg: Discord.Message) 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
   if (isInt(arg)) return parseInt(arg);
-  throw new Error(strings.general.error(strings.arguments.invalidNumber));
+  throw new Error(strings.arguments.invalidNumber);
 };
 allParsers.set(Number, numberParser);
 

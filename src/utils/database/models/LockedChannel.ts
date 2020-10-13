@@ -1,13 +1,12 @@
 import { Entity, BaseEntity, PrimaryColumn, Column } from "typeorm";
-import { Snowflake } from "discord.js";
 
 @Entity("lockedchannels")
 export class LockedChannel extends BaseEntity {
   @PrimaryColumn()
-  channelId: Snowflake;
+  channelId: string;
 
   @Column()
-  lockedBy: Snowflake;
+  lockedBy: string;
 
   @Column()
   reason: string;

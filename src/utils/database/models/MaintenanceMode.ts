@@ -1,5 +1,4 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { Snowflake } from "discord.js";
 
 @Entity("maintenance")
 export class MaintenanceMode extends BaseEntity {
@@ -7,5 +6,5 @@ export class MaintenanceMode extends BaseEntity {
   id: number;
 
   @Column()
-  enabledBy: Snowflake;
+  enabledBy: string;
 }

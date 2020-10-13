@@ -1,10 +1,9 @@
 import { Entity, BaseEntity, Column, PrimaryColumn } from "typeorm";
-import { Snowflake } from "discord.js";
 
 @Entity("xpexclusions")
 export class XPExclusion extends BaseEntity {
   @PrimaryColumn()
-  id: Snowflake;
+  id: string;
 
   @Column("text")
   type: "role" | "channel" | "category";
