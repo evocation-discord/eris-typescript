@@ -1,6 +1,6 @@
 import { command, CommandCategories } from "@utils/commands";
-import { emotes, env, regex, colors } from "@utils/constants";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import { env, colors } from "@utils/constants";
+import { commandDescriptions, strings } from "@utils/messages";
 import { Module } from "@utils/modules";
 import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
