@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { ErisClient } from "../client/ErisClient";
 import { IListenerDecoratorMeta } from "../listener/decorator";
 import { Listener } from "../listener/Listener";

@@ -6,6 +6,6 @@ export class XPExclusion extends BaseEntity {
   @PrimaryColumn()
   id: Snowflake;
 
-  @Column()
+  @Column("text")
   type: "role" | "channel" | "category";
 }

@@ -6,6 +6,6 @@ export class Blacklist extends BaseEntity {
   @PrimaryColumn()
   id: Snowflake;
 
-  @Column()
+  @Column("text")
   type: "user" | "role";
 }

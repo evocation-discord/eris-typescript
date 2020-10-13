@@ -12,7 +12,7 @@ export const strings = {
     somethingWentWrong: "Something went wrong. You should never see this response.",
     commandDisabled: "This command has been disabled, hence this denial of access. If you believe this administrative action was in error, please contact a Bot Owner (users who are accredited in `e!about`).",
     version: `${emotes.commandresponses.version} **VERSION**: Eris is currently running on version **1.5**, titled **THE EXPERIENCE UPDATE**, deployed on **12**/**09**/**2020** (DD/MM/YYYY).`,
-    commandSyntaxError: (usage: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\``,
+    commandSyntaxError: (usage: string, error: string) => `A syntactic error was encountered. Angle brackets are indicative of required arguments, while square brackets are indicative of optional arguments.\n**SYNTAX**: \`${usage}\`\n**ERROR**: ${error}`,
     dmsclosed: "Your User Settings are preventing me from being able to send you Direct Messages. Please rectify this issue and try again.",
     checkdms: "Check your Direct Messages."
   },
@@ -38,17 +38,22 @@ export const strings = {
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
     winners: (winners: string, name: string, messageLink: string) => `Congratulations ${winners}! You have won **${name}**. Please send a Direct Message to <@747105315840983212> with this message link to redeem your prize: <${messageLink}>. If we do not hear from you within **24** hours of this message being sent, the prize will be rerolled.`
   },
+  parsers: {
+    couldNotFindGuildMember: "Could not find that guild member.",
+    couldNotFindUser: "Could not find that user.",
+    couldNotFindGuild: "Could not find that guild.",
+    couldNotFindTextChannel: "Could not find that text channel.",
+    couldNotFindNewsChannel: "Could not find that news channel.",
+    couldNotFindVoiceChannel: "Could not find that voice channel.",
+    couldNotFindGuildChannel: "Could not find that guild channel.",
+    couldNotFindCategory: "Could not find that category.",
+    couldNotFindRole: "Could not find that role."
+  },
   arguments: {
     noArgumentSupplied: "No argument(s) was/were supplied.",
     remainderBlank: "Remainder of the command is blank.",
     invalidDuration: "Invalid duration.",
     invalidNumber: "Could not identify number within syntactic parameters.",
-    couldNotFindGuildMember: "Could not find that guild member.",
-    couldNotFindUser: "Could not find that user.",
-    couldNotFindGuild: "Could not find that guild.",
-    couldNotFindTextChannel: "Could not find that text channel.",
-    couldNotFindCategory: "Could not find that category.",
-    couldNotFindRole: "Could not find that role."
   },
   inhibitors: {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
@@ -111,8 +116,6 @@ export const strings = {
       updatedExclusionsForRole: "Updated exclusions for the specified role.",
       updatedExclusionsForUser: "Updated exclusions for the specified user.",
       removedAllExclusions: "Removed all exclusions.",
-      roleNotResolved: "Role was not able to be resolved.",
-      userNotResolved: "User was not able to be resolved.",
     },
     giveaway: {
       loadingMessage: "Loading...",
@@ -500,3 +503,10 @@ export const errorMessage = async (message: Discord.Message, error: string): Pro
   const msg = await message.channel.send(error);
   msg.delete({ timeout: 5000 });
 };
+
+export const codeblockMember = (added: Discord.GuildMember[], removed: Discord.GuildMember[] = []): string => [
+  "```diff",
+  ...added.map(r => `+ ${r.user.tag}`),
+  ...removed.map(r => `- ${r.user.tag}`),
+  "```"
+].join("\n");

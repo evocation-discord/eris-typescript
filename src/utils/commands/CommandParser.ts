@@ -3,11 +3,10 @@ import { getArgumentParser } from "@utils/arguments/Arguments";
 import { ErisClient, RedisClient } from "@utils/client";
 import { escapeRegex } from "@utils/constants/regex";
 import { Blacklist, DisabledCommand } from "@utils/database/models";
-import { strings } from "@utils/messages";
+import { errorMessage, strings } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import Discord from "discord.js";
-import { errorMessage } from "..";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -58,13 +57,13 @@ export class CommandParserModule extends Module {
         else if (p.length === 0) args.push(undefined);
         else args.push(p);
       } catch (err) {
-        console.error(err);
+        const error = err as Error;
         // Return a error.
         try {
           if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
             await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
           }
-          return errorMessage(msg, strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`)));
+          return errorMessage(msg, strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`, error.message)));
         } catch (_) {
           // Do nothing. The user doesn't have the correct arguments.
           return;

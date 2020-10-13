@@ -1,21 +1,27 @@
-import { Module, command, inhibitors, Remainder, guildMemberParser, NEGATIONS, CommandCategories, commandDescriptions, strings, codeblockMember } from "@lib/utils";
-import { GuildMember, Message } from "discord.js";
+import { Remainder } from "@utils/arguments";
+import { command, CommandCategories } from "@utils/commands";
+import { env } from "@utils/constants";
+import { inhibitors } from "@utils/inhibitors/Inhibitor";
+import { commandDescriptions, strings, codeblockMember } from "@utils/messages";
+import { Module } from "@utils/modules";
+import { guildMember as guildMemberParser } from "@utils/parsers";
+import Discord from "discord.js";
 
 export default class PermissionsModule extends Module {
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart })
-  async negateart(msg: Message, _members: string): Promise<void> {
+  async negateart(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
-    const members: GuildMember[] = [];
+    const members: Discord.GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
-    const added: GuildMember[] = [];
-    const removed: GuildMember[] = [];
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGATIONS.ART)) {
-        member.roles.remove(NEGATIONS.ART);
+      if (member.roles.cache.has(env.NEGATIONS.ART)) {
+        member.roles.remove(env.NEGATIONS.ART);
         removed.push(member);
       } else {
-        member.roles.add(NEGATIONS.ART);
+        member.roles.add(env.NEGATIONS.ART);
         added.push(member);
       }
     }
@@ -23,19 +29,19 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback })
-  async negatefeedback(msg: Message, _members: string): Promise<void> {
+  async negatefeedback(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
-    const members: GuildMember[] = [];
+    const members: Discord.GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
-    const added: GuildMember[] = [];
-    const removed: GuildMember[] = [];
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGATIONS.FEEDBACK)) {
-        member.roles.remove(NEGATIONS.FEEDBACK);
+      if (member.roles.cache.has(env.NEGATIONS.FEEDBACK)) {
+        member.roles.remove(env.NEGATIONS.FEEDBACK);
         removed.push(member);
       } else {
-        member.roles.add(NEGATIONS.FEEDBACK);
+        member.roles.add(env.NEGATIONS.FEEDBACK);
         added.push(member);
       }
     }
@@ -43,19 +49,19 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
-  async negatereaction(msg: Message, _members: string): Promise<void> {
+  async negatereaction(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
-    const members: GuildMember[] = [];
+    const members: Discord.GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
-    const added: GuildMember[] = [];
-    const removed: GuildMember[] = [];
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGATIONS.REACTIONS)) {
-        member.roles.remove(NEGATIONS.REACTIONS);
+      if (member.roles.cache.has(env.NEGATIONS.REACTIONS)) {
+        member.roles.remove(env.NEGATIONS.REACTIONS);
         removed.push(member);
       } else {
-        member.roles.add(NEGATIONS.REACTIONS);
+        member.roles.add(env.NEGATIONS.REACTIONS);
         added.push(member);
       }
     }
@@ -63,19 +69,19 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
-  async negatemedia(msg: Message, _members: string): Promise<void> {
+  async negatemedia(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
-    const members: GuildMember[] = [];
+    const members: Discord.GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
-    const added: GuildMember[] = [];
-    const removed: GuildMember[] = [];
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGATIONS.MEDIA)) {
-        member.roles.remove(NEGATIONS.MEDIA);
+      if (member.roles.cache.has(env.NEGATIONS.MEDIA)) {
+        member.roles.remove(env.NEGATIONS.MEDIA);
         removed.push(member);
       } else {
-        member.roles.add(NEGATIONS.MEDIA);
+        member.roles.add(env.NEGATIONS.MEDIA);
         added.push(member);
       }
     }
@@ -83,19 +89,19 @@ export default class PermissionsModule extends Module {
   }
 
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
-  async negateexperience(msg: Message, _members: string): Promise<void> {
+  async negateexperience(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
-    const members: GuildMember[] = [];
+    const members: Discord.GuildMember[] = [];
     for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
     if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
-    const added: GuildMember[] = [];
-    const removed: GuildMember[] = [];
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
     for await (const member of members) {
-      if (member.roles.cache.has(NEGATIONS.EXPERIENCE)) {
-        member.roles.remove(NEGATIONS.EXPERIENCE);
+      if (member.roles.cache.has(env.NEGATIONS.EXPERIENCE)) {
+        member.roles.remove(env.NEGATIONS.EXPERIENCE);
         removed.push(member);
       } else {
-        member.roles.add(NEGATIONS.EXPERIENCE);
+        member.roles.add(env.NEGATIONS.EXPERIENCE);
         added.push(member);
       }
     }

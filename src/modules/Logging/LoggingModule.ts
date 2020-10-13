@@ -41,7 +41,7 @@ export default class LoggingModule extends Module {
     if (msg.guild.id !== env.MAIN_GUILD_ID) return;
     if (msg.channel.id === "528598741565833246") return;
     if (isStaff(msg)) return;
-    const links = msg.content.match(regex.linkRegex) || [];
+    const links = msg.content.match(regex.link) || [];
     const channel = await this.client.channels.fetch(env.CHANNELS.MODERATION_LOG) as Discord.TextChannel;
     if (links.length) {
       for await (const _link of links) {

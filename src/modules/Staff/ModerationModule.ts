@@ -11,7 +11,7 @@ export default class ModerationModule extends Module {
   @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote })
   async quote(msg: Discord.Message, messageLink: string): Promise<void> {
     msg.delete();
-    const executedRegex = regex.messageLinkRegex.exec(messageLink);
+    const executedRegex = regex.messageLink.exec(messageLink);
     if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
     const [, guildId, channelId, messageId] = executedRegex;
     try {

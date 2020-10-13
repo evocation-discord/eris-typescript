@@ -70,7 +70,7 @@ export default class BotOwner extends Module {
   @command({ inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Arguments.Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit })
   async edit(msg: Discord.Message, messageLink: string, newContent: string): Promise<Discord.Message | void> {
     let isError = false;
-    const executedRegex = regex.messageLinkRegex.exec(messageLink);
+    const executedRegex = regex.messageLink.exec(messageLink);
     if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
     const [, guildId, channelId, messageId] = executedRegex;
     const guild = this.client.guilds.resolve(guildId);

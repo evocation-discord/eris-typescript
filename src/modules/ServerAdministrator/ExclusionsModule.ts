@@ -1,18 +1,22 @@
-import { command, Module, ErisClient, Optional, regExpEsc, resolveUser, resolveRole, emotes, Remainder, ROLES, Embed, inhibitors, CommandCategories, commandDescriptions, strings, userParser, roleParser, errorMessage } from "@lib/utils";
-import { Message, Role, User } from "discord.js";
+import { command, CommandCategories } from "@utils/commands";
+import inhibitors from "@utils/inhibitors";
+import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import * as Arguments from "@utils/arguments";
+import Discord from "discord.js";
+import { env } from "@utils/constants";
 import { Blacklist } from "@database/models";
+import Embed from "@utils/embed";
+import { role as roleParser, user as userParser } from "@utils/parsers";
 
 export default class ExclusionsModule extends Module {
-  constructor(client: ErisClient) {
-    super(client);
-  }
 
-  @command({ inhibitors: [inhibitors.adminOnly], args: [new Optional(String), new Optional(new Remainder(String))], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.exclude, usage: "[user|role] [ID/mention]" })
-  async exclude(msg: Message, type?: "user" | "role", id?: string): Promise<void | Message> {
+  @command({ inhibitors: [inhibitors.adminOnly], args: [new Arguments.Optional(String), new Arguments.Optional(new Arguments.Remainder(String))], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.exclude, usage: "[user|role] [ID/mention]" })
+  async exclude(msg: Discord.Message, type?: "user" | "role", id?: string): Promise<void | Discord.Message> {
     if (msg.channel.type === "dm") return;
     if (!type || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
     if (type === "role") {
-      if (!msg.member.roles.cache.has(ROLES.LEAD_ADMINISTRATORS)) return;
+      if (!msg.member.roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)) return;
       const role = await roleParser(id, msg);
       if (typeof role === "string") return errorMessage(msg, strings.general.error(role));
       if (msg.member.roles.cache.has(role.id)) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
@@ -34,8 +38,8 @@ export default class ExclusionsModule extends Module {
     } else return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
   }
 
-  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Optional(String), new Optional(String), new Optional(new Remainder(String))], staff: true, description: commandDescriptions.exclusions, usage: "[remove|clear] [user|role] [ID/mention]" })
-  async exclusions(msg: Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Message|void> {
+  @command({ inhibitors: [inhibitors.adminOnly], group: CommandCategories["Server Administrator"], args: [new Arguments.Optional(String), new Arguments.Optional(String), new Arguments.Optional(new Arguments.Remainder(String))], staff: true, description: commandDescriptions.exclusions, usage: "[remove|clear] [user|role] [ID/mention]" })
+  async exclusions(msg: Discord.Message, what?: "remove" | "clear", type?: "user" | "role", id?: string): Promise<Discord.Message|void> {
     if (!what) {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
       const userBlacklists = await Blacklist.find({ where: { type: "user" } });

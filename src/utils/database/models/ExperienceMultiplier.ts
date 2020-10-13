@@ -6,7 +6,7 @@ export class XPMultiplier extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column("text")
   type: "user" | "server" | "role" | "channel";
 
   @Column({ nullable: true })
