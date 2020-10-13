@@ -163,7 +163,6 @@ export const strings = {
         `${emotes.commandresponses.soulstones} **\`e!vb\`** Command Access [COMING SOON]`,
         `${emotes.commandresponses.soulstones} **\`e!muse\`** Command Access`
       ].join("\n"),
-      disboardRoleAdd: "[FORCED REVOCATION] This role is protected from assignment.",
       hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
     },
     permissions: {

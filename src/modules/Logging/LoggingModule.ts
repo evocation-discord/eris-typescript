@@ -75,14 +75,6 @@ export default class LoggingModule extends Module {
       channel.send(strings.modules.logging.userBoost(newMember.user));
     }
   }
-
-  @monitor({ event: "guildMemberUpdate" })
-  async onDisboardRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
-    if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
-    const role = newMember.guild.roles.cache.find(r => r.name === "[BOT] DISBOARD");
-    if (!role) return;
-    if (!oldMember.roles.cache.has(role.id) && newMember.roles.cache.has(role.id)) newMember.roles.remove(role, strings.modules.logging.disboardRoleAdd);
-  }
 }
 
 const isStaff = (msg: Discord.Message): boolean => msg.member.roles.cache.some(role => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id));
