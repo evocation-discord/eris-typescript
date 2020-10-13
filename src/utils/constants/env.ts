@@ -53,7 +53,7 @@ const DATABASE_INFO = {
 
 const MAIN_GUILD_ID = process.env.MAIN_GUILD_ID;
 
-export default {
+export {
   ROLES,
   CHANNELS,
   NEGATIONS,

@@ -1,5 +1,5 @@
 import { listener } from "./decorator";
 
-export default {
+export {
   listener
 };

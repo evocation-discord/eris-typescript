@@ -1,13 +1,13 @@
-import { Message } from "discord.js";
-import { Module } from "../modules/Module";
-import { ErisClient } from "../client/ErisClient";
-import { getArgumentParser } from "../arguments/Arguments";
-import ArgTextProcessor from "../arguments/ArgumentProcessor";
-import { escapeRegex, emotes, errorMessage } from "..";
-import { monitor } from "../monitor/decorator";
-import { Blacklist, DisabledCommand } from "../database/models";
-import { strings } from "../messages";
-import RedisClient from "../client/RedisClient";
+import ArgTextProcessor from "@utils/arguments/ArgumentProcessor";
+import { getArgumentParser } from "@utils/arguments/Arguments";
+import { ErisClient, RedisClient } from "@utils/client";
+import { escapeRegex } from "@utils/constants/regex";
+import { Blacklist, DisabledCommand } from "@utils/database/models";
+import { strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import { monitor } from "@utils/monitor";
+import Discord from "discord.js";
+import { errorMessage } from "..";
 
 export class CommandParserModule extends Module {
   constructor(client: ErisClient) {
@@ -15,7 +15,7 @@ export class CommandParserModule extends Module {
   }
 
   @monitor({ event: "message" })
-  async onMessage(msg: Message): Promise<Message|void> {
+  async onMessage(msg: Discord.Message): Promise<Discord.Message|void> {
     if (msg.author && msg.author.bot) return;
 
     const prefix = process.env.PREFIX;

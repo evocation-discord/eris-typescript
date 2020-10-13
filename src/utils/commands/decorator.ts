@@ -1,9 +1,8 @@
-import { Message } from "discord.js";
-import { Inhibitor } from "../inhibitors/Inhibitor";
-import { Module } from "../modules/Module";
-import { Remainder, Optional } from "../arguments/Arguments";
-import { supportedArgs } from "../arguments/supportedArgs";
-import { CommandCategories } from "../constants";
+import * as Arguments from "@utils/arguments";
+import { supportedArgs } from "@utils/arguments/supportedArgs";
+import { Inhibitor } from "@utils/inhibitors";
+import { Module } from "@utils/modules";
+import { CommandCategories } from ".";
 
 export interface ICommandDecoratorOptions {
   description?: string,
@@ -13,7 +12,7 @@ export interface ICommandDecoratorOptions {
   group: CommandCategories,
   staff?: boolean,
   admin?: boolean,
-  args: (supportedArgs | Remainder | Optional)[]
+  args: (supportedArgs | Arguments.Remainder | Arguments.Optional)[]
 }
 
 interface ICommandDecoratorMeta {

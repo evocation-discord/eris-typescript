@@ -1,5 +1,5 @@
 import { monitor } from "./decorator";
 
-export default {
+export {
   monitor
 };

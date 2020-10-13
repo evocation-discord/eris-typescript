@@ -1,5 +1,5 @@
 import { Listener } from "./Listener";
-import { ErisClient } from "../client/ErisClient";
+import { ErisClient } from "@utils/client";
 
 export class ListenerManager {
   listeners: Set<Listener> = new Set();

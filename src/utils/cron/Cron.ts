@@ -1,4 +1,4 @@
-import { Module } from "../modules/Module";
+import { Module } from "@utils/modules";
 import { CronJob } from "cron";
 
 export interface Cron {

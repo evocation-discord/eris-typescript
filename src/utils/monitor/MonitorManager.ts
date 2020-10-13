@@ -1,4 +1,4 @@
-import { ErisClient } from "../client/ErisClient";
+import { ErisClient } from "@utils/client";
 import { Monitor } from "./Monitor";
 
 export class MonitorManager {

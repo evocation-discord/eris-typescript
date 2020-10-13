@@ -1,4 +1,4 @@
-import RedisClient from "./RedisClient";
+import { RedisClient } from "./RedisClient";
 import { ErisClient } from "./ErisClient";
 
 export {

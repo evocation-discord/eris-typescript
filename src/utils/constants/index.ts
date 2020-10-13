@@ -2,9 +2,9 @@ import regex from "./regex";
 import * as levels from "./levels";
 import emotes from "./emotes";
 import colors from "./colors";
-import env from "./env";
+import * as env from "./env";
 
-export default {
+export {
   regex,
   levels,
   emotes,

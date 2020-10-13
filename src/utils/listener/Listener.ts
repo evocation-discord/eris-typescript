@@ -1,8 +1,8 @@
-import { Module } from "../modules/Module";
-import { ClientEvents } from "discord.js";
+import { Module } from "@utils/modules";
+import Discord from "discord.js";
 
 export interface Listener {
-    event: keyof ClientEvents,
+    event: keyof Discord.ClientEvents,
     id: string,
     module: Module,
     func: Function,

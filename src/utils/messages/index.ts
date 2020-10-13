@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { emotes, ROLES, timeFormatter } from "..";
-import { PermissionResolvable, Snowflake, Message, User, GuildEmoji, Guild, TextChannel, Role } from "discord.js";
-import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "../database/models";
-import { GuildMember } from "discord.js";
-import { CHANNELS } from "../constants";
+import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "@database/models";
+import Discord from "discord.js";
+import { emotes, env } from "@utils/constants";
+import { timeFormatter } from "@utils/time";
 
 export const strings = {
   general: {
@@ -32,7 +31,7 @@ export const strings = {
       description: (duration: string) => [
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
-        `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **LEVEL 3** or above, your entrance will be nullified.\n`,
+        `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${env.ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **LEVEL 3** or above, your entrance will be nullified.\n`,
         "Want to receive notifications everytime a giveaway is active? Run `!join Giveaways` in <#528598988673253376>."
       ].join("\n")
     },
@@ -54,15 +53,15 @@ export const strings = {
   inhibitors: {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
     notInGuild: "You are not in a guild.",
-    missingDiscordPermission: (permission: PermissionResolvable) => `You do not satisfy a Discord permission node: **${permission}**.`,
+    missingDiscordPermission: (permission: Discord.PermissionResolvable) => `You do not satisfy a Discord permission node: **${permission}**.`,
     cooldown: (cooldown: string) => `You must wait **${cooldown}** to run this command!`,
     requestRejectedBotCommands: "Request has been rejected. Please run this command in <#528598988673253376>!",
     requestRejected: "Request has been rejected."
   },
   modules: {
     directmessages: {
-      embedFooter: (messageid: Snowflake) => `Message ID: ${messageid}`,
-      embedAuthor: (message: Message) => `${message.author.tag} (${message.author.id})`,
+      embedFooter: (messageid: Discord.Snowflake) => `Message ID: ${messageid}`,
+      embedAuthor: (message: Discord.Message) => `${message.author.tag} (${message.author.id})`,
       attachments: "Attachments",
       directMessageReceived: `${emotes.logging.messagecreation} **DIRECT MESSAGE RECEIVED**`,
       directMessageEdited: `${emotes.logging.messageedit} **DIRECT MESSAGE EDITED**`,
@@ -71,32 +70,32 @@ export const strings = {
       orignalContentError: "Old Message content couldn't be fetched.",
       editedMessage: "Edited Message",
       commands: {
-        directMessageSentExecution: (message: Message, user: User) => `${emotes.logging.messagecreation} **\`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`,
-        directMessageDeleteExecution: (message: Message, user: User) => `${emotes.logging.messagedeletion} **\`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to delete a Direct Message that was previously sent to **\`${user.tag}\`** (\`${user.id}\`).`,
-        directMessageSent: (user: User, content: string) => `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${content}**.`,
-        directMessageDeleted: (user: User, content: string) => `Direct Message to **\`${user.tag}\`** (\`${user.id}\`) has been deleted - **${content}**.`
+        directMessageSentExecution: (message: Discord.Message, user: Discord.User) => `${emotes.logging.messagecreation} **\`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to send a Direct Message to **\`${user.tag}\`** (\`${user.id}\`).`,
+        directMessageDeleteExecution: (message: Discord.Message, user: Discord.User) => `${emotes.logging.messagedeletion} **\`${message.author.tag}\`** (\`${message.author.id}\`) ran an administrative command in ${message.channel} (\`${message.channel.id}\`), forcing me to delete a Direct Message that was previously sent to **\`${user.tag}\`** (\`${user.id}\`).`,
+        directMessageSent: (user: Discord.User, content: string) => `Direct Message has been sent to **\`${user.tag}\`** (\`${user.id}\`) - **${content}**.`,
+        directMessageDeleted: (user: Discord.User, content: string) => `Direct Message to **\`${user.tag}\`** (\`${user.id}\`) has been deleted - **${content}**.`
       }
     },
     donations: {
       auditLogDonationRoleAdd: "[FORCED REVOCATION] Authenticity cannot be verified.",
       commands: {
         logdonationBotError: "The identifier you inputted is attributed to that of a bot. Please only use this command for its intended purpose.",
-        logdonationAlreadyHyperion: (user: User) => `I have logged this donation; ${user} already has the **<@&${ROLES.HYPERION}>** role.`,
-        logdonationNewHyperion: (user: User) => `I have logged this donation and awarded ${user} with the **<@&${ROLES.HYPERION}>** role.`,
-        awardMiraculum: (user: User) => `I have awarded ${user} with the **<@&${ROLES.EVOCATION_MIRACULUM}>** role. Please take into consideration that this message will be returned even if the user already has the role prior to the command invocation being sent.`,
-        logdonationLogEntry: (user: User, item: string, executor: User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
+        logdonationAlreadyHyperion: (user: Discord.User) => `I have logged this donation; ${user} already has the **<@&${env.ROLES.HYPERION}>** role.`,
+        logdonationNewHyperion: (user: Discord.User) => `I have logged this donation and awarded ${user} with the **<@&${env.ROLES.HYPERION}>** role.`,
+        awardMiraculum: (user: Discord.User) => `I have awarded ${user} with the **<@&${env.ROLES.EVOCATION_MIRACULUM}>** role. Please take into consideration that this message will be returned even if the user already has the role prior to the command invocation being sent.`,
+        logdonationLogEntry: (user: Discord.User, item: string, executor: Discord.User) => `\`[${timeFormatter()}]\` ${emotes.giveaway.donation} **\`${user.tag}\`** (\`${user.id}\`) donated **${item}**. This donation was logged by **\`${executor.tag}\`** (\`${executor.id}\`).`
       }
     },
     emojis: {
-      emojiAdded: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      emojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      emojiDeleted: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
-      animatedEmojiAdded: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
-      animatedEmojiUpdated: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      animatedEmojiDeleted: (emoji: GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
+      emojiAdded: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      emojiUpdated: (oldEmoji: Discord.GuildEmoji, newEmoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      emojiDeleted: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
+      animatedEmojiAdded: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
+      animatedEmojiUpdated: (oldEmoji: Discord.GuildEmoji, newEmoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
+      animatedEmojiDeleted: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
     },
     events: {
-      announcementMessages: (message: Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
+      announcementMessages: (message: Discord.Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
     },
     exclusions: {
       cantAddRoleToExclusions: "You cannot add that role as an exclusion as it would constitute your exclusion, too.",
@@ -120,7 +119,7 @@ export const strings = {
       notValidMessageID: "That is not a valid message ID! Try running without an ID to use the most recent giveaway in this channel.",
       giveawayEnded: "Giveaway has been ended.",
       noGiveawayMessageLinked: "The message you linked is not a giveaway message!",
-      rerollNewWinner: (name: string, winner: User, messageLink: string) => [
+      rerollNewWinner: (name: string, winner: Discord.User, messageLink: string) => [
         `The new winner of **${name}** is ${winner}.`,
         `**MESSAGE LINK**: <${messageLink}>`
       ].join("\n"),
@@ -144,17 +143,17 @@ export const strings = {
     },
     logging: {
       anonymisedAudit: (cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ANONYMISED]\`** ${emotes.logging.anonymisedaudit} Command \`${cmdTrigger}\` was performed. No further information is available.`,
-      administrativeCommand: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${emotes.logging.administrativeaudit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
-      command: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
-      disabledCommand: (msg: Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed a disabled command \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
-      linkResolver: (msg: Message, link: string, resLink: string) => [
+      administrativeCommand: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${emotes.logging.administrativeaudit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
+      command: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
+      disabledCommand: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed a disabled command \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
+      linkResolver: (msg: Discord.Message, link: string, resLink: string) => [
         `\`[${timeFormatter()}]\` **\`[LINK REDIRECT RESOLVER]\`** ${emotes.logging.linkresolver} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) sent a message (\`${msg.id}\`) containing a redirection-based link in ${msg.channel} (\`${msg.channel.id}\`).\n`,
         `**UNRESOLVED LINK**: <${link}>`,
         `**RESOLVED LINK**: <${resLink}>\n`,
         "No automatic action has been taken against their account or the message itself. Please review the above to ensure that the link is not violative of Evocation's regulations."
       ].join("\n"),
-      userUpdate: (oldUser: User, newUser: User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`,
-      userBoost: (user: User) => [
+      userUpdate: (oldUser: Discord.User, newUser: Discord.User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`,
+      userBoost: (user: Discord.User) => [
         `Thank you for boosting **EVOCATION**, ${user}! You now have access to change your own nickname, embed links, attach files and stream into the server. If these permissions seem familiar to you, that means you are **LEVEL 3** or above.\n`,
         "**SUCCESSFULLY UNLOCKED**:",
         `${emotes.commandresponses.soulstones} Coloured **EOS** Role [HOISTED]`,
@@ -173,7 +172,7 @@ export const strings = {
     botowner: {
       emojis: {
         notInServer: "I cannot retrieve emoji information about that server. Are you sure I'm in it?",
-        messageHeader: (server: Guild) => [
+        messageHeader: (server: Discord.Guild) => [
           "__**EMOJI**__\n",
           `**SERVER**: ${server.name}`,
           `**SERVER ID**: ${server.id}\n`
@@ -277,8 +276,8 @@ export const strings = {
         "A group of clowns is sometimes called a giggle.",
         "Spiders recycle webs by eating them.",
       ],
-      cancel_0: (user: User) => `${user} has been **CANCELLED**.`,
-      cancel_1: (user: User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
+      cancel_0: (user: Discord.User) => `${user} has been **CANCELLED**.`,
+      cancel_1: (user: Discord.User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
       cantCancelYourself: "You can't cancel yourself in this way.",
       cantCancelAdmins: "no ❤️",
       cantCancelEris: "You can't cancel me.",
@@ -293,7 +292,7 @@ export const strings = {
       "Don't mention it."
     ],
     erisGoodnightMessage: [
-      (message: Message) => `<:catblush:752075380227309598> Goodnight, **${message.author.username}**!`,
+      (message: Discord.Message) => `<:catblush:752075380227309598> Goodnight, **${message.author.username}**!`,
       () => "Rest well, dear.",
       () => "Until the morning, then, I guess.",
       () => "See you!",
@@ -324,9 +323,9 @@ export const strings = {
       },
       xpAdded: (amount: number, users: number) => `Added **${amount}** experience to **${users}** user(s).`,
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
-      levelSet: (user: User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
+      levelSet: (user: Discord.User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
-      multiplierCreated: (type: string, us: User | Role | Guild | TextChannel, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Role ? `**${us}** (\`${us.id}\`)` : us instanceof TextChannel ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Role ? "Users that have this role" : us instanceof Guild ? `All members of **${us.name.toUpperCase()}**` : us instanceof TextChannel ? "Users that talk in this channel" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
+      multiplierCreated: (type: string, us: Discord.User | Discord.Role | Discord.Guild | Discord.TextChannel, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof Discord.User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Discord.Role ? `**${us}** (\`${us.id}\`)` : us instanceof Discord.TextChannel ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Discord.Role ? "Users that have this role" : us instanceof Discord.Guild ? `All members of **${us.name.toUpperCase()}**` : us instanceof Discord.TextChannel ? "Users that talk in this channel" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       missingRoleId: "No role ID can be deduced from your command invocation. Please try again.",
       missingChannelId: "No channel ID can be deduced from your command invocation. Please try again.",
@@ -345,9 +344,9 @@ export const strings = {
           return `→ **Channel**: **<#${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
       },
       levelRole: {
-        add: (role: Role, level: number) => `Registered **${role}** as a levelled role. It will be automatically awarded to users at **LEVEL ${level}**.`,
-        remove: (role: Role) => `Removed **${role}** from the levelled roles registry.`,
-        edit: (role: Role, level: number) => `Updated **${role}** to **LEVEL ${level}**.`,
+        add: (role: Discord.Role, level: number) => `Registered **${role}** as a levelled role. It will be automatically awarded to users at **LEVEL ${level}**.`,
+        remove: (role: Discord.Role) => `Removed **${role}** from the levelled roles registry.`,
+        edit: (role: Discord.Role, level: number) => `Updated **${role}** to **LEVEL ${level}**.`,
         alreadyRegistered: "This role is already registered as a level role.",
         doesNotExist: "This role is not configured to be awarded upon meeting an experience threshold.",
         noLevelledRoles: "No levelled roles have been configured.",
@@ -357,7 +356,7 @@ export const strings = {
       leaderboard: {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
         boosterHeader: `\n${emotes.commandresponses.leaderboard.blobboost} **BOOSTER LEADERBOARD**`,
-        row: (rank: number, user: User, level: number, totalXP: number, booster = false) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
+        row: (rank: number, user: Discord.User, level: number, totalXP: number, booster = false) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
       },
       checkmultipliers: {
         userProvided: "The above multipliers have been determined to influence this user's experience gain.",
@@ -366,7 +365,7 @@ export const strings = {
     },
     moderation: {
       quote: {
-        embedAuthor: (msg: Message) => `${msg.author.tag} (${msg.author.id})`,
+        embedAuthor: (msg: Discord.Message) => `${msg.author.tag} (${msg.author.id})`,
         embedFooter: (msgId: string, channelName: string) => `Message ID: ${msgId} | Sent in #${channelName}`,
         unknownError: "Cannot quote this message; do I have permission to view the channel in which this message originates?",
         restrictedChannel: "You cannot quote a message from that channel as its access is highly restricted.",
@@ -377,34 +376,34 @@ export const strings = {
       cantAffiliateYourself: "You cannot execute affiliate commands on yourself.",
       cantAffiliateBots: "You may only use this command on users, not bots. Please only use these affiliation commands with necessity. Thank you.",
       affiliate: {
-        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has been awarded the **<@&${ROLES.AFFILIATE}>** role.`,
+        success: (user: Discord.User) => `**\`${user.tag}\`** (\`${user.id}\`) has been awarded the **<@&${env.ROLES.AFFILIATE}>** role.`,
         denied: `${emotes.commandresponses.denial} That user is already an Evocation affiliate.`,
-        audit: (user: User) => `User was selected to represent an affiliated server by ${user.tag}.`
+        audit: (user: Discord.User) => `User was selected to represent an affiliated server by ${user.tag}.`
       },
       removeaffiliate: {
-        success: (user: User) => `**\`${user.tag}\`** (\`${user.id}\`) has had their **<@&${ROLES.AFFILIATE}>** role removed.`,
+        success: (user: Discord.User) => `**\`${user.tag}\`** (\`${user.id}\`) has had their **<@&${env.ROLES.AFFILIATE}>** role removed.`,
         denied: `${emotes.commandresponses.denial} That user is not an Evocation affiliate.`,
-        audit: (user: User) => `Representative for a server is being changed/affiliation is being dissolved. Responsible User: ${user.tag}.`
+        audit: (user: Discord.User) => `Representative for a server is being changed/affiliation is being dissolved. Responsible User: ${user.tag}.`
       },
       listaffiliates: {
         embedFieldTitle: "Affiliates",
         noAffiliate: "→ There are currently no Affiliate Representatives.",
-        affiliateMap: (member: GuildMember) => `→ ${member} (\`${member.id}\`)`,
+        affiliateMap: (member: Discord.GuildMember) => `→ ${member} (\`${member.id}\`)`,
       },
       roleRemoveNotLegitimacy: "[CONDITIONAL REVOCATION] Role was not added to user with legitimacy.",
       roleAddNotLegitimacy: "[FORCED ATTRIBTUION] Role was not removed from user with legitimacy.",
-      welcomeMessage: (user: User) => [
+      welcomeMessage: (user: Discord.User) => [
         `Welcome, ${user}, to Evocation's **Affiliate Lounge**.`,
-        `You have been selected as an **Affiliate Representative** for a server that is listed in <#${CHANNELS.AFFILIATE_LOUNGE}>.`,
+        `You have been selected as an **Affiliate Representative** for a server that is listed in <#${env.CHANNELS.AFFILIATE_LOUNGE}>.`,
         "This channel is intended as a secure medium of liaison - you can communicate updates to your listing or questions about affiliation. Please also use this channel to notify us about anything that you believe may be of significance in relation to the future operation of your server that may influence your association with our server.",
         "This channel's access is restricted to **Administrators**, the **Server Growth Lead** and **Affiliate Representatives**."
       ].join("\n\n")
     },
     rolemanagement: {
       dethrone: {
-        auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
+        auditLogReason: (executor: Discord.User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
         success: `${emotes.logging.dethrone} **SUCCESS**: I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.`,
-        log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
+        log: (executor: Discord.User, members: { member: Discord.GuildMember, roles: Discord.Role[]}[]) => {
           const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.dethrone} **${members.length}** member${members.length === 1 ? "": "s"} was/were dethroned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
             strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
@@ -413,9 +412,9 @@ export const strings = {
         }
       },
       crown: {
-        auditLogReason: (executor: User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
+        auditLogReason: (executor: Discord.User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
         success: `${emotes.logging.crown} **SUCCESS**: I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.`,
-        log: (executor: User, members: { member: GuildMember, roles: Role[]}[]) => {
+        log: (executor: Discord.User, members: { member: Discord.GuildMember, roles: Discord.Role[]}[]) => {
           const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.crown} **${members.length}** member${members.length === 1 ? "": "s"} was/were crowned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
             strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
@@ -496,4 +495,9 @@ const rankEmoji = (rank: number): string => {
   if (rank === 2) return `${emotes.commandresponses.leaderboard.numbertwo} `;
   if (rank === 3) return `${emotes.commandresponses.leaderboard.numberthree} `;
   return "       ";
+};
+
+export const errorMessage = async (message: Discord.Message, error: string): Promise<void> => {
+  const msg = await message.channel.send(error);
+  msg.delete({ timeout: 5000 });
 };

@@ -1,4 +1,4 @@
-import { ErisClient } from "../client/ErisClient";
+import { ErisClient } from "@utils/client";
 import { Cron } from "./Cron";
 import { CronJob } from "cron";
 

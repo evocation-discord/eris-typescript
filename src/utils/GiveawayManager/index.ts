@@ -1,15 +1,16 @@
-import { Snowflake } from "discord.js";
-import { Giveaway } from "../database/models";
-import { scheduler, Embed, ROLES, getDuration } from "..";
-import { client } from "../../..";
-import { TextChannel } from "discord.js";
-import { emotes } from "../constants";
-import { strings } from "../messages";
+import { emotes } from "@utils/constants";
+import { Giveaway } from "@utils/database/models";
+import Embed from "@utils/embed";
+import { strings } from "@utils/messages";
+import scheduler from "@utils/scheduler";
+import { getDuration } from "@utils/time";
+import Discord from "discord.js";
+import { client } from "../../";
 
 export interface GiveawayArgs {
   startTime: number,
   duration: number,
-  channelId: Snowflake,
+  channelId: Discord.Snowflake,
   giveawayId: string,
   endTime: number
 }
@@ -51,7 +52,7 @@ export default async function (args: GiveawayArgs): Promise<void> {
     // Run each second
     scheduler.newEvent("../GiveawayManager", 1, args);
   }
-};
+}
 
 const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
   const embed = new Embed()
@@ -60,7 +61,7 @@ const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
     .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners))
     .setTimestamp(new Date(args.startTime + giveaway.duration))
     .setDescription(strings.giveaway.embed.noWinner);
-  const channel = await client.channels.fetch(args.channelId) as TextChannel;
+  const channel = await client.channels.fetch(args.channelId) as Discord.TextChannel;
   const guild = await channel.guild.fetch();
   const message = await channel.messages.fetch(giveaway.messageId);
 
@@ -72,7 +73,7 @@ const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway) => {
 export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
   const embed = new Embed()
     .setColor("#36393F");
-  const channel = await client.channels.fetch(args.channelId) as TextChannel;
+  const channel = await client.channels.fetch(args.channelId) as Discord.TextChannel;
   const guild = await channel.guild.fetch();
   const message = await channel.messages.fetch(giveaway.messageId);
   const reaction = message.reactions.resolve(emotes.giveaway.giftreactionid);
@@ -102,7 +103,7 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
 };
 
 const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway) => {
-  const channel = await client.channels.fetch(args.channelId) as TextChannel;
+  const channel = await client.channels.fetch(args.channelId) as Discord.TextChannel;
   const message = await channel.messages.fetch(giveaway.messageId);
   if (!message) {
     giveaway.ended = true;

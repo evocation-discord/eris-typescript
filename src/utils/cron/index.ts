@@ -1,5 +1,5 @@
 import { cron } from "./decorator";
 
-export default {
+export {
   cron
 };

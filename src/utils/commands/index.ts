@@ -11,7 +11,7 @@ enum CommandCategories {
   "Affiliation Management" = "Affiliation Management"
 }
 
-export default {
+export {
   command,
   CommandCategories
 };

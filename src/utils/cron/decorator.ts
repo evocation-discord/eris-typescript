@@ -1,4 +1,4 @@
-import { Module } from "../modules/Module";
+import { Module } from "@utils/modules";
 
 export interface ICronDecoratorMeta {
   id: string,

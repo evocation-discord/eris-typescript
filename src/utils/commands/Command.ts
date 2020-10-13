@@ -1,13 +1,12 @@
-import { Message } from "discord.js";
-import { Module } from "../modules/Module";
-import { Inhibitor } from "../inhibitors/Inhibitor";
-import { supportedArgs } from "../arguments/supportedArgs";
-import { Remainder, Optional } from "../arguments/Arguments";
-import { CommandCategories } from "../constants";
+import { Module } from "@utils/modules";
+import { Inhibitor } from "@utils/inhibitors";
+import { supportedArgs } from "@utils/arguments/supportedArgs";
+import * as Arguments from "@utils/arguments";
+import { CommandCategories } from "@utils/commands";
 
 export interface Command {
     func: Function,
-    args?: (supportedArgs | Remainder | Optional)[],
+    args?: (supportedArgs | Arguments.Remainder | Arguments.Optional)[],
     triggers: string[],
     id: string,
     description?: string,

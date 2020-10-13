@@ -1,4 +1,4 @@
-import { Module } from "../modules/Module";
+import { Module } from "../modules";
 import type { ClientEvents } from "discord.js";
 
 export interface IMonitorDecoratorMeta {

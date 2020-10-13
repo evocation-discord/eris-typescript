@@ -2,12 +2,12 @@ import { Client } from "discord.js";
 import chokidar from "chokidar";
 import { join } from "path";
 import { readdirSync } from "fs";
-import { CommandManager } from "../commands/CommandManager";
-import { ListenerManager } from "../listener/ListenerManager";
-import { Module } from "../modules/Module";
-import { CommandParserModule } from "../commands/CommandParser";
-import { MonitorManager } from "../monitor/MonitorManager";
-import { CronManager } from "../cron/CronManager";
+import { CommandManager } from "@utils/commands/CommandManager";
+import { ListenerManager } from "@utils/listener/ListenerManager";
+import { Module } from "@utils/modules";
+import { CommandParserModule } from "@utils/commands/CommandParser";
+import { MonitorManager } from "@utils/monitor/MonitorManager";
+import { CronManager } from "@utils/cron/CronManager";
 
 export class ErisClient extends Client {
   public commandManager: CommandManager;

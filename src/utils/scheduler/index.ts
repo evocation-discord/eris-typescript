@@ -1,5 +1,5 @@
+import { RedisClient } from "@utils/client";
 import path from "path";
-import { RedisClient } from "../client";
 
 interface Event {
   timestamp: number,
