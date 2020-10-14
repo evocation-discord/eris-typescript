@@ -1,16 +1,17 @@
 import { ErisClient } from "@utils/client";
-import { Cron } from "./Cron";
 import { CronJob } from "cron";
+import { Cron } from "./Cron";
 
 export class CronManager {
   crons: Set<Cron> = new Set();
+
   constructor(public client: ErisClient) { }
 
   add(cron: Cron): void {
     if (this.crons.has(cron)) return;
 
-    const conflictingCron = Array.from(this.crons).find(
-      l => l.id === cron.id
+    const conflictingCron = [...this.crons].find(
+      (l) => l.id === cron.id
     );
     if (conflictingCron) {
       throw new Error(
@@ -26,6 +27,6 @@ export class CronManager {
   }
 
   getById(id: string): Cron | undefined {
-    return Array.from(this.crons).find(c => c.id === id);
+    return [...this.crons].find((c) => c.id === id);
   }
 }

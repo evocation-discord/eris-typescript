@@ -34,10 +34,10 @@ export class CommandParserModule extends Module {
     // blacklists, woohoo
     const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
     const userBlacklists = await Blacklist.find({ where: { type: "user" } });
-    if (userBlacklists.find(u => u.id === msg.author.id)) return;
-    if (roleBlacklists.find(r => msg.member.roles.cache.has(r.id))) return;
+    if (userBlacklists.find((u) => u.id === msg.author.id)) return;
+    if (roleBlacklists.find((r) => msg.member.roles.cache.has(r.id))) return;
 
-    for (const inhibitor of cmd.inhibitors) {
+    for await (const inhibitor of cmd.inhibitors) {
       const reason = await inhibitor(msg, cmd);
       if (reason) {
         // It inhibited
@@ -48,7 +48,7 @@ export class CommandParserModule extends Module {
     }
     const processor = new ArgTextProcessor(stringArgs);
     const args: unknown[] = [];
-    for (const cmdArg of cmd.args || []) {
+    for await (const cmdArg of cmd.args || []) {
       const parser = getArgumentParser(cmdArg);
       try {
         // Process the argument.

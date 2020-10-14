@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from "typeorm";
+import {
+  Entity, BaseEntity, Column, PrimaryColumn
+} from "typeorm";
 
 @Entity("xpexclusions")
 export class XPExclusion extends BaseEntity {

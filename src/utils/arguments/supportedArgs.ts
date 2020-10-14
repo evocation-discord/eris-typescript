@@ -1,7 +1,9 @@
 import Discord from "discord.js";
-import Duration from "./Duration";
 import { strings } from "@utils/messages";
-import { guild, guildMember, role, textChannel, user } from "@utils/parsers";
+import {
+  guild, guildMember, role, textChannel, user
+} from "@utils/parsers";
+import Duration from "./Duration";
 
 // All supported arguments.
 export type supportedArgs = typeof Discord.GuildMember | typeof Discord.User | typeof Discord.Role | typeof Discord.Guild | typeof Discord.TextChannel | typeof String | typeof Number | typeof Duration;
@@ -11,6 +13,7 @@ export const allParsers: Map<supportedArgs, (arg: string, msg: Discord.Message) 
 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
+  // eslint-disable-next-line radix
   if (isInt(arg)) return parseInt(arg);
   throw new Error(strings.arguments.invalidNumber);
 };
@@ -39,12 +42,12 @@ const roleParser = async (arg: string, msg: Discord.Message): Promise<Discord.Ro
 allParsers.set(Discord.Role, roleParser);
 
 // Handle string parsing.
-allParsers.set(String, async x => x);
+allParsers.set(String, async (x) => x);
 
-const isInt = value => {
-  if (isNaN(value)) {
+const isInt = (value): boolean => {
+  if (Number.isNaN(value)) {
     return false;
   }
   const x = parseFloat(value);
-  return (x | 0) === x;
+  return (x || 0) === x;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Module } from "@utils/modules";
 import { CronJob } from "cron";
 

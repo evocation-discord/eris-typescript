@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Module } from "@utils/modules";
 
 export interface ICronDecoratorMeta {
@@ -11,23 +12,25 @@ export interface ICronDecoratorOptions {
 }
 
 export function cron(opts: ICronDecoratorOptions) {
+  // eslint-disable-next-line func-names
   return function (
     target: Module,
     propertyKey: string,
     descriptor: PropertyDescriptor
   ): void {
     const targetConstructorName = target.constructor.name; // Making this a variable to avoid some weird TS bug.
-    if (!(target instanceof Module))
+    if (!(target instanceof Module)) {
       throw new TypeError(
         `${targetConstructorName} doesn't extend Module`
       );
-    if (!(descriptor.value.constructor instanceof Function))
+    }
+    if (!(descriptor.value.constructor instanceof Function)) {
       throw new TypeError(
         `Decorator needs to be applied to a Method. (${targetConstructorName}#${descriptor.value.name} was ${descriptor.value.constructor.name})`
       );
+    }
 
-    const cronMeta: ICronDecoratorMeta[] =
-      Reflect.getMetadata("eris:cronMetas", target) || [];
+    const cronMeta: ICronDecoratorMeta[] = Reflect.getMetadata("eris:cronMetas", target) || [];
 
     cronMeta.push({
       id: propertyKey,

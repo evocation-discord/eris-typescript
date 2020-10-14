@@ -8,7 +8,9 @@ import { guildMember as guildMemberParser } from "@utils/parsers";
 import Discord from "discord.js";
 
 export default class PermissionsModule extends Module {
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["na"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateart
+  })
   async negateart(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
     const members: Discord.GuildMember[] = [];
@@ -28,7 +30,9 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["nf"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatefeedback
+  })
   async negatefeedback(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
     const members: Discord.GuildMember[] = [];
@@ -48,7 +52,9 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Feedback")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["nr"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatereaction
+  })
   async negatereaction(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
     const members: Discord.GuildMember[] = [];
@@ -68,7 +74,9 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Reaction")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["nm"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negatemedia
+  })
   async negatemedia(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
     const members: Discord.GuildMember[] = [];
@@ -88,7 +96,9 @@ export default class PermissionsModule extends Module {
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Media")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["ne"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateexperience
+  })
   async negateexperience(msg: Discord.Message, _members: string): Promise<void> {
     msg.delete();
     const members: Discord.GuildMember[] = [];

@@ -3,13 +3,14 @@ import { Monitor } from "./Monitor";
 
 export class MonitorManager {
   monitors: Set<Monitor> = new Set();
+
   constructor(public client: ErisClient) { }
 
   add(monitor: Monitor): void {
     if (this.monitors.has(monitor)) return;
 
-    const conflictingMonitor = Array.from(this.monitors).find(
-      l => l.id === monitor.id
+    const conflictingMonitor = [...this.monitors].find(
+      (l) => l.id === monitor.id
     );
     if (conflictingMonitor) {
       throw new Error(
@@ -24,6 +25,6 @@ export class MonitorManager {
   }
 
   getById(id: string): Monitor | undefined {
-    return Array.from(this.monitors).find(c => c.id === id);
+    return [...this.monitors].find((c) => c.id === id);
   }
 }

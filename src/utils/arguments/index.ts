@@ -1,6 +1,8 @@
+import {
+  TextChannel, Role, Guild, User, GuildMember
+} from "discord.js";
 import { Remainder, Optional } from "./Arguments";
 import Duration from "./Duration";
-import { TextChannel, Role, Guild, User, GuildMember } from "discord.js";
 
 export {
   Remainder,
@@ -10,5 +12,5 @@ export {
   Role,
   Guild,
   User,
-  GuildMember,
+  GuildMember
 };

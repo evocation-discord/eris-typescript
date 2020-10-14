@@ -3,10 +3,10 @@ export function getLevelXP(num: number): number {
 }
 
 export function getLevelFromXP(xp: number): number {
-  let remaining_xp = xp;
+  let remainingXp = xp;
   let level = 0;
-  while (remaining_xp >= getLevelXP(level)) {
-    remaining_xp -= getLevelXP(level);
+  while (remainingXp >= getLevelXP(level)) {
+    remainingXp -= getLevelXP(level);
     level += 1;
   }
   return level;

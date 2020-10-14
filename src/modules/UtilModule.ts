@@ -8,7 +8,6 @@ import { monitor } from "@utils/monitor";
 import Discord from "discord.js";
 
 export default class UtilCommandModule extends Module {
-
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.about })
   about(msg: Discord.Message): Promise<Discord.Message> {
     return msg.channel.send(strings.modules.util.aboutCommand, { allowedMentions: { users: [] } });
@@ -26,7 +25,9 @@ export default class UtilCommandModule extends Module {
     await message.edit(strings.modules.util.heartBeatResponse(msg.client.ws.ping));
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.privacypolicy, aliases: ["privacy"] })
+  @command({
+    inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.privacypolicy, aliases: ["privacy"]
+  })
   async privacypolicy(msg: Discord.Message): Promise<void> {
     try {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
@@ -37,7 +38,7 @@ export default class UtilCommandModule extends Module {
     try {
       await msg.delete();
     } catch (e) {
-      null;
+      //
     }
   }
 
@@ -45,13 +46,13 @@ export default class UtilCommandModule extends Module {
   onErisMessage(message: Discord.Message): void {
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
-    if (!message.member.roles.cache.some(r => [env.ROLES.CHRONOS, env.ROLES.ORION, env.ROLES.SCIONS_OF_ELYSIUM, env.ROLES.SENTRIES_OF_DESCENSUS, env.ROLES.STAFF].includes(r.id))) return;
+    if (!message.member.roles.cache.some((r) => [env.ROLES.CHRONOS, env.ROLES.ORION, env.ROLES.SCIONS_OF_ELYSIUM, env.ROLES.SENTRIES_OF_DESCENSUS, env.ROLES.STAFF].includes(r.id))) return;
     if (["528593099971100672", "728243965987389442"].includes(message.channel.parentID)) return;
-    const thankYouEris = () => {
+    const thankYouEris = (): void => {
       const random = Math.floor(Math.random() * 100 + 1);
       if (random % 2 === 1) return;
       let done = false;
-      ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach(erisString => {
+      ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
           message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
@@ -61,11 +62,11 @@ export default class UtilCommandModule extends Module {
     };
     thankYouEris();
 
-    const goodnightEris = () => {
+    const goodnightEris = (): void => {
       const random = Math.floor(Math.random() * 100 + 1);
       if (random % 2 === 1) return;
       let done = false;
-      ["goodnight eris", "night eris", "gn eris", "gngn eris"].forEach(erisString => {
+      ["goodnight eris", "night eris", "gn eris", "gngn eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
           message.channel.send(strings.modules.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.erisGoodnightMessage.length)](message));
@@ -90,10 +91,10 @@ export default class UtilCommandModule extends Module {
   async staff(msg: Discord.Message): Promise<void> {
     const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
     const members = mainGuild.members.cache;
-    const admins = members.filter(m => m.roles.cache.has(env.ROLES.ADMINISTRATORS) || m.roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
-    const mods = members.filter(m => m.roles.cache.has(env.ROLES.MODERATOR) && !admins.includes(m)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
-    const serverGrowthLead = members.filter(m => m.roles.cache.has(env.ROLES.SERVER_GROWTH_LEAD)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
-    const developers = members.filter(m => m.roles.cache.has(env.ROLES.ERIS_DEVELOPER)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const admins = members.filter((m) => m.roles.cache.has(env.ROLES.ADMINISTRATORS) || m.roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const mods = members.filter((m) => m.roles.cache.has(env.ROLES.MODERATOR) && !admins.includes(m)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const serverGrowthLead = members.filter((m) => m.roles.cache.has(env.ROLES.SERVER_GROWTH_LEAD)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
+    const developers = members.filter((m) => m.roles.cache.has(env.ROLES.ERIS_DEVELOPER)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
 
     const embed = new Embed()
       .setAuthor("Evocation Staff")
@@ -107,7 +108,7 @@ export default class UtilCommandModule extends Module {
 
   formatStaffMessage(member: Discord.GuildMember): string {
     const status: string[] = [];
-    const presence = member.user.presence;
+    const { presence } = member.user;
     if (presence.activities.some((a) => a.type === "STREAMING")) status.push(emotes.commandresponses.badges.streaming);
     if (presence.status === "dnd") status.push(emotes.commandresponses.badges.donotdisturb);
     if (presence.status === "idle") status.push(emotes.commandresponses.badges.idle);

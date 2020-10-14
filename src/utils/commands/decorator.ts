@@ -24,20 +24,23 @@ export type ICommandDecorator = ICommandDecoratorMeta & ICommandDecoratorOptions
 export function command(
   opts: Partial<ICommandDecoratorOptions> | undefined = {}
 ) {
+  // eslint-disable-next-line func-names
   return function (
     target: Module,
     propertyKey: string,
     descriptor: PropertyDescriptor
   ): void {
     const targetConstructorName = target.constructor.name;
-    if (!(target instanceof Module))
+    if (!(target instanceof Module)) {
       throw new TypeError(
         `${targetConstructorName} doesn't extend Module`
       );
-    if (!(descriptor.value.constructor instanceof Function))
+    }
+    if (!(descriptor.value.constructor instanceof Function)) {
       throw new TypeError(
         `Decorator needs to be applied to a Method. (${targetConstructorName}#${descriptor.value.name} was ${descriptor.value.constructor.name})`
       );
+    }
     const newMeta: ICommandDecorator = {
       staff: opts.staff || false,
       admin: opts.admin || false,
@@ -50,8 +53,7 @@ export function command(
       inhibitors: opts.inhibitors || []
     };
 
-    const targetMetas: ICommandDecorator[] =
-      Reflect.getMetadata("eris:commandMetas", target) || [];
+    const targetMetas: ICommandDecorator[] = Reflect.getMetadata("eris:commandMetas", target) || [];
     targetMetas.push(newMeta);
     Reflect.defineMetadata("eris:commandMetas", targetMetas, target);
   };

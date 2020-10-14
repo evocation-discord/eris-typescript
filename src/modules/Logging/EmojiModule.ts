@@ -5,7 +5,6 @@ import Discord from "discord.js";
 import { monitor } from "@utils/monitor";
 
 export default class EmojiModule extends Module {
-
   @monitor({ event: "emojiCreate" })
   async emojiCreate(emoji: Discord.GuildEmoji): Promise<void> {
     if (emoji.guild.id !== env.MAIN_GUILD_ID) return;

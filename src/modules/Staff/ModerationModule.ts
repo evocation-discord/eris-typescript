@@ -7,8 +7,9 @@ import { regex } from "@utils/constants";
 import Embed from "@utils/embed";
 
 export default class ModerationModule extends Module {
-
-  @command({ inhibitors: [inhibitors.moderatorOnly], group: CommandCategories["Moderation"], args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote })
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote
+  })
   async quote(msg: Discord.Message, messageLink: string): Promise<void> {
     msg.delete();
     const executedRegex = regex.messageLink.exec(messageLink);
@@ -28,7 +29,7 @@ export default class ModerationModule extends Module {
       const embed = new Embed()
         .setAuthor(strings.modules.moderation.quote.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
         .setDescription(message.content)
-        .attachFiles(message.attachments.map(a => a))
+        .attachFiles(message.attachments.map((a) => a))
         .setFooter(strings.modules.moderation.quote.embedFooter(message.id, channel.name));
       msg.channel.send(embed);
     } catch (e) {

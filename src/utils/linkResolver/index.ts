@@ -1,6 +1,7 @@
 import request from "request";
 import { promisify } from "util";
 
+// eslint-disable-next-line func-names
 export default async function (link: string): Promise<string> {
   try {
     const redirects: string[] = [];
@@ -11,17 +12,17 @@ export default async function (link: string): Promise<string> {
     });
 
     redirects.push(res.request.href);
-    return redirects.filter((link, index, all) => {
+    return redirects.filter((lnk, index, all) => {
       const last = index ? all[index - 1] : "";
 
       if (
-        last.replace("http://", "https://") === link ||
-        last.replace("http://", "https://www.") === link ||
-        link.replace("www.", "") === last
+        last.replace("http://", "https://") === lnk
+        || last.replace("http://", "https://www.") === lnk
+        || lnk.replace("www.", "") === last
       ) return false;
 
-      return link;
-    }).filter(link => link)[0];
+      return lnk;
+    }).filter((lnk) => lnk)[0];
   } catch (error) {
     // TODO: error handling
     return link.startsWith("http") ? link : `http://${link}`;

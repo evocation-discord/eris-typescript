@@ -22,12 +22,12 @@ const logging = {
   emojis: {
     addemoji: "<:createemoji:760589916475228211>",
     updateemoji: "<:updateemoji:760589916731473991>",
-    deleteemoji: "<:deleteemoji:760589916395667456>",
+    deleteemoji: "<:deleteemoji:760589916395667456>"
   },
   members: {
     addmember: "<:addmember:760584350013063198>",
     updatemember: "<:updatemember:760584350122246164>",
-    disconnectmember: "<:disconnectmember:760584349799940138>",
+    disconnectmember: "<:disconnectmember:760584349799940138>"
   },
   crown: "<:crown:760595946861494304>",
   dethrone: "<:dethrone:760595947238588446>"
@@ -78,14 +78,14 @@ const commandresponses = {
     privatetextchannel: "<:privatetextchannel:752268602698236005>",
     announcementchannel: "<:announcementchannel:752268602647904306>",
     privateannouncementchannel: "<:privateannouncementchannel:752268602694041680>",
-    expandedcategory: "<:expandedcategory:752268602404503573>",
+    expandedcategory: "<:expandedcategory:752268602404503573>"
   },
   badges: {
     idle: "<:idle:752564909169967214>",
     offline: "<:offline:752564909279150151>",
     online: "<:online:752564909140869141>",
     streaming: "<:streaming:752564909358973028>",
-    donotdisturb: "<:donotdisturb:752564908956057692>",
+    donotdisturb: "<:donotdisturb:752564908956057692>"
   },
   creditcard: "<:creditcard:752268602710949898>",
   soulstones: "<:soulstones:752268601880215644>",
@@ -121,8 +121,6 @@ const uncategorised = {
   nnid: "759711893777809420",
   serverboost: "<:serverboost:759774106634813450>"
 };
-
-
 
 export default {
   giveaway,

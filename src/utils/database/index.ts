@@ -1,6 +1,6 @@
 import { createConnection } from "typeorm";
-import TypeormEntities from "./models";
 import { env } from "@utils/constants";
+import TypeormEntities from "./models";
 
 export const setupDatabase = (): void => {
   createConnection({
@@ -11,5 +11,5 @@ export const setupDatabase = (): void => {
     password: env.DATABASE_INFO.PASSWORD,
     synchronize: true,
     entities: TypeormEntities
-  }).then(_ => console.log("Connected to database!")).catch(console.error);
+  }).then(() => console.log("Connected to database!")).catch(console.error);
 };

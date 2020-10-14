@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier } from "@database/models";
+import {
+  Blacklist, Giveaway, DisabledCommand, XPExclusion, XPMultiplier
+} from "@database/models";
 import Discord from "discord.js";
 import { emotes, env } from "@utils/constants";
 import { timeFormatter } from "@utils/time";
@@ -53,7 +56,7 @@ export const strings = {
     noArgumentSupplied: "No argument(s) was/were supplied.",
     remainderBlank: "Remainder of the command is blank.",
     invalidDuration: "Invalid duration.",
-    invalidNumber: "Could not identify number within syntactic parameters.",
+    invalidNumber: "Could not identify number within syntactic parameters."
   },
   inhibitors: {
     noPermission: "You do not satisfy the predefined criteria to be able to perform this command.",
@@ -97,7 +100,7 @@ export const strings = {
       emojiDeleted: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **EMOJI REMOVED**: \`:${emoji.name}:\``,
       animatedEmojiAdded: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.addemoji} **ANIMATED EMOJI ADDED**: ${emoji} \`:${emoji.name}:\``,
       animatedEmojiUpdated: (oldEmoji: Discord.GuildEmoji, newEmoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.updateemoji} **ANIMATED EMOJI RENAMED**: ${newEmoji} \`:${oldEmoji.name}:\` → \`:${newEmoji.name}:\``,
-      animatedEmojiDeleted: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``,
+      animatedEmojiDeleted: (emoji: Discord.GuildEmoji) => `\`[${timeFormatter()}]\` ${emotes.logging.emojis.deleteemoji} **ANIMATED EMOJI REMOVED**: \`:${emoji.name}:\``
     },
     events: {
       announcementMessages: (message: Discord.Message) => `\`[${timeFormatter(new Date(message.createdTimestamp))}]\` **\`[PUBLICATION NOTICE]\`** <:information:747497420954534050> **\`${message.author.tag}\`** (\`${message.author.id}\`) sent a message (\`${message.id}\`) in ${message.channel} (\`${message.channel.id}\`) that was automatically published. **MESSAGE LINK**: <https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`
@@ -115,7 +118,7 @@ export const strings = {
       userNotExcluded: "This user is not excluded.",
       updatedExclusionsForRole: "Updated exclusions for the specified role.",
       updatedExclusionsForUser: "Updated exclusions for the specified user.",
-      removedAllExclusions: "Removed all exclusions.",
+      removedAllExclusions: "Removed all exclusions."
     },
     giveaway: {
       loadingMessage: "Loading...",
@@ -133,7 +136,7 @@ export const strings = {
       giveawayListMap: (index: number, giveaway: Giveaway) => `\`${index + 1}.\` **\`[CREATION]\`** \`[${timeFormatter(giveaway.startTime)}]\` **${giveaway.prize}** in <#${giveaway.channelId}> (\`${giveaway.channelId}\`). Started by **<@${giveaway.startedBy}>** (\`${giveaway.startedBy}\`). Ends at \`${timeFormatter(giveaway.endTime)}\`. **Message ID**: \`${giveaway.messageId}\``,
       giveawayEndedMap: (index: number, giveaway: Giveaway) => `\`${index + 1}.\` **\`[CREATION]\`** \`[${timeFormatter(giveaway.startTime)}]\` **${giveaway.prize}** in <#${giveaway.channelId}> (\`${giveaway.channelId}\`). Started by **<@${giveaway.startedBy}>** (\`${giveaway.startedBy}\`). Ended at \`${timeFormatter()}\`.`,
       activeGiveaways: `${emotes.giveaway.giftmessage} **ACTIVE GIVEAWAYS**`,
-      endedGivewaways: `${emotes.giveaway.giftmessage} **ENDED GIVEAWAYS**`,
+      endedGivewaways: `${emotes.giveaway.giftmessage} **ENDED GIVEAWAYS**`
     },
     help: {
       unknownCategory: "**UNKNOWN CATEGORY**",
@@ -145,7 +148,7 @@ export const strings = {
       noDescription: "A description has not been specified for this command."
     },
     logging: {
-      anonymisedAudit: (cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ANONYMISED]\`** ${emotes.logging.anonymisedaudit} Command \`${cmdTrigger}\` was performed. No further information is available.`,
+      anonymisedAudit: (cmdTrigger: string) => `\`[${timeFormatter()}]\` **\`[ANONYMISED]\`** ${emotes.logging.anonymisedaudit} Command \`${cmdTrigger}\` was performed. No further information is available.`,
       administrativeCommand: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` **\`[ADMINISTRATIVE]\`** ${emotes.logging.administrativeaudit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
       command: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
       disabledCommand: (msg: Discord.Message, cmdTrigger: string, stringArgs: string[]) => `\`[${timeFormatter()}]\` ${emotes.logging.audit} **\`${msg.author.tag}\`** (\`${msg.author.id}\`) performed a disabled command \`${cmdTrigger}\` (\`${msg.id}\`)${stringArgs.length > 0 ? ` with args: \`${stringArgs.join(" ")}\`` : ""} in ${msg.channel} (\`${msg.channel.id}\`).`,
@@ -276,7 +279,7 @@ export const strings = {
         "A face with big eyes, a small nose, and a small chin exhibits kinderschema: the collection of traits humans have evolved to find adorable.",
         "When it comes to wine, an aroma similar to cat pee is a considered a good thing.",
         "A group of clowns is sometimes called a giggle.",
-        "Spiders recycle webs by eating them.",
+        "Spiders recycle webs by eating them."
       ],
       cancel_0: (user: Discord.User) => `${user} has been **CANCELLED**.`,
       cancel_1: (user: Discord.User) => `#${user.username.toLowerCase().replace(" ", "")}isoverparty`,
@@ -327,6 +330,7 @@ export const strings = {
       xpDeducted: (amount: number, users: number) => `Deducted **${amount}** experience from **${users}** user(s).`,
       levelSet: (user: Discord.User, level: number) => `**\`${user.tag}\`** (\`${user.id}\`) is now **LEVEL ${level}**.`,
       auditLogRoleRemove: "[FORCED ATTRIBUTION] Role was not removed from user with legitimacy.",
+      // eslint-disable-next-line no-nested-ternary
       multiplierCreated: (type: string, us: Discord.User | Discord.Role | Discord.Guild | Discord.TextChannel, amount: number, expireDate: Date) => `Type **${type.toUpperCase()}** multiplier created. This will affect ${us instanceof Discord.User ? `**\`${us.tag}\`** (\`${us.id}\`)` : us instanceof Discord.Role ? `**${us}** (\`${us.id}\`)` : us instanceof Discord.TextChannel ? `**${us}** (\`${us.id}\`)` : "the whole server"}. ${us instanceof Discord.Role ? "Users that have this role" : us instanceof Discord.Guild ? `All members of **${us.name.toUpperCase()}**` : us instanceof Discord.TextChannel ? "Users that talk in this channel" : "They"} will receive **${amount}** times as much experience as they usually would. ${expireDate ? `This multiplier is set to expire at **${timeFormatter(expireDate)}**. ` : ""}Run \`${process.env.PREFIX}multiplier list\` to retrieve a list of active multipliers, displayed categorically.`,
       missingUserId: "No user ID can be deduced from your command invocation. Please try again.",
       missingRoleId: "No role ID can be deduced from your command invocation. Please try again.",
@@ -336,14 +340,11 @@ export const strings = {
       multiplierEmbedName: (type: "Server" | "User" | "Role" | "Channel") => `${type} Multipliers`,
       noMultipliers: "There are no active multipliers under this category.",
       multiplierMapping: (ur: XPMultiplier) => {
-        if (ur.type === "server")
-          return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
-        if (ur.type === "user")
-          return `→ **User**: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
-        if (ur.type === "role")
-          return `→ **Role**: **<@&${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
-        if (ur.type === "channel")
-          return `→ **Channel**: **<#${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        if (ur.type === "server") return `→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        if (ur.type === "user") return `→ **User**: <@${ur.thingID}> (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        if (ur.type === "role") return `→ **Role**: **<@&${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        if (ur.type === "channel") return `→ **Channel**: **<#${ur.thingID}>** (\`${ur.thingID}\`)\n→ **Multiplier**: ${ur.multiplier}\n→ **Time of Expiration**: ${ur.endDate ? timeFormatter(ur.endDate) : "This multiplier will not automatically expire."}`;
+        return "Error";
       },
       levelRole: {
         add: (role: Discord.Role, level: number) => `Registered **${role}** as a levelled role. It will be automatically awarded to users at **LEVEL ${level}**.`,
@@ -353,7 +354,7 @@ export const strings = {
         doesNotExist: "This role is not configured to be awarded upon meeting an experience threshold.",
         noLevelledRoles: "No levelled roles have been configured.",
         levelledRolesEmbedTitle: "Levelled Roles",
-        levelledRolesEmbedFooter: "These are the roles that will be automatically awarded to users based on predefined thresholds. Certain restrictions may be in place regarding their attribution/revocation.",
+        levelledRolesEmbedFooter: "These are the roles that will be automatically awarded to users based on predefined thresholds. Certain restrictions may be in place regarding their attribution/revocation."
       },
       leaderboard: {
         header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
@@ -390,7 +391,7 @@ export const strings = {
       listaffiliates: {
         embedFieldTitle: "Affiliates",
         noAffiliate: "→ There are currently no Affiliate Representatives.",
-        affiliateMap: (member: Discord.GuildMember) => `→ ${member} (\`${member.id}\`)`,
+        affiliateMap: (member: Discord.GuildMember) => `→ ${member} (\`${member.id}\`)`
       },
       roleRemoveNotLegitimacy: "[CONDITIONAL REVOCATION] Role was not added to user with legitimacy.",
       roleAddNotLegitimacy: "[FORCED ATTRIBTUION] Role was not removed from user with legitimacy.",
@@ -406,9 +407,9 @@ export const strings = {
         auditLogReason: (executor: Discord.User) => `${executor.tag} (${executor.id}) dethroned this user. Check the logs for more information.`,
         success: `${emotes.logging.dethrone} **SUCCESS**: I have removed all roles from the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were removed.`,
         log: (executor: Discord.User, members: { member: Discord.GuildMember, roles: Discord.Role[]}[]) => {
-          const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.dethrone} **${members.length}** member${members.length === 1 ? "": "s"} was/were dethroned by ${executor} (\`${executor.id}\`).`];
+          const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.dethrone} **${members.length}** member${members.length === 1 ? "" : "s"} was/were dethroned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
-            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
+            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map((r) => `**${r}**`).join(", ")}`);
           }
           return strArray.join("\n");
         }
@@ -417,9 +418,9 @@ export const strings = {
         auditLogReason: (executor: Discord.User) => `${executor.tag} (${executor.id}) crowned this user. Check the logs for more information.`,
         success: `${emotes.logging.crown} **SUCCESS**: I have added back all roles to the following users. Please note that this action has been logged with information about the command invocation as well as the roles that were added.`,
         log: (executor: Discord.User, members: { member: Discord.GuildMember, roles: Discord.Role[]}[]) => {
-          const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.crown} **${members.length}** member${members.length === 1 ? "": "s"} was/were crowned by ${executor} (\`${executor.id}\`).`];
+          const strArray = [`\`[${timeFormatter()}]\` ${emotes.logging.crown} **${members.length}** member${members.length === 1 ? "" : "s"} was/were crowned by ${executor} (\`${executor.id}\`).`];
           for (const { member, roles } of members) {
-            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map(r => `**${r}**`).join(", ")}`);
+            strArray.push(`${member.user} (\`${member.user.id}\`): ${roles.map((r) => `**${r}**`).join(", ")}`);
           }
           return strArray.join("\n");
         }
@@ -428,7 +429,6 @@ export const strings = {
   },
   commandGroups: {}
 };
-
 
 export const commandDescriptions = {
   send: "Forces Eris to send a message based on the second syntactic parameter. All mentions are forcibly escaped.",
@@ -506,7 +506,7 @@ export const errorMessage = async (message: Discord.Message, error: string): Pro
 
 export const codeblockMember = (added: Discord.GuildMember[], removed: Discord.GuildMember[] = []): string => [
   "```diff",
-  ...added.map(r => `+ ${r.user.tag}`),
-  ...removed.map(r => `- ${r.user.tag}`),
+  ...added.map((r) => `+ ${r.user.tag}`),
+  ...removed.map((r) => `- ${r.user.tag}`),
   "```"
 ].join("\n");

@@ -16,7 +16,7 @@ export async function user(arg: string, message: Discord.Message): Promise<Disco
   let querySearch: Discord.User[];
   if (results.length > 0) {
     const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
-    const filtered = results.filter(user => regWord.test(user.username));
+    const filtered = results.filter((u) => regWord.test(u.username));
     querySearch = filtered.length > 0 ? filtered : results;
   } else {
     querySearch = results;
@@ -31,7 +31,7 @@ export async function resolveUser(query: string | Discord.User, guild: Discord.G
   if (typeof query === "string") {
     if (regex.user.test(query)) return guild.client.users.fetch(regex.user.exec(query)[1]);
     if (/\w{1,32}#\d{4}/.test(query)) {
-      const res = guild.members.cache.find(member => member.user.tag === query);
+      const res = guild.members.cache.find((member) => member.user.tag === query);
       return res ? res.user : null;
     }
   }

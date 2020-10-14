@@ -3,8 +3,8 @@ import { regExpEsc } from "@utils/constants/regex";
 import { strings } from "@utils/messages";
 import Discord from "discord.js";
 
-export async function voiceChannel(arg: string, message: Discord.Message): Promise<Discord.VoiceChannel> {
-  const resChannel = await resolveVoiceChannel(arg, message.guild);
+export function voiceChannel(arg: string, message: Discord.Message): Discord.VoiceChannel {
+  const resChannel = resolveVoiceChannel(arg, message.guild);
   if (resChannel) return resChannel;
 
   const results: Discord.VoiceChannel[] = [];
@@ -16,7 +16,7 @@ export async function voiceChannel(arg: string, message: Discord.Message): Promi
   let querySearch: Discord.VoiceChannel[];
   if (results.length > 0) {
     const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
-    const filtered = results.filter(channel => regWord.test(channel.name) && channel.type === "voice");
+    const filtered = results.filter((channel) => regWord.test(channel.name) && channel.type === "voice");
     querySearch = filtered.length > 0 ? filtered : results;
   } else {
     querySearch = results;
@@ -26,7 +26,7 @@ export async function voiceChannel(arg: string, message: Discord.Message): Promi
   return querySearch[0];
 }
 
-export async function resolveVoiceChannel(query: string | Discord.Channel, guild: Discord.Guild): Promise<Discord.VoiceChannel> {
+export function resolveVoiceChannel(query: string | Discord.Channel, guild: Discord.Guild): Discord.VoiceChannel {
   if (query instanceof Discord.Channel && query.type === "voice") return guild.channels.cache.has(query.id) ? query as Discord.VoiceChannel : null;
   if (typeof query === "string" && regex.channel.test(query)) {
     const ch = guild.channels.cache.get(regex.channel.exec(query)[1]) as Discord.VoiceChannel;

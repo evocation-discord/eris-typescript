@@ -1,8 +1,10 @@
+/* eslint-disable max-classes-per-file */
 import Discord from "discord.js";
 import { strings } from "@utils/messages";
 
 class ArgConstructor {
   parts: string[];
+
   result: string;
 
   constructor(parts: string[], result: string) {
@@ -38,7 +40,7 @@ export default class ArgTextProcessor {
 
     // Ok, if not, we combine until the quote ends (if the string ends before a end quote, we just return all arguments).
     const argParts = [a];
-    let argsCombined = a.substr(1);
+    let argsCombined = a.slice(1);
     for (; ;) {
       // Shift the argument.
       const arg = this.unusedArgs.shift();

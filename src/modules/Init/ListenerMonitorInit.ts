@@ -22,7 +22,7 @@ export default class ListenerMonitorInit extends Module {
     super(client);
 
     for (const event of eventArray) {
-      this.client.on(event, (...args: unknown[]) => Array.from(this.client.monitorManager.monitors).filter(m => m.event === event).forEach(monitor => monitor.func.call(monitor.module, ...args)));
+      this.client.on(event, (...args: unknown[]) => [...this.client.monitorManager.monitors].filter((m) => m.event === event).forEach((monitor) => monitor.func.call(monitor.module, ...args)));
     }
   }
 }

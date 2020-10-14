@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, PrimaryColumn, Column } from "typeorm";
+import {
+  Entity, BaseEntity, PrimaryColumn, Column
+} from "typeorm";
 
 @Entity("lockedchannels")
 export class LockedChannel extends BaseEntity {

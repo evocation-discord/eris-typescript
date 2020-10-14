@@ -18,7 +18,7 @@ export default class EventModule extends Module {
   @listener({ event: "ready" })
   onReady(): void {
     scheduler.loadEvents();
-    Array.from(this.client.cronManager.crons).map(cron => cron.cronJob.fireOnTick());
+    [...this.client.cronManager.crons].map((cron) => cron.cronJob.fireOnTick());
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
 
@@ -69,9 +69,9 @@ export default class EventModule extends Module {
         {
           method: "POST",
           headers: {
-            "Authorization": `Bot ${process.env.DISCORD_TOKEN}`,
-          },
-        },
+            Authorization: `Bot ${process.env.DISCORD_TOKEN}`
+          }
+        }
       );
       const channel = await this.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
       channel.send(strings.modules.events.announcementMessages(message));
@@ -92,15 +92,15 @@ export default class EventModule extends Module {
   @monitor({ event: "guildMemberUpdate" })
   async onGuildMemberUpdate(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
     const addedRoles: Discord.Role[] = [];
-    newMember.roles.cache.forEach(role => {
+    newMember.roles.cache.forEach((role) => {
       if (!oldMember.roles.cache.has(role.id)) addedRoles.push(role);
     });
-    addedRoles.forEach(role => this.client.emit("guildMemberRoleAdd", oldMember, newMember, role));
+    addedRoles.forEach((role) => this.client.emit("guildMemberRoleAdd", oldMember, newMember, role));
     const removedRoles: Discord.Role[] = [];
-    oldMember.roles.cache.forEach(role => {
+    oldMember.roles.cache.forEach((role) => {
       if (!newMember.roles.cache.has(role.id)) removedRoles.push(role);
     });
-    removedRoles.forEach(role => this.client.emit("guildMemberRoleRemove", oldMember, newMember, role));
+    removedRoles.forEach((role) => this.client.emit("guildMemberRoleRemove", oldMember, newMember, role));
   }
 
   @monitor({ event: "message" })

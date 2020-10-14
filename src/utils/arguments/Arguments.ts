@@ -1,7 +1,8 @@
-import ArgTextProcessor from "./ArgumentProcessor";
-import { supportedArgs, allParsers } from "./supportedArgs";
+/* eslint-disable max-classes-per-file */
 import Discord from "discord.js";
 import { strings } from "@utils/messages";
+import ArgTextProcessor from "./ArgumentProcessor";
+import { supportedArgs, allParsers } from "./supportedArgs";
 
 // Handles remainder parsing.
 export class Remainder {
@@ -52,14 +53,13 @@ export class Optional {
   }
 }
 
-
 export const getArgumentParser = (arg: supportedArgs | Remainder | Optional): ((parser: ArgTextProcessor, msg: Discord.Message) => Promise<unknown[]>) => {
   // Return the parser.
-  if (arg instanceof Remainder || arg instanceof Optional) return async (parser: ArgTextProcessor, msg: Discord.Message) => arg.parse.bind(arg)(parser, msg);
+  if (arg instanceof Remainder || arg instanceof Optional) return async (parser: ArgTextProcessor, msg: Discord.Message): Promise<unknown[]> => arg.parse.bind(arg)(parser, msg);
 
   // Get the parser for individual arguments.
   const transformer = allParsers.get(arg);
 
   // Handle the parsing.
-  return async (parser: ArgTextProcessor, msg: Discord.Message) => [await parser.one(transformer, msg)];
+  return async (parser: ArgTextProcessor, msg: Discord.Message): Promise<unknown[]> => [await parser.one(transformer, msg)];
 };

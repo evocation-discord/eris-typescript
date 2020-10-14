@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Module } from "@utils/modules";
 import { Inhibitor } from "@utils/inhibitors";
 import { supportedArgs } from "@utils/arguments/supportedArgs";

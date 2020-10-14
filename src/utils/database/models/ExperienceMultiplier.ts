@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity, BaseEntity, PrimaryGeneratedColumn, Column
+} from "typeorm";
 
 @Entity("xpmultiplier")
 export class XPMultiplier extends BaseEntity {

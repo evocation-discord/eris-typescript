@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from "typeorm";
+import {
+  Entity, BaseEntity, Column, PrimaryColumn
+} from "typeorm";
 
 @Entity("levelroles")
 export class LevelRole extends BaseEntity {

@@ -3,8 +3,8 @@ import { regExpEsc } from "@utils/constants/regex";
 import { strings } from "@utils/messages";
 import Discord from "discord.js";
 
-export async function newsChannel(arg: string, message: Discord.Message): Promise<Discord.NewsChannel> {
-  const resChannel = await resolveNewsChannel(arg, message.guild);
+export function newsChannel(arg: string, message: Discord.Message): Discord.NewsChannel {
+  const resChannel = resolveNewsChannel(arg, message.guild);
   if (resChannel) return resChannel;
 
   const results: Discord.NewsChannel[] = [];
@@ -16,7 +16,7 @@ export async function newsChannel(arg: string, message: Discord.Message): Promis
   let querySearch: Discord.NewsChannel[];
   if (results.length > 0) {
     const regWord = new RegExp(`\\b${regExpEsc(arg)}\\b`, "i");
-    const filtered = results.filter(channel => regWord.test(channel.name) && (channel.type === "news"));
+    const filtered = results.filter((channel) => regWord.test(channel.name) && (channel.type === "news"));
     querySearch = filtered.length > 0 ? filtered : results;
   } else {
     querySearch = results;
@@ -26,7 +26,7 @@ export async function newsChannel(arg: string, message: Discord.Message): Promis
   return querySearch[0];
 }
 
-export async function resolveNewsChannel(query: string | Discord.Channel | Discord.Message, guild: Discord.Guild): Promise<Discord.NewsChannel> {
+export function resolveNewsChannel(query: string | Discord.Channel | Discord.Message, guild: Discord.Guild): Discord.NewsChannel {
   if (query instanceof Discord.Channel && query.type === "news") return guild.channels.cache.has(query.id) ? query as Discord.NewsChannel : null;
   if (query instanceof Discord.Message) return query.guild.id === guild.id ? query.channel as Discord.NewsChannel : null;
   if (typeof query === "string" && regex.channel.test(query)) {

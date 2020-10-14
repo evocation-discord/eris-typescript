@@ -5,9 +5,7 @@ export class CommandManager {
 
     add(cmd: Command): void {
       if (this.cmds.has(cmd)) return;
-      const conflictingCommand = Array.from(this.cmds).find(cm =>
-        cmd.triggers.some(trigger => cm.triggers.includes(trigger))
-      );
+      const conflictingCommand = [...this.cmds].find((cm) => cmd.triggers.some((trigger) => cm.triggers.includes(trigger)));
       if (conflictingCommand) {
         throw new Error(
           `Cannot add ${cmd.id} because it would conflict with ${conflictingCommand.id}.`
@@ -21,6 +19,6 @@ export class CommandManager {
     }
 
     getByTrigger(trigger: string): Command {
-      return Array.from(this.cmds).find(c => c.triggers.includes(trigger));
+      return [...this.cmds].find((c) => c.triggers.includes(trigger));
     }
 }

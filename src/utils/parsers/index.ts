@@ -19,4 +19,3 @@ export {
   voiceChannel,
   guild
 };
-

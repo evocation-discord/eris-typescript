@@ -1,7 +1,6 @@
 import "reflect-metadata";
 
 import dotenv from "dotenv";
-dotenv.config();
 
 import "module-alias/register";
 import "@utils/types/discord";
@@ -27,11 +26,13 @@ import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 import HalloweenModule from "@modules/HalloweenModule";
 
+dotenv.config();
+
 export const client = new ErisClient({
   botAdmins: [
     "209609796704403456", // Stijn
-    "369497100834308106", // Ace
-  ],
+    "369497100834308106" // Ace
+  ]
 });
 
 setupDatabase();
