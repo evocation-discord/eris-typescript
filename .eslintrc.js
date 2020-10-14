@@ -2,61 +2,53 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: "module",
+    sourceType: "module"
   },
-  extends: ["plugin:@typescript-eslint/recommended", "eslint:recommended"],
+  extends: ["airbnb-base", "plugin:@typescript-eslint/recommended", "eslint:recommended"],
+  plugins: ["@typescript-eslint", "unicorn"],
 
   env: {
     es6: true,
-    node: true,
+    node: true
   },
-  plugins: ["@typescript-eslint"],
 
   rules: {
+    "@typescript-eslint/explicit-function-return-type": 1,
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-explicit-any": 2,
+    "@typescript-eslint/no-unused-expressions": 2,
+    "@typescript-eslint/array-type": ["error", {
+      default: "array",
+      readonly: "array"
+    }],
+    "consistent-return": "off",
+    "no-console": "off",
+    "class-methods-use-this": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "no-useless-constructor": "off",
+    "new-cap": "off",
+    "vue/max-attributes-per-line": "off",
+    "vue/no-v-html": "off",
+    "comma-dangle": ["error", "never"],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "unicorn/better-regex": "error",
+    "unicorn/prefer-spread": "error",
+    "unicorn/prefer-string-slice": "error",
+    "unicorn/throw-new-error": "error",
+    "no-param-reassign": "off",
+    "no-return-assign": "off",
+    quotes: ["error", "double"],
+    "max-len": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "off",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/camelcase": "off",
-    "prefer-arrow-callback": "warn",
     "@typescript-eslint/semi": [2, "always"],
-    "@typescript-eslint/quotes": ["error", "double"],
-    eqeqeq: "error",
-    "no-var": "error",
-    "prefer-const": "error",
-    "no-const-assign": "error",
-    "prefer-template": "error",
-    "no-trailing-spaces": "warn",
-    "keyword-spacing": "error",
-    "space-before-blocks": "error",
-    "object-curly-spacing": ["error", "always"],
-    "array-bracket-spacing": [2, "never"],
-    "arrow-spacing": "error",
-    "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/member-delimiter-style": [
-      2,
-      {
-        multiline: {
-          delimiter: "comma",
-          requireLast: false,
-        },
-        singleline: {
-          delimiter: "comma",
-          requireLast: false,
-        },
-      },
-    ],
-    "@typescript-eslint/type-annotation-spacing": [
-      2,
-      {
-        overrides: {
-          arrow: {
-            before: true,
-            after: true,
-          },
-        },
-      },
-    ],
-    indent: ["error", 2],
-  },
+    "no-eval": "off",
+    "no-restricted-syntax": "off"
+  }
 };

@@ -1,11 +1,11 @@
+import "reflect-metadata";
 
 import dotenv from "dotenv";
-dotenv.config();
 
 import "module-alias/register";
-import "@lib/utils/types/discord";
+import "@utils/types/discord";
 
-import { ErisClient } from "@lib/utils";
+import { ErisClient } from "@utils/client";
 import { setupDatabase } from "@database/index";
 import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
 import EventModule from "@modules/Init/EventModule";
@@ -26,11 +26,13 @@ import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 import HalloweenModule from "@modules/HalloweenModule";
 
+dotenv.config();
+
 export const client = new ErisClient({
   botAdmins: [
     "209609796704403456", // Stijn
-    "369497100834308106", // Ace
-  ],
+    "369497100834308106" // Ace
+  ]
 });
 
 setupDatabase();

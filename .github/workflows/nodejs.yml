@@ -1,0 +1,37 @@
+name: NodeJS
+
+on:
+  push:
+
+jobs:
+  deploy:
+    name: "Build and deploy package to GitHub Package Registry"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        
+      - uses: actions/cache@v2
+        name: Cache dependencies
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: ESLint
+        run: yarn lint
+
+      - name: TSC Linter
+        run: yarn lint:tsc
+
+      - name: Publish to Github Package Registry
+        if: github.ref == 'refs/heads/master'
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: evocation-discord/eris/eris
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          tags: 'latest,stable'
+          registry: docker.pkg.github.com
