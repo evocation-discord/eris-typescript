@@ -1,9 +1,7 @@
-name: Docker CD
+name: NodeJS
 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   deploy:
@@ -29,6 +27,7 @@ jobs:
         run: yarn lint:tsc
 
       - name: Publish to Github Package Registry
+        if: github.ref == 'refs/heads/master'
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: evocation-discord/eris/eris
