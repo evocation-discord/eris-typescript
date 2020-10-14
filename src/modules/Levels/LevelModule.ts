@@ -492,8 +492,11 @@ export default class LevelModule extends Module {
 
     for await (const data of xpData) {
       const user = await msg.client.users.fetch(data.id);
-      const info = await userInfo(user);
-      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.totalXP, guild.members.resolve(user.id).roles.cache.has(env.ROLES.EOS)));
+      const member = await guild.members.fetch(user);
+      if (member) {
+        const info = await userInfo(user);
+        message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.totalXP, member.roles.cache.has(env.ROLES.EOS)));
+      }
     }
     const boosters = guild.members.cache.filter((m) => (!xpData.find((xp) => xp.id === m.id))).filter((m) => !m.user.bot).filter((m) => m.roles.cache.has(env.ROLES.EOS));
     if (boosters.size > 0) {
