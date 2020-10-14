@@ -3,12 +3,12 @@
 ### Prerequisites
 Eris is built to run on any kind of environment or operating system.
 
-### Style guide
+### Style Guide
 Eris follows most of the **[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)**.
 We expect all of our developers to follow this style guide.
 Before you either push a commit or create a Pull Request, please check if there are no linter errors present. We recommend using Visual Studio Code (or [VSCodium](https://vscodium.com), if you're concerned about your privacy) with the ESLint plugin installed for automatic linting.
 
-### Before committing
+### Before Committing
 We have adopted **[Conventional Commits](https://www.conventionalcommits.org)** as a ruleset for commit messages. In short, commit messages *must* be formatted using one the following prefixes:
 
 - `build` – for changes made to the build system
@@ -24,7 +24,7 @@ We have adopted **[Conventional Commits](https://www.conventionalcommits.org)** 
 - `style` – for code style changes (such as indentation)
 - `test` – for when adding tests or assertions
 
-Examples:
+**Examples**:
 
 `feat: add support for removing tags`
 
@@ -32,7 +32,7 @@ Examples:
 
 You may also specify a scope. We **strongly** encourage you to use scopes, because it's an excellent way of determining what part of the codebase has been changed.
 
-Example:
+**Example**:
 
 `feat(groups): add ability to remove a group`
 
