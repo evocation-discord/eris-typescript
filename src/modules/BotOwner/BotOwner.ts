@@ -124,6 +124,8 @@ export default class BotOwner extends Module {
     };
     // eslint-disable-next-line no-shadow, global-require
     const Discord = require("discord.js");
+    // eslint-disable-next-line no-shadow, global-require
+    const DatabaseModels = require("@database/models");
     try {
       const evaled = eval(code);
       const clean = await codeclean(msg.client, evaled);
