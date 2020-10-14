@@ -63,6 +63,7 @@
     "deps": "yarn upgrade-interactive",
     "lint": "eslint src",
     "lint:tsc": "tsc --noEmit",
+    "lint:tsc:watch": "tsc --noEmit -w",
     "lint:fix": "eslint --fix src"
   }
 }
