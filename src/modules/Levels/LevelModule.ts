@@ -486,17 +486,14 @@ export default class LevelModule extends Module {
     const guild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
     let xpData = await UserXP.find();
     xpData = xpData.sort((a, b) => b.xp - a.xp);
-    xpData = xpData.slice(0, 10);
+    xpData = xpData.filter((user) => guild.members.resolve(user.id)).slice(0, 10);
 
     const message: string[] = [strings.modules.levels.leaderboard.header];
 
     for await (const data of xpData) {
       const user = await msg.client.users.fetch(data.id);
-      const member = await guild.members.fetch(user);
-      if (member) {
-        const info = await userInfo(user);
-        message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.totalXP, member.roles.cache.has(env.ROLES.EOS)));
-      }
+      const info = await userInfo(user);
+      message.push(strings.modules.levels.leaderboard.row(info.rank, user, info.lvl, info.totalXP, guild.members.resolve(user).roles.cache.has(env.ROLES.EOS)));
     }
     const boosters = guild.members.cache.filter((m) => (!xpData.find((xp) => xp.id === m.id))).filter((m) => !m.user.bot).filter((m) => m.roles.cache.has(env.ROLES.EOS));
     if (boosters.size > 0) {
@@ -552,10 +549,11 @@ const userInfo = async (user: Discord.User): Promise<{
   rank: number;
   totalUsers: number;
 }> => {
+  const guild = user.client.guilds.resolve(env.MAIN_GUILD_ID);
   let xpData = await UserXP.findOne({ where: { id: user.id } });
   if (!xpData) xpData = await UserXP.create({ id: user.id }).save();
   let allData = await UserXP.find();
-  allData = allData.sort((a, b) => b.xp - a.xp);
+  allData = allData.sort((a, b) => b.xp - a.xp).filter((usr) => guild.members.resolve(usr.id));
   const userTotalXP = xpData.xp;
   const userLvl = levels.getLevelFromXP(userTotalXP);
   let x = 0;
