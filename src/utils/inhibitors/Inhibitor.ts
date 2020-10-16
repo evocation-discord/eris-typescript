@@ -79,7 +79,6 @@ export const roleValidation = async (msg: Discord.Message, roleID: string): Prom
 
 const canOnlyBeExecutedInBotCommands = mergeInhibitors(guildsOnly, async (msg) => {
   if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
-  if (msg.channel.id === "528598741565833246") return undefined;
   if ((msg.channel as Discord.TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejectedBotCommands;
   return undefined;
 });

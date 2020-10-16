@@ -29,7 +29,6 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
 
-    if (msg.channel.id === "528598741565833246") return channel.send(strings.modules.logging.anonymisedAudit(cmdTrigger));
     if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return channel.send(strings.modules.logging.disabledCommand(msg, cmdTrigger, stringArgs));
     if (cmd.staff || cmd.admin) return channel.send(strings.modules.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
     return channel.send(strings.modules.logging.command(msg, cmdTrigger, stringArgs));
@@ -40,7 +39,6 @@ export default class LoggingModule extends Module {
     if (msg.author && msg.author.bot) return;
     if (msg.channel.type === "dm") return;
     if (msg.guild.id !== env.MAIN_GUILD_ID) return;
-    if (msg.channel.id === "528598741565833246") return;
     if (isStaff(msg)) return;
     const links = msg.content.match(regex.link) || [];
     const channel = await this.client.channels.fetch(env.CHANNELS.MODERATION_LOG) as Discord.TextChannel;
