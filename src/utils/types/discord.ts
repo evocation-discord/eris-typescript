@@ -8,6 +8,9 @@ declare module "discord.js" {
   interface ClientEvents {
     eventLog: [string, string],
     guildMemberRoleAdd: [GuildMember, GuildMember, Role],
-    guildMemberRoleRemove: [GuildMember, GuildMember, Role]
+    guildMemberRoleRemove: [GuildMember, GuildMember, Role],
+    voiceChannelJoin: [GuildMember, VoiceChannel],
+    voiceChannelLeave: [GuildMember, VoiceChannel],
+    voiceChannelSwitch: [GuildMember, VoiceChannel, VoiceChannel],
   }
 }

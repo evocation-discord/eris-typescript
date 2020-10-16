@@ -25,6 +25,7 @@ import ModerationModule from "@modules/Staff/ModerationModule";
 import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 import HalloweenModule from "@modules/HalloweenModule";
+import VoiceModule from "@modules/VoiceModule";
 
 dotenv.config();
 
@@ -60,6 +61,7 @@ client
   .registerModule(PurchaseableRolesModule)
   .registerModule(UtilModule)
   .registerModule(LevelModule)
+  .registerModule(VoiceModule)
   // Event Modules
   .registerModule(HalloweenModule)
   .login(process.env.DISCORD_TOKEN);

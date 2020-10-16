@@ -425,6 +425,10 @@ export const strings = {
           return strArray.join("\n");
         }
       }
+    },
+    voice: {
+      joined: "Joined Evocation Voice",
+      left: "Left Evocation Voice"
     }
   },
   commandGroups: {}

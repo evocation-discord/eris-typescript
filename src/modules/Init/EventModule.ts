@@ -103,6 +103,20 @@ export default class EventModule extends Module {
     removedRoles.forEach((role) => this.client.emit("guildMemberRoleRemove", oldMember, newMember, role));
   }
 
+  @monitor({ event: "voiceStateUpdate" })
+  async onVoiceStateUpdate(oldState: Discord.VoiceState, newState: Discord.VoiceState): Promise<void> {
+    const newMember = newState.member;
+    if (!oldState.channel && newState.channel) {
+      this.client.emit("voiceChannelJoin", newMember, newState.channel);
+    }
+    if (oldState.channel && !newState.channel) {
+      this.client.emit("voiceChannelLeave", newMember, oldState.channel);
+    }
+    if (oldState.channel && newState.channel && oldState.channel.id !== newState.channel.id) {
+      this.client.emit("voiceChannelSwitch", newMember, oldState.channel, newState.channel);
+    }
+  }
+
   @monitor({ event: "message" })
   async onFeedbackMessage(message: Discord.Message): Promise<void> {
     if (message.author.bot) return;
