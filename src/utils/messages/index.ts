@@ -164,7 +164,7 @@ export const strings = {
         "**SUCCESSFULLY UNLOCKED**:",
         `${emotes.commandresponses.soulstones} Coloured **EOS** Role [HOISTED]`,
         `${emotes.commandresponses.soulstones} Permanent x**2 EXPERIENCE MULTIPLIER**`,
-        `${emotes.commandresponses.soulstones} Permanent Access to Voice Context Channel`,        
+        `${emotes.commandresponses.soulstones} Permanent Access to Voice Context Channel`,
         `${emotes.commandresponses.soulstones} Permanent Appearance in Server Leaderboard`,
         `${emotes.commandresponses.soulstones} Special Badge Appended to Your Entry in Server Leaderboard`,
         `${emotes.commandresponses.soulstones} **\`e!vb\`** Command Access [COMING SOON]`,
