@@ -1,3 +1,4 @@
+import { GuildMember } from "discord.js";
 import { ErisClient } from "../client/ErisClient";
 
 declare module "discord.js" {
@@ -12,5 +13,6 @@ declare module "discord.js" {
     voiceChannelJoin: [GuildMember, VoiceChannel],
     voiceChannelLeave: [GuildMember, VoiceChannel],
     voiceChannelSwitch: [GuildMember, VoiceChannel, VoiceChannel],
+    voiceChannelDeaf: [GuildMember, "self-deafed" | "server-deafed"]
   }
 }

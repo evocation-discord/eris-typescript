@@ -28,4 +28,13 @@ export default class VoiceModule extends Module {
       await member.roles.add(env.ROLES.VOICE_CONNECTED, strings.modules.voice.joined);
     }
   }
+
+  @monitor({ event: "voiceChannelDeaf" })
+  async voiceChannelDeaf(member: Discord.GuildMember, deafType: "self-deafed" | "server-deafed"): Promise<void> {
+    if (member.voice.channel.id === env.CHANNELS.EVOCATION_VOICE && deafType === "self-deafed") {
+      const oldChannel = member.voice.channel;
+      await member.voice.setChannel(member.guild.afkChannel);
+      member.user.send(strings.modules.voice.deafMessage(oldChannel.name, member.guild.afkChannel.name));
+    }
+  }
 }

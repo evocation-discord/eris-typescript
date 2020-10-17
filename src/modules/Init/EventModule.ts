@@ -115,6 +115,9 @@ export default class EventModule extends Module {
     if (oldState.channel && newState.channel && oldState.channel.id !== newState.channel.id) {
       this.client.emit("voiceChannelSwitch", newMember, oldState.channel, newState.channel);
     }
+    if (!oldState.deaf && newState.deaf) {
+      this.client.emit("voiceChannelDeaf", newMember, newState.selfDeaf ? "self-deafed" : "server-deafed");
+    }
   }
 
   @monitor({ event: "message" })

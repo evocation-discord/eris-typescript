@@ -18,7 +18,8 @@ const eventArray: (keyof Discord.ClientEvents)[] = [
   "voiceStateUpdate",
   "voiceChannelJoin",
   "voiceChannelLeave",
-  "voiceChannelSwitch"
+  "voiceChannelSwitch",
+  "voiceChannelDeaf"
 ];
 
 export default class ListenerMonitorInit extends Module {
