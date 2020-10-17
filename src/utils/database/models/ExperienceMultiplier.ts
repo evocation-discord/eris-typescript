@@ -13,7 +13,7 @@ export class XPMultiplier extends BaseEntity {
   @Column({ nullable: true })
   thingID: string;
 
-  @Column()
+  @Column("float")
   multiplier: number;
 
   @Column({ nullable: true })

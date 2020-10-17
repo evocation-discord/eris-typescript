@@ -14,7 +14,7 @@ export const allParsers: Map<supportedArgs, (arg: string, msg: Discord.Message) 
 // Used to parse a number.
 const numberParser = async (arg: string): Promise<number> => {
   // eslint-disable-next-line radix
-  if (isInt(arg)) return parseInt(arg);
+  if (isInt(arg)) return parseFloat(arg);
   throw new Error(strings.arguments.invalidNumber);
 };
 allParsers.set(Number, numberParser);

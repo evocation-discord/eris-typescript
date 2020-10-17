@@ -108,7 +108,7 @@ export default class LevelModule extends Module {
           continue;
         }
       }
-      user.xp += (multiplier.multiplier * randomXP);
+      user.xp += Math.round((multiplier.multiplier * randomXP));
     }
 
     user.xp += randomXP;
@@ -380,6 +380,7 @@ export default class LevelModule extends Module {
   })
   async activatechannelmultiplier(msg: Discord.Message, channel: Discord.TextChannel, multiplier: number, duration?: Arguments.Duration): Promise<void> {
     await msg.delete();
+    console.log(multiplier);
     const xpmultiplier = await XPMultiplier.create({
       type: "channel",
       multiplier,
