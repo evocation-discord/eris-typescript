@@ -380,7 +380,6 @@ export default class LevelModule extends Module {
   })
   async activatechannelmultiplier(msg: Discord.Message, channel: Discord.TextChannel, multiplier: number, duration?: Arguments.Duration): Promise<void> {
     await msg.delete();
-    console.log(multiplier);
     const xpmultiplier = await XPMultiplier.create({
       type: "channel",
       multiplier,
