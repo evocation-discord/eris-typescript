@@ -11,7 +11,7 @@ import Discord from "discord.js";
 
 export default class RoleManagementModule extends Module {
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Arguments.Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.dethrone
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [new Arguments.Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.dethrone
   })
   async dethrone(msg: Discord.Message, _members: string): Promise<void> {
     await msg.delete();
@@ -34,7 +34,7 @@ export default class RoleManagementModule extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Arguments.Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.crown
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [new Arguments.Remainder(String)], admin: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.crown
   })
   async crown(msg: Discord.Message, _members: string): Promise<void> {
     await msg.delete();

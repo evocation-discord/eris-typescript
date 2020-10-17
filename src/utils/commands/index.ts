@@ -1,7 +1,7 @@
 import { command } from "./decorator";
 
 enum CommandCategories {
-  "Bot Owner" = "Bot Owner",
+  "Bot Maintainers" = "Bot Maintainers",
   "Informational" = "Informational",
   "Giveaways" = "Giveaways",
   "Server Administrator" = "Server Administrator",

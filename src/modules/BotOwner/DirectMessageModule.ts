@@ -59,7 +59,7 @@ export default class DirectMessageModule extends Module {
   }
 
   @command({
-    aliases: ["dm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [Arguments.User, new Arguments.Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage
+    aliases: ["dm"], group: CommandCategories["Bot Maintainers"], inhibitors: [inhibitors.botMaintainersOnly], args: [Arguments.User, new Arguments.Remainder(String)], admin: true, usage: "<user:user|snowflake> <content:...string>", description: commandDescriptions.directmessage
   })
   async directmessage(message: Discord.Message, user: Discord.User, content: string): Promise<void> {
     await message.delete();
@@ -76,7 +76,7 @@ export default class DirectMessageModule extends Module {
   }
 
   @command({
-    aliases: ["deletedm"], group: CommandCategories["Bot Owner"], inhibitors: [inhibitors.botAdminsOnly], args: [Arguments.User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage
+    aliases: ["deletedm"], group: CommandCategories["Bot Maintainers"], inhibitors: [inhibitors.botMaintainersOnly], args: [Arguments.User, String], admin: true, usage: "<user:user|snowflake> <messageid:string>", description: commandDescriptions.deletedirectmessage
   })
   async deletedirectmessage(message: Discord.Message, user: Discord.User, messageId: string): Promise<void> {
     await message.delete();

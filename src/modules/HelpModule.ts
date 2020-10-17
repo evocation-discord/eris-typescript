@@ -7,7 +7,7 @@ import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
 
 const commandGroupsWithEmojis = {
-  "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
+  "Bot Maintainers": `${emotes.commandresponses.settings} **BOT MAINTAINERS**`,
   "Server Administrator": `${emotes.commandresponses.admin} **SERVER ADMINISTRATOR**`,
   Informational: `${emotes.commandresponses.information} **INFORMATIONAL**`,
   "Affiliation Management": `${emotes.commandresponses.affiliate} **AFFILIATION MANAGEMENT**`,
@@ -25,7 +25,7 @@ export default class HelpModule extends Module {
     const commands = [...this.client.commandManager.cmds];
     if (!cmmand) {
       const commandGroups: CommandCategories[] = [
-        CommandCategories["Bot Owner"],
+        CommandCategories["Bot Maintainers"],
         CommandCategories["Server Administrator"],
         CommandCategories["Affiliation Management"],
         // CommandCategories["Temporary Role Assignment"],
@@ -50,7 +50,7 @@ export default class HelpModule extends Module {
     } else if (this.client.commandManager.getByTrigger(cmmand)) {
       const cmd = this.client.commandManager.getByTrigger(cmmand);
       if (cmd.admin) {
-        if (!this.client.botAdmins.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
+        if (!this.client.botMaintainers.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
       } else if (cmd.staff) {
         if (!msg.member.roles.cache.some((role) => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
       }
@@ -74,7 +74,7 @@ export default class HelpModule extends Module {
 
     commands.forEach((cmmand) => {
       if (cmmand.admin) {
-        if (this.client.botAdmins.includes(msg.author.id)) cmds.push(cmmand);
+        if (this.client.botMaintainers.includes(msg.author.id)) cmds.push(cmmand);
       } else cmds.push(cmmand);
     });
 

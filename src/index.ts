@@ -30,7 +30,7 @@ import VoiceModule from "@modules/VoiceModule";
 dotenv.config();
 
 export const client = new ErisClient({
-  botAdmins: [
+  botMaintainers: [
     "209609796704403456", // Stijn
     "369497100834308106" // Ace
   ]

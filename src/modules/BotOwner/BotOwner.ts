@@ -11,7 +11,7 @@ import Embed from "@utils/embed";
 
 export default class BotOwner extends Module {
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [Arguments.TextChannel, new Arguments.Remainder(String)], admin: true, usage: "<channel:textchannel|snowflake> <content:...string>", description: commandDescriptions.send
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [Arguments.TextChannel, new Arguments.Remainder(String)], admin: true, usage: "<channel:textchannel|snowflake> <content:...string>", description: commandDescriptions.send
   })
   send(msg: Discord.Message, channel: Discord.TextChannel, args: string): void {
     msg.delete();
@@ -19,7 +19,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>", description: commandDescriptions.setstatus
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [String], admin: true, usage: "<status:online|idle|dnd|invisible>", description: commandDescriptions.setstatus
   })
   setstatus(msg: Discord.Message, status: "online" | "idle" | "dnd" | "invisible" | string): Promise<Discord.Message | void> {
     const discordStatus = status as Discord.PresenceStatusData;
@@ -50,7 +50,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Arguments.Remainder(String)], admin: true, usage: "<status:watching|playing|listening>", description: commandDescriptions.setgame
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [String, new Arguments.Remainder(String)], admin: true, usage: "<status:watching|playing|listening>", description: commandDescriptions.setgame
   })
   setgame(msg: Discord.Message, type: "watching" | "playing" | "listening", game: string): Promise<Discord.Message | void> {
     switch (type) {
@@ -70,7 +70,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [String, new Arguments.Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [String, new Arguments.Remainder(String)], admin: true, usage: "<messageLink:string> <newContent:...string>", description: commandDescriptions.edit
   })
   async edit(msg: Discord.Message, messageLink: string, newContent: string): Promise<Discord.Message | void> {
     let isError = false;
@@ -89,7 +89,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], args: [new Arguments.Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], args: [new Arguments.Remainder(String)], aliases: ["ev"], admin: true, usage: "<code:...string>", description: commandDescriptions.eval
   })
   async eval(msg: Discord.Message, code: string): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
@@ -136,7 +136,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], aliases: ["kill", "die"], admin: true, description: commandDescriptions.shutdown
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], aliases: ["kill", "die"], admin: true, description: commandDescriptions.shutdown
   })
   async shutdown(msg: Discord.Message): Promise<void> {
     await msg.channel.send(strings.general.success(strings.modules.util.shutdown));
@@ -144,7 +144,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>"
+    inhibitors: [inhibitors.botMaintainersOnly], args: [String], group: CommandCategories["Bot Maintainers"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>"
   })
   async disablecmd(msg: Discord.Message, cmd: string): Promise<Discord.Message | void> {
     if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return errorMessage(msg, strings.general.error(strings.modules.util.cantdisablecommands));
@@ -159,7 +159,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], args: [String], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.enablecmd, usage: "<command:string>"
+    inhibitors: [inhibitors.botMaintainersOnly], args: [String], group: CommandCategories["Bot Maintainers"], admin: true, description: commandDescriptions.enablecmd, usage: "<command:string>"
   })
   async enablecmd(msg: Discord.Message, cmd: string): Promise<Discord.Message | void> {
     const commandToEnable = this.client.commandManager.getByTrigger(cmd);
@@ -172,7 +172,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], aliases: ["ldc"], admin: true, description: commandDescriptions.listdisabledcmds
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], aliases: ["ldc"], admin: true, description: commandDescriptions.listdisabledcmds
   })
   async listdisabledcmds(msg: Discord.Message): Promise<Discord.Message> {
     const disabledcommands = await DisabledCommand.find();
@@ -183,7 +183,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.channels
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], admin: true, description: commandDescriptions.channels
   })
   async channels(message: Discord.Message): Promise<void> {
     if ((message.channel as Discord.TextChannel).name !== "administrator-bot-commands") return;
@@ -203,7 +203,7 @@ export default class BotOwner extends Module {
   }
 
   @command({
-    inhibitors: [inhibitors.botAdminsOnly], group: CommandCategories["Bot Owner"], admin: true, description: commandDescriptions.emojis, usage: "[server:guild]", args: [new Arguments.Optional(Arguments.Guild)]
+    inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], admin: true, description: commandDescriptions.emojis, usage: "[server:guild]", args: [new Arguments.Optional(Arguments.Guild)]
   })
   async emojis(message: Discord.Message, server?: Discord.Guild): Promise<void> {
     await message.delete();

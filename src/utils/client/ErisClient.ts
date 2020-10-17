@@ -17,7 +17,7 @@ export class ErisClient extends Client {
 
   public modules: Set<Module> = new Set();
 
-  readonly botAdmins: string[];
+  readonly botMaintainers: string[];
 
   constructor(opts: Partial<ErisClientOptions> = {}) {
     super({
@@ -40,7 +40,7 @@ export class ErisClient extends Client {
         ]
       }
     });
-    this.botAdmins = opts.botAdmins || [];
+    this.botMaintainers = opts.botMaintainers || [];
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);
     this.monitorManager = new MonitorManager(this);
@@ -96,5 +96,5 @@ export class ErisClient extends Client {
 }
 
 interface ErisClientOptions {
-  botAdmins: string[]
+  botMaintainers: string[]
 }

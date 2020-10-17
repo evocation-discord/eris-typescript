@@ -13,8 +13,8 @@ export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
   };
 }
 
-const botAdminsOnly: Inhibitor = async (msg: Discord.Message) => {
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+const botMaintainersOnly: Inhibitor = async (msg: Discord.Message) => {
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -28,7 +28,7 @@ const userCooldown = (ms: number): Inhibitor => async (msg, cmd): Promise<string
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   const redisString = `user:${msg.author.id}:command:${cmd.triggers[0]}`;
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   if (await RedisClient.get(redisString)) return strings.inhibitors.cooldown(humanizeDuration(await RedisClient.ttl(redisString) * 1000 || 0));
   await RedisClient.set(redisString, "1", "ex", ms / 1000);
   return undefined;
@@ -45,7 +45,7 @@ const moderatorOnly: Inhibitor = async (msg) => {
 const adminOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
@@ -54,14 +54,14 @@ const adminOnly: Inhibitor = async (msg, client) => {
 const serverGrowthLeadOnly: Inhibitor = async (msg, client) => {
   const isNotGuild = await guildsOnly(msg, client);
   if (isNotGuild) return isNotGuild;
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS, env.ROLES.SERVER_GROWTH_LEAD].includes(role.id))) return undefined;
   return strings.inhibitors.noPermission;
 };
 
 const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => async (msg): Promise<string | undefined> => {
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   if (roles.includes("STAFF") && await roleValidation(msg, env.ROLES.STAFF)) return undefined;
   if (roles.includes("SCIONS OF ELYSIUM") && await roleValidation(msg, env.ROLES.SCIONS_OF_ELYSIUM)) return undefined;
   if (roles.includes("SENTRIES OF DESCENSUS") && await roleValidation(msg, env.ROLES.SENTRIES_OF_DESCENSUS)) return undefined;
@@ -78,13 +78,13 @@ export const roleValidation = async (msg: Discord.Message, roleID: string): Prom
 };
 
 const canOnlyBeExecutedInBotCommands = mergeInhibitors(guildsOnly, async (msg) => {
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   if ((msg.channel as Discord.TextChannel).name !== "bot-commands") return strings.inhibitors.requestRejectedBotCommands;
   return undefined;
 });
 
 const canOnlyBeExecutedInChannels = (channels: string[], silent = false): Inhibitor => mergeInhibitors(guildsOnly, async (msg) => {
-  if (msg.client.botAdmins.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   if (channels.includes(msg.channel.id)) return undefined;
   if (channels.includes((msg.channel as Discord.TextChannel).name)) return undefined;
   if (silent) return "Silent";
@@ -96,7 +96,7 @@ export type Inhibitor = (
   command?: Command,
 ) => Promise<string | undefined>;
 export const inhibitors = {
-  botAdminsOnly,
+  botMaintainersOnly,
   guildsOnly,
   hasGuildPermission,
   userCooldown,
