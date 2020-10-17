@@ -425,6 +425,11 @@ export const strings = {
           return strArray.join("\n");
         }
       }
+    },
+    voice: {
+      joined: "Joined Evocation Voice",
+      left: "Left Evocation Voice",
+      deafMessage: (oldVoice: string, newVoice: string) => `${emotes.logging.members.updatemember} **MOVED**: You have been moved from **${oldVoice.toUpperCase()}** to **${newVoice.toUpperCase()}**. This is to ensure occupants of voice channels are actively contributing.`
     }
   },
   commandGroups: {}
