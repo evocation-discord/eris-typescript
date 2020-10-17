@@ -80,6 +80,7 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
   const users = __users
     .filter((u) => u.bot === false)
     .filter((u) => u.id !== client.user.id)
+    .filter((u) => guild.members.cache.has(u.id))
     .filter((u) => !guild.members.resolve(u).roles.cache.find((r) => r.name === "Muted"))
     .random(giveaway.winners)
     .filter((u) => u);
