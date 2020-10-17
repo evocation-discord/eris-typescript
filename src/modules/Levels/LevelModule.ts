@@ -29,7 +29,7 @@ export default class LevelModule extends Module {
     rolesData = rolesData.sort((a, b) => a.level - b.level);
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
     const firstEntry = auditLogs.entries.first();
-    const isValid = ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id);
+    const isValid = [this.client.user.id].includes(firstEntry.executor.id);
     if (!rolesData.map((r) => r.id).includes(role.id)) return;
 
     const roleData = rolesData.find((r) => r.level === userLevel);

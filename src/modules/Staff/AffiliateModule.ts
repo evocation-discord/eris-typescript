@@ -15,7 +15,7 @@ export default class AffiliateModule extends Module {
     if (role.id !== env.ROLES.AFFILIATE) return;
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
     const firstEntry = auditLogs.entries.first();
-    if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id))) { return newMember.roles.remove(env.ROLES.AFFILIATE, strings.modules.affiliate.roleRemoveNotLegitimacy); }
+    if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { return newMember.roles.remove(env.ROLES.AFFILIATE, strings.modules.affiliate.roleRemoveNotLegitimacy); }
     (newMember.client.channels.resolve(env.CHANNELS.AFFILIATE_LOUNGE) as Discord.TextChannel).send(strings.modules.affiliate.welcomeMessage(newMember.user));
   }
 
@@ -25,7 +25,7 @@ export default class AffiliateModule extends Module {
     if (role.id !== env.ROLES.AFFILIATE) return;
     const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
     const firstEntry = auditLogs.entries.first();
-    if (!(firstEntry.changes[0].key === "$remove" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.add(env.ROLES.AFFILIATE, strings.modules.affiliate.roleAddNotLegitimacy); }
+    if (!(firstEntry.changes[0].key === "$remove" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.add(env.ROLES.AFFILIATE, strings.modules.affiliate.roleAddNotLegitimacy); }
   }
 
   @command({

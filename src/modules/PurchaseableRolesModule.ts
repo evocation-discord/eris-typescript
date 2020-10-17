@@ -21,7 +21,7 @@ export default class PurchaseableRolesModule extends Module {
       if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
         const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
         const firstEntry = auditLogs.entries.first();
-        if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.purchaseableroles.auditLogRoleAdd); }
+        if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.purchaseableroles.auditLogRoleAdd); }
       }
     }
   }

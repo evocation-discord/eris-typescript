@@ -14,12 +14,12 @@ export default class DonationModule extends Module {
     if (!oldMember.roles.cache.has(env.ROLES.HYPERION) && newMember.roles.cache.has(env.ROLES.HYPERION)) {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
       const firstEntry = auditLogs.entries.first();
-      if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.HYPERION, strings.modules.donations.auditLogDonationRoleAdd); }
+      if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.HYPERION, strings.modules.donations.auditLogDonationRoleAdd); }
     }
     if (!oldMember.roles.cache.has(env.ROLES.EVOCATION_MIRACULUM) && newMember.roles.cache.has(env.ROLES.EVOCATION_MIRACULUM)) {
       const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
       const firstEntry = auditLogs.entries.first();
-      if (!(firstEntry.changes[0].key === "$add" && ["242730576195354624", this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.EVOCATION_MIRACULUM, strings.modules.donations.auditLogDonationRoleAdd); }
+      if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.EVOCATION_MIRACULUM, strings.modules.donations.auditLogDonationRoleAdd); }
     }
   }
 
