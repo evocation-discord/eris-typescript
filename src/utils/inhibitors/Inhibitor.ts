@@ -39,6 +39,7 @@ const moderatorOnly: Inhibitor = async (msg) => {
   if (isNotGuild) return isNotGuild;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
+over  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -48,6 +49,7 @@ const adminOnly: Inhibitor = async (msg, client) => {
   if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -57,6 +59,7 @@ const serverGrowthLeadOnly: Inhibitor = async (msg, client) => {
   if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS, env.ROLES.SERVER_GROWTH_LEAD].includes(role.id))) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   return strings.inhibitors.noPermission;
 };
 
@@ -72,6 +75,7 @@ const onlySomeRolesCanExecute = (roles: PermissionRole[]): Inhibitor => async (m
 };
 
 export const roleValidation = async (msg: Discord.Message, roleID: string): Promise<boolean> => {
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   if (!msg.member) return false;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   return mainGuild.members.resolve(msg.author.id).roles.cache.has(roleID);
