@@ -39,7 +39,7 @@ const moderatorOnly: Inhibitor = async (msg) => {
   if (isNotGuild) return isNotGuild;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return undefined;
-over  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   return strings.inhibitors.noPermission;
 };
 
