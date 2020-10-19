@@ -1,13 +1,12 @@
 {
   "name": "@evocation/eris",
   "version": "1.0.0",
-  "main": "bin",
+  "main": "dist",
   "repository": "git@github.com:Evocation-Discord/Eris.git",
   "author": "Stijn <stijn@kolkies.dev>",
   "license": "UNLICENSED",
   "dependencies": {
     "cron": "^1.8.2",
-    "dayjs": "^1.8.34",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "humanize-duration": "^3.23.1",
