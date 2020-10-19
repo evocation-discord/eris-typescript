@@ -16,9 +16,9 @@
 
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@lib/*": ["lib/*"],
+      "@utils/*": ["utils/*"],
       "@modules/*": ["modules/*"],
-      "@database/*": ["lib/utils/database/*"]
+      "@database/*": ["utils/database/*"]
     }
   },
   "include": [

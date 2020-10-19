@@ -1,90 +1,94 @@
-import { Message } from "discord.js";
-import { command, Module, Optional, Command, ROLES, CommandCategories, commandDescriptions, strings, emotes, errorMessage, PV } from "@lib/utils";
+import { command, CommandCategories } from "@utils/commands";
+import { Command } from "@utils/commands/Command";
+import { emotes, env } from "@utils/constants";
+import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import { Module } from "@utils/modules";
+import * as Arguments from "@utils/arguments";
+import Discord from "discord.js";
 
 const commandGroupsWithEmojis = {
-  "Bot Owner": `${emotes.commandresponses.settings} **BOT OWNER**`,
+  "Bot Maintainers": `${emotes.commandresponses.settings} **BOT MAINTAINERS**`,
   "Server Administrator": `${emotes.commandresponses.admin} **SERVER ADMINISTRATOR**`,
-  "Informational": `${emotes.commandresponses.information} **INFORMATIONAL**`,
+  Informational: `${emotes.commandresponses.information} **INFORMATIONAL**`,
   "Affiliation Management": `${emotes.commandresponses.affiliate} **AFFILIATION MANAGEMENT**`,
-  "Giveaways": `${emotes.giveaway.donation} **GIVEAWAYS**`,
-  "Moderation": `${emotes.commandresponses.moderation} **MODERATION**`,
+  Giveaways: `${emotes.giveaway.donation} **GIVEAWAYS**`,
+  Moderation: `${emotes.commandresponses.moderation} **MODERATION**`,
   "Purchasable Role Limitation": `${emotes.commandresponses.creditcard} **PURCHASABLE ROLE LIMITATION**`,
   "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`,
-  "Soulstones": `${emotes.commandresponses.soulstones} **SOULSTONES**`,
+  Soulstones: `${emotes.commandresponses.soulstones} **SOULSTONES**`
 };
 
 export default class HelpModule extends Module {
-
-  @command({ group: CommandCategories.Informational, args: [new Optional(String)], usage: "[command:string]", description: commandDescriptions.help })
-  async help(msg: Message, command?: string): PV<Message> {
-    const commands = Array.from(this.client.commandManager.cmds);
-    if (!command) {
+  @command({
+    group: CommandCategories.Informational, args: [new Arguments.Optional(String)], usage: "[command:string]", description: commandDescriptions.help
+  })
+  async help(msg: Discord.Message, cmmand?: string): Promise<void> {
+    const commands = [...this.client.commandManager.cmds];
+    if (!cmmand) {
       const commandGroups: CommandCategories[] = [
-        CommandCategories["Bot Owner"],
+        CommandCategories["Bot Maintainers"],
         CommandCategories["Server Administrator"],
         CommandCategories["Affiliation Management"],
         // CommandCategories["Temporary Role Assignment"],
         // CommandCategories["Starboard"],
-        CommandCategories["Giveaways"],
-        CommandCategories["Moderation"],
+        CommandCategories.Giveaways,
+        CommandCategories.Moderation,
         // CommandCategories["Currency (Endorphins)"],
-        CommandCategories["Soulstones"],
+        CommandCategories.Soulstones,
         // CommandCategories["Relics"],
         CommandCategories["Levelling System"],
-        CommandCategories["Informational"],
+        CommandCategories.Informational,
         CommandCategories["Purchasable Role Limitation"]
       ];
       const messageArray: string[] = [];
 
       for await (const commandGroup of commandGroups) {
-        const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter(cmd => cmd.group === commandGroup)));
-        if (cmds.length === 0) continue;
-        messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map(cmd => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
+        const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter((c) => c.group === commandGroup)));
+        if (cmds.length > 0) messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map((cmd) => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(strings.modules.help.specificCommandHelp);
       msg.channel.send(messageArray.join("\n"), { split: true });
-    } else if (this.client.commandManager.getByTrigger(command)) {
-      const cmd = this.client.commandManager.getByTrigger(command);
+    } else if (this.client.commandManager.getByTrigger(cmmand)) {
+      const cmd = this.client.commandManager.getByTrigger(cmmand);
       if (cmd.admin) {
-        if (!this.client.botAdmins.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
-      } else {
-        if (cmd.staff) {
-          if (!msg.member.roles.cache.some(role => [ROLES.STAFF, ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
-        }
+        if (!this.client.botMaintainers.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
+      } else if (cmd.staff) {
+        if (!msg.member.roles.cache.some((role) => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
       }
       const triggers = [...cmd.triggers];
       const cmdName = triggers.shift();
       const message = [
         `**COMMAND**: \`${process.env.PREFIX}${cmdName}\``,
-        `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded }`  ,
-        `**ALIASES**: ${triggers.map(trigger => `\`${trigger}\``).length > 0 ? triggers.map(trigger => `\`${trigger}\``).join(", ") : strings.modules.help.noAliases}`,
+        `**SYNTACTIC USAGE**: ${cmd.usage ? `\`${cmd.usage}\`` : strings.modules.help.noArgumentsNeeded}`,
+        `**ALIASES**: ${triggers.map((trigger) => `\`${trigger}\``).length > 0 ? triggers.map((trigger) => `\`${trigger}\``).join(", ") : strings.modules.help.noAliases}`,
         `**DESCRIPTION**: ${cmd.description || strings.modules.help.noDescription}`
       ];
-      return msg.channel.send(message.join("\n"));
+      msg.channel.send(message.join("\n"));
     } else {
-      return errorMessage(msg, strings.general.error(strings.modules.help.noCommandFound));
+      errorMessage(msg, strings.general.error(strings.modules.help.noCommandFound));
     }
+    return null;
   }
 
-  filterAdminCommands(msg: Message, commands: Command[]): Command[] {
+  filterAdminCommands(msg: Discord.Message, commands: Command[]): Command[] {
     const cmds: Command[] = [];
 
-    commands.forEach(command => {
-      if (command.admin) {
-        if (this.client.botAdmins.includes(msg.author.id)) cmds.push(command);
-      } else cmds.push(command);
+    commands.forEach((cmmand) => {
+      if (cmmand.admin) {
+        if (this.client.botMaintainers.includes(msg.author.id)) cmds.push(cmmand);
+      } else cmds.push(cmmand);
     });
 
     return cmds;
   }
 
-  filterStaffCommands(msg: Message, commands: Command[]): Command[] {
+  filterStaffCommands(msg: Discord.Message, commands: Command[]): Command[] {
     const cmds: Command[] = [];
 
-    commands.forEach(command => {
-      if (command.staff) {
-        if (msg.member.roles.cache.some(role => [ROLES.MODERATOR, ROLES.ADMINISTRATORS, ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(command);
-      } else cmds.push(command);
+    commands.forEach((cmmand) => {
+      if (cmmand.staff) {
+        if (msg.member.roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(cmmand);
+      } else cmds.push(cmmand);
     });
 
     return cmds;

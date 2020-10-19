@@ -1,14 +1,12 @@
 {
   "name": "@evocation/eris",
   "version": "1.0.0",
-  "main": "bin",
+  "main": "dist",
   "repository": "git@github.com:Evocation-Discord/Eris.git",
   "author": "Stijn <stijn@kolkies.dev>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@types/node-schedule": "^1.3.0",
-    "chokidar": "^3.4.1",
-    "dayjs": "^1.8.34",
+    "node-schedule": "^1.3.2",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "humanize-duration": "^3.23.1",
@@ -16,13 +14,22 @@
     "module-alias": "^2.2.2",
     "mysql2": "^2.1.0",
     "node-fetch": "^2.6.0",
-    "node-schedule": "^1.3.2",
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
     "typeorm": "^0.2.25"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@swc/cli": "^0.1.27",
+    "@swc/core": "^1.2.36",
+    "@types/node-schedule": "^1.3.0",
     "@types/humanize-duration": "^3.18.0",
     "@types/ioredis": "^4.17.4",
     "@types/node": "^14.0.25",
@@ -33,14 +40,29 @@
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
     "eslint": "^7.5.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-unicorn": "^22.0.0",
+    "husky": "^4.3.0",
+    "nodemon": "^2.0.4",
     "typescript": "^3.9.7"
   },
   "_moduleAliases": {
-    "@lib": "dist/lib",
+    "@utils": "dist/utils",
     "@modules": "dist/modules",
-    "@database": "dist/lib/utils/database"
+    "@database": "dist/utils/database"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "swc src -d dist",
+    "build:watch": "swc src -d dist -w",
+    "start": "node dist",
+    "dev": "nodemon dist",
+    "deps": "yarn upgrade-interactive",
+    "lint": "eslint src",
+    "lint:tsc": "tsc --noEmit",
+    "lint:tsc:watch": "tsc --noEmit -w",
+    "lint:fix": "eslint --fix src"
   }
 }

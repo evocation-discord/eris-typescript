@@ -1,11 +1,11 @@
+import "reflect-metadata";
 
 import dotenv from "dotenv";
-dotenv.config();
 
 import "module-alias/register";
-import "@lib/utils/types/discord";
+import "@utils/types/discord";
 
-import { ErisClient } from "@lib/utils";
+import { ErisClient } from "@utils/client";
 import { setupDatabase } from "@database/index";
 import ListenerMonitorInit from "@modules/Init/ListenerMonitorInit";
 import EventModule from "@modules/Init/EventModule";
@@ -26,12 +26,15 @@ import AffiliateModule from "@modules/Staff/AffiliateModule";
 import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementModule";
 import HalloweenModule from "@modules/HalloweenModule";
 import SoulstoneModule from "@modules/SoulstoneModule";
+import VoiceModule from "@modules/VoiceModule";
+
+dotenv.config();
 
 export const client = new ErisClient({
-  botAdmins: [
+  botMaintainers: [
     "209609796704403456", // Stijn
-    "369497100834308106", // Ace
-  ],
+    "369497100834308106" // Ace
+  ]
 });
 
 setupDatabase();
@@ -60,6 +63,7 @@ client
   .registerModule(UtilModule)
   .registerModule(LevelModule)
   .registerModule(SoulstoneModule)
+  .registerModule(VoiceModule)
   // Event Modules
   .registerModule(HalloweenModule)
   .login(process.env.DISCORD_TOKEN);
