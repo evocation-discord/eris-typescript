@@ -1,5 +1,4 @@
 /* eslint-disable no-continue */
-// TODO: Rewrite functions
 import { monitor } from "@utils/monitor";
 import * as Arguments from "@utils/arguments";
 import { command, CommandCategories } from "@utils/commands";
