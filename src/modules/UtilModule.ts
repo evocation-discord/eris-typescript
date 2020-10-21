@@ -5,6 +5,7 @@ import inhibitors from "@utils/inhibitors";
 import { commandDescriptions, strings, errorMessage } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
+import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
 
 export default class UtilCommandModule extends Module {
@@ -124,5 +125,15 @@ export default class UtilCommandModule extends Module {
     if (member.user.bot) return;
     const channel = await member.client.channels.fetch(env.CHANNELS.LOUNGE) as Discord.TextChannel;
     channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>. We now have **${member.guild.memberCount}** members.`);
+  }
+
+  @command({
+    group: CommandCategories.Informational, description: commandDescriptions.avatar, inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Arguments.Optional(Discord.User)]
+  })
+  async avatar(message: Discord.Message, user = message.author): Promise<void> {
+    const embed = new Embed()
+      .setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setImage(user.displayAvatarURL({ dynamic: true, format: "png", size: 4096 }));
+    await message.channel.send(embed);
   }
 }

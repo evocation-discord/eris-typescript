@@ -495,7 +495,8 @@ export const commandDescriptions = {
   dethrone: "Removes all roles from (an) user(s).",
   crown: "Re-assigns roles that were removed using the `e!dethrone` conmand.",
   emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server.",
-  staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position."
+  staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position.",
+  avatar: "Retrieves the avatar of a user. If no argument is provided, the invoking user's avatar will be returned."
 };
 
 const rankEmoji = (rank: number): string => {
