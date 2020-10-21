@@ -6,7 +6,7 @@ import { env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
 import { cron } from "@utils/cron";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
-import { strings, commandDescriptions } from "@utils/messages";
+import { strings, commandDescriptions, errorMessage } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import Discord from "discord.js";
@@ -154,9 +154,12 @@ export default class SoulstoneModule extends Module {
     let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     soulstoneData.soulstones -= amount;
-    if (soulstoneData.soulstones < 0) soulstoneData.soulstones = 0;
-    await soulstoneData.save();
-    await message.channel.send(strings.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
+    if (soulstoneData.soulstones < amount) {
+      await errorMessage(message, strings.general.error(strings.modules.soulstones.commands.deductsoulstones.error));
+    } else {
+      await soulstoneData.save();
+      await message.channel.send(strings.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
+    }
   }
 }
 

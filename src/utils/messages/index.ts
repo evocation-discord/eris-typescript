@@ -451,7 +451,8 @@ export const strings = {
           success: (user: Discord.User, award: number, total: number) => `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: Awarded **${award}** Soulstones to **\`${user.tag}\`** (\`${user.id}\`). They now have **${total}** Soulstones.`
         },
         deductsoulstones: {
-          success: (user: Discord.User, deduct: number, total: number) => `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: Deducted **${deduct}** Soulstones from **\`${user.tag}\`** (\`${user.id}\`). They now have **${total}** Soulstones.`
+          success: (user: Discord.User, deduct: number, total: number) => `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: Deducted **${deduct}** Soulstones from **\`${user.tag}\`** (\`${user.id}\`). They now have **${total}** Soulstones.`,
+          error: "User does not have that many Soulstones."
         }
       }
     },
