@@ -135,6 +135,29 @@ export default class SoulstoneModule extends Module {
     const soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
     await message.channel.send(strings.modules.soulstones.commands.soulstones.success(user, soulstoneData.soulstones));
   }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.awardsoulstones, aliases: ["awardss"], inhibitors: [inhibitors.botMaintainersOnly], usage: "<user:user> <amount:number>", args: [Arguments.User, Number]
+  })
+  async awardsoulstones(message: Discord.Message, user: Discord.User, amount: number): Promise<void> {
+    let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+    if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
+    soulstoneData.soulstones += amount;
+    await soulstoneData.save();
+    await message.channel.send(strings.modules.soulstones.commands.awardsoulstones.success(user, amount, soulstoneData.soulstones));
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.deductsoulstones, aliases: ["deductss"], inhibitors: [inhibitors.botMaintainersOnly], usage: "<user:user> <amount:number>", args: [Arguments.User, Number]
+  })
+  async deductsoulstones(message: Discord.Message, user: Discord.User, amount: number): Promise<void> {
+    let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+    if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
+    soulstoneData.soulstones -= amount;
+    if (soulstoneData.soulstones < 0) soulstoneData.soulstones = 0;
+    await soulstoneData.save();
+    await message.channel.send(strings.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
+  }
 }
 
 const userInfo = async (user: Discord.User): Promise<{ soulstones: number; rank: number; }> => {

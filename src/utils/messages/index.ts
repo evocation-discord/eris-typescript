@@ -446,6 +446,12 @@ export const strings = {
         },
         soulstones: {
           success: (user: Discord.User, soulstones: number) => `${emotes.commandresponses.soulstones} **BALANCE**: **${user.username}**#${user.discriminator} has **${soulstones}** Soulstone(s).`
+        },
+        awardsoulstones: {
+          success: (user: Discord.User, award: number, total: number) => `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: Awarded **${award}** Soulstones to **\`${user.tag}\`** (\`${user.id}\`). They now have **${total}** Soulstones.`
+        },
+        deductsoulstones: {
+          success: (user: Discord.User, deduct: number, total: number) => `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: Deducted **${deduct}** Soulstones from **\`${user.tag}\`** (\`${user.id}\`). They now have **${total}** Soulstones.`
         }
       }
     },
@@ -522,7 +528,9 @@ export const commandDescriptions = {
   collect: "Collects Soulstones that have been placed automatically.",
   soulstoneleaderboard: "Leaderboard for Soulstones.",
   redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
-  soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned."
+  soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned.",
+  awardsoulstones: "Awards a user a certain amount of Soulstones",
+  deductsoulstones: "Removes a certain amount of Soulstones from a user."
 };
 
 const rankEmoji = (rank: number): string => {
