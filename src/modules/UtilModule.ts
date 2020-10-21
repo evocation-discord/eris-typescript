@@ -132,7 +132,7 @@ export default class UtilCommandModule extends Module {
   })
   async avatar(message: Discord.Message, user = message.author): Promise<void> {
     const embed = new Embed()
-      .setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setAuthor(`Avatar of ${user.tag} (${user.id})`, user.displayAvatarURL({ dynamic: true, format: "png" }))
       .setImage(user.displayAvatarURL({ dynamic: true, format: "png", size: 4096 }));
     await message.channel.send(embed);
   }
