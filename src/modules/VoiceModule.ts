@@ -37,4 +37,13 @@ export default class VoiceModule extends Module {
       member.user.send(strings.modules.voice.deafMessage(oldChannel.name, member.guild.afkChannel.name));
     }
   }
+
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember, role: Discord.Role): Promise<void> {
+    if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
+    if (role.id !== env.ROLES.VOICE_CONNECTED) return;
+    const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+    const firstEntry = auditLogs.entries.first();
+    if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.affiliate.roleRemoveNotLegitimacy); }
+  }
 }
