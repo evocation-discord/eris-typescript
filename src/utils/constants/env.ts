@@ -47,7 +47,8 @@ const NEGATIONS = {
   MEDIA: process.env.NEGATION_MEDIA,
   REACTIONS: process.env.NEGATION_REACTIONS,
   ART: process.env.NEGATION_ART,
-  FEEDBACK: process.env.NEGATION_FEEDBACK
+  FEEDBACK: process.env.NEGATION_FEEDBACK,
+  EVENTS: process.env.NEGATION_EVENTS
 };
 
 const DATABASE_INFO = {

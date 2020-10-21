@@ -117,4 +117,26 @@ export default class PermissionsModule extends Module {
     }
     await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Experience")), codeblockMember(added, removed)].join("\n"), { split: true });
   }
+
+  @command({
+    inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [new Remainder(String)], aliases: ["nev"], staff: true, usage: "<members:...guildmember|snowflake>", description: commandDescriptions.negateevents
+  })
+  async negateevents(msg: Discord.Message, _members: string): Promise<void> {
+    msg.delete();
+    const members: Discord.GuildMember[] = [];
+    for await (const _member of _members.split(" ")) members.push(await guildMemberParser(_member, msg));
+    if (members.includes(msg.member)) members.splice(members.indexOf(msg.member), 1);
+    const added: Discord.GuildMember[] = [];
+    const removed: Discord.GuildMember[] = [];
+    for await (const member of members) {
+      if (member.roles.cache.has(env.NEGATIONS.EVENTS)) {
+        member.roles.remove(env.NEGATIONS.EVENTS);
+        removed.push(member);
+      } else {
+        member.roles.add(env.NEGATIONS.EVENTS);
+        added.push(member);
+      }
+    }
+    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Events")), codeblockMember(added, removed)].join("\n"), { split: true });
+  }
 }

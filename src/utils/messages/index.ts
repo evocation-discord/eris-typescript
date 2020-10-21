@@ -173,7 +173,7 @@ export const strings = {
       hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
     },
     permissions: {
-      negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback") => `${type} negations have been executed for the specified users.`
+      negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback" | "Events") => `${type} negations have been executed for the specified users.`
     },
     botowner: {
       emojis: {
@@ -453,6 +453,7 @@ export const commandDescriptions = {
   negatereaction: "Appends/removes the '[NEGATION] Reactions' role to/from the specified user(s).",
   negatemedia: "Appends/removes the '[NEGATION] Media' role to/from the specified user(s).",
   negateexperience: "Appends/removes the '[NEGATION] Experience' role to/from the specified user(s).",
+  negateevents: "Appends/removes the '[NEGATION] Events' role to/from the specified user(s).",
   start: "Starts a giveaway in the channel in which this command is performed.",
   reroll: "Forces Eris to redetermine the winner of a giveaway. If no arguments are supplied, the most recent giveaway's winner will be rerolled.",
   end: "Ends a giveaway. If a message ID isn't supplied, the most recent active giveaway in the channel in which the command is being run in will be ended.",
