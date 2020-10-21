@@ -35,7 +35,7 @@ export const strings = {
         `React with ${emotes.giveaway.giftreaction} to enter!\n`,
         `**TIME REMAINING**: ${duration}\n`,
         `**ELIGIBILITY PREREQUISITES**: You __**MUST**__ have the **<@&${env.ROLES.MALLORN}>** role or above to enter giveaways. If you attempt to enter this giveaway without being **LEVEL 3** or above, your entrance will be nullified.\n`,
-        "Want to receive notifications everytime a giveaway is active? Run `!join Giveaways` in <#528598988673253376>."
+        "Want to receive notifications everytime a giveaway is active? Run `hjoin Giveaways` in <#528598988673253376>."
       ].join("\n")
     },
     noWinner: (name: string) => `Nobody won **${name}**. Maybe next time...`,
