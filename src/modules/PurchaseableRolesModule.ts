@@ -13,17 +13,13 @@ export default class PurchaseableRolesModule extends Module {
     super(client);
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember, role: Discord.Role): Promise<void> {
     if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
-    const roles = [env.ROLES.SENTRIES_OF_DESCENSUS, env.ROLES.SCIONS_OF_ELYSIUM, env.ROLES.ORION, env.ROLES.CHRONOS];
-    for await (const role of roles) {
-      if (!oldMember.roles.cache.has(role) && newMember.roles.cache.has(role)) {
-        const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
-        const firstEntry = auditLogs.entries.first();
-        if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.purchaseableroles.auditLogRoleAdd); }
-      }
-    }
+    if (![env.ROLES.SENTRIES_OF_DESCENSUS, env.ROLES.SCIONS_OF_ELYSIUM, env.ROLES.ORION, env.ROLES.CHRONOS].includes(role.id)) return;
+    const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+    const firstEntry = auditLogs.entries.first();
+    if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.purchaseableroles.auditLogRoleAdd); }
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.onlySomeRolesCanExecute(["SCIONS OF ELYSIUM", "SENTRIES OF DESCENSUS", "STAFF", "EOS"]), inhibitors.userCooldown(30000)], group: CommandCategories["Purchasable Role Limitation"], description: commandDescriptions.muse })

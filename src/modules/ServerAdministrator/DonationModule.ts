@@ -8,19 +8,13 @@ import Discord from "discord.js";
 import { env } from "@utils/constants";
 
 export default class DonationModule extends Module {
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember, role: Discord.Role): Promise<void> {
     if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
-    if (!oldMember.roles.cache.has(env.ROLES.HYPERION) && newMember.roles.cache.has(env.ROLES.HYPERION)) {
-      const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
-      const firstEntry = auditLogs.entries.first();
-      if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.HYPERION, strings.modules.donations.auditLogDonationRoleAdd); }
-    }
-    if (!oldMember.roles.cache.has(env.ROLES.EVOCATION_MIRACULUM) && newMember.roles.cache.has(env.ROLES.EVOCATION_MIRACULUM)) {
-      const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
-      const firstEntry = auditLogs.entries.first();
-      if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(env.ROLES.EVOCATION_MIRACULUM, strings.modules.donations.auditLogDonationRoleAdd); }
-    }
+    if (![env.ROLES.HYPERION, env.ROLES.EVOCATION_MIRACULUM].includes(role.id)) return;
+    const auditLogs = await newMember.guild.fetchAuditLogs({ type: "MEMBER_ROLE_UPDATE" });
+    const firstEntry = auditLogs.entries.first();
+    if (!(firstEntry.changes[0].key === "$add" && [this.client.user.id].includes(firstEntry.executor.id))) { newMember.roles.remove(role, strings.modules.donations.auditLogDonationRoleAdd); }
   }
 
   @command({

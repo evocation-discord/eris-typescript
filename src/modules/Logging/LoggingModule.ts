@@ -66,13 +66,12 @@ export default class LoggingModule extends Module {
     }
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember, role: Discord.Role): Promise<void> {
     if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
-    if (!oldMember.roles.cache.has(env.ROLES.EOS) && newMember.roles.cache.has(env.ROLES.EOS)) {
-      const channel = newMember.guild.channels.cache.find((c) => c.name === "lounge") as Discord.TextChannel;
-      channel.send(strings.modules.logging.userBoost(newMember.user));
-    }
+    if (role.id !== env.ROLES.EOS) return;
+    const channel = newMember.guild.channels.cache.find((c) => c.name === "lounge") as Discord.TextChannel;
+    channel.send(strings.modules.logging.userBoost(newMember.user));
   }
 }
 
