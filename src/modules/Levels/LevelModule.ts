@@ -150,7 +150,6 @@ export default class LevelModule extends Module {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
-      if (typeof role === "string") return strings.errors.errorMessage(msg, strings.errors.error(role));
       if (msg.member.roles.cache.has(role.id)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.cantAddRoleToExclusions));
       await XPExclusion.create({
         type: "role",
@@ -159,7 +158,6 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("role")));
     } else if (type === "channel") {
       const channel = await textChannelParser(id, msg);
-      if (!channel) return;
       await XPExclusion.create({
         type: "channel",
         id: channel.id
@@ -167,7 +165,6 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("channel")));
     } else if (type === "category") {
       const channel = await categoryChannelParser(id, msg);
-      if (typeof channel === "string") return strings.errors.errorMessage(msg, strings.errors.error(channel));
       await XPExclusion.create({
         type: "category",
         id: channel.id
@@ -195,17 +192,20 @@ export default class LevelModule extends Module {
     if (what === "remove") {
       if (!type || !["channel", "role", "category"].includes(type) || !id) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
       if (type === "role") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "role" } });
+        const role = await roleParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: role.id, type: "role" } });
         if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.roleNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForRole));
       } else if (type === "channel") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "channel" } });
+        const channel = await textChannelParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: channel.id, type: "channel" } });
         if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.channelNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForChannel));
       } else if (type === "category") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "category" } });
+        const channel = await categoryChannelParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: channel.id, type: "category" } });
         if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.categoryNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForCategory));
