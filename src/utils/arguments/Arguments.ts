@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import Discord from "discord.js";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import ArgTextProcessor from "./ArgumentProcessor";
 import { supportedArgs, allParsers } from "./supportedArgs";
 
@@ -23,7 +23,7 @@ export class Remainder {
     const remainder = parser.remainder();
     if (remainder === "") {
       // Argument is blank.
-      throw new Error(strings.arguments.remainderBlank);
+      throw new Error(strings.errors.arguments.remainderBlank);
     }
 
     // Call the parser.

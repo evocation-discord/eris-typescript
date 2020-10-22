@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export const { PREFIX } = process.env;
+
 const ROLES = {
   HYPERION: process.env.WHITE_HALLOWS,
   SENTRIES_OF_DESCENSUS: process.env.SENTRIES_OF_DESCENSUS_ROLE,

@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export async function user(arg: string, message: Discord.Message): Promise<Discord.User> {
@@ -22,7 +22,7 @@ export async function user(arg: string, message: Discord.Message): Promise<Disco
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindUser);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindUser);
   return querySearch[0];
 }
 

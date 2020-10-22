@@ -1,5 +1,5 @@
 import { env } from "@utils/constants";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import Discord from "discord.js";

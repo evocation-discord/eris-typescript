@@ -1,6 +1,6 @@
 import { monitor } from "@utils/monitor";
 import inhibitors from "@utils/inhibitors";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { command, CommandCategories } from "@utils/commands";
 import Discord from "discord.js";
 import { Module } from "@utils/modules";
@@ -33,9 +33,9 @@ export default class AffiliateModule extends Module {
   })
   async affiliate(message: Discord.Message, member: Discord.GuildMember): Promise<void> {
     if (message.guild.id !== env.MAIN_GUILD_ID) return;
-    if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
-    if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
-    if (member.roles.cache.has(env.ROLES.AFFILIATE)) return errorMessage(message, strings.modules.affiliate.affiliate.denied);
+    if (member === message.member) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.cantAffiliateYourself));
+    if (member.user.bot) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.cantAffiliateBots));
+    if (member.roles.cache.has(env.ROLES.AFFILIATE)) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.affiliate.denied));
     await member.roles.add(env.ROLES.AFFILIATE, strings.modules.affiliate.affiliate.audit(message.author));
     message.channel.send(strings.general.success(strings.modules.affiliate.affiliate.success(member.user)), { allowedMentions: { roles: [], users: [] } });
   }
@@ -45,9 +45,9 @@ export default class AffiliateModule extends Module {
   })
   async removeaffiliate(message: Discord.Message, member: Discord.GuildMember): Promise<void> {
     if (message.guild.id !== env.MAIN_GUILD_ID) return;
-    if (member === message.member) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateYourself));
-    if (member.user.bot) return errorMessage(message, strings.general.error(strings.modules.affiliate.cantAffiliateBots));
-    if (!member.roles.cache.has(env.ROLES.AFFILIATE)) return errorMessage(message, strings.modules.affiliate.removeaffiliate.denied);
+    if (member === message.member) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.cantAffiliateYourself));
+    if (member.user.bot) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.cantAffiliateBots));
+    if (!member.roles.cache.has(env.ROLES.AFFILIATE)) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.affiliate.removeaffiliate.denied));
     await member.roles.remove(env.ROLES.AFFILIATE, strings.modules.affiliate.removeaffiliate.audit(message.author));
     message.channel.send(strings.general.success(strings.modules.affiliate.removeaffiliate.success(member.user)), { allowedMentions: { roles: [], users: [] } });
   }

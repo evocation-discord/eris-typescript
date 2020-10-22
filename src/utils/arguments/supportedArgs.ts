@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import {
   guild, guildMember, role, textChannel, user
 } from "@utils/parsers";
@@ -15,7 +15,7 @@ export const allParsers: Map<supportedArgs, (arg: string, msg: Discord.Message) 
 const numberParser = async (arg: string): Promise<number> => {
   // eslint-disable-next-line radix
   if (isInt(arg)) return parseFloat(arg);
-  throw new Error(strings.arguments.invalidNumber);
+  throw new Error(strings.errors.arguments.invalidNumber);
 };
 allParsers.set(Number, numberParser);
 

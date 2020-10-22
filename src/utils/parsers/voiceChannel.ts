@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export function voiceChannel(arg: string, message: Discord.Message): Discord.VoiceChannel {
@@ -22,7 +22,7 @@ export function voiceChannel(arg: string, message: Discord.Message): Discord.Voi
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindVoiceChannel);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindVoiceChannel);
   return querySearch[0];
 }
 

@@ -2,7 +2,7 @@ import { command, CommandCategories } from "@utils/commands";
 import { emotes, env } from "@utils/constants";
 import Embed from "@utils/embed";
 import inhibitors from "@utils/inhibitors";
-import { commandDescriptions, strings, errorMessage } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import * as Arguments from "@utils/arguments";
@@ -34,7 +34,7 @@ export default class UtilCommandModule extends Module {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
       await msg.author.send(strings.modules.util.privacypolicy.message2);
     } catch (e) {
-      errorMessage(msg, strings.general.error(strings.general.dmsclosed));
+      strings.errors.errorMessage(msg, strings.errors.error(strings.general.dmsclosed));
     }
     try {
       await msg.delete();
@@ -56,7 +56,7 @@ export default class UtilCommandModule extends Module {
       ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
-          message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
+          message.channel.send(strings.modules.purchaseableroles.erisThanksMessage[Math.floor(Math.random() * strings.modules.purchaseableroles.erisThanksMessage.length)]);
           done = true;
         }
       });
@@ -70,7 +70,7 @@ export default class UtilCommandModule extends Module {
       ["goodnight eris", "night eris", "gn eris", "gngn eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
-          message.channel.send(strings.modules.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.erisGoodnightMessage.length)](message));
+          message.channel.send(strings.modules.purchaseableroles.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.purchaseableroles.erisGoodnightMessage.length)](message));
           done = true;
         }
       });

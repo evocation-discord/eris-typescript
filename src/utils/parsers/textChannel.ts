@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export function textChannel(arg: string, message: Discord.Message): Discord.TextChannel {
@@ -22,7 +22,7 @@ export function textChannel(arg: string, message: Discord.Message): Discord.Text
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindTextChannel);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindTextChannel);
   return querySearch[0] as Discord.TextChannel;
 }
 

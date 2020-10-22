@@ -2,7 +2,7 @@ import { Remainder } from "@utils/arguments";
 import { command, CommandCategories } from "@utils/commands";
 import { env } from "@utils/constants";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
-import { commandDescriptions, strings, codeblockMember } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { guildMember as guildMemberParser } from "@utils/parsers";
 import Discord from "discord.js";
@@ -27,7 +27,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Art")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Art")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({
@@ -49,7 +49,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Feedback")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Feedback")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({
@@ -71,7 +71,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Reaction")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Reaction")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({
@@ -93,7 +93,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Media")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Media")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({
@@ -115,7 +115,7 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Experience")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Experience")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
   @command({
@@ -137,6 +137,14 @@ export default class PermissionsModule extends Module {
         added.push(member);
       }
     }
-    await msg.channel.send([strings.general.success(strings.modules.permissions.negations("Events")), codeblockMember(added, removed)].join("\n"), { split: true });
+    await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Events")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
+  }
+
+  async logRoleAdd(): Promise<void> {
+    //
+  }
+
+  async logRoleRemove(): Promise<void> {
+    //
   }
 }

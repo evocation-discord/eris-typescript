@@ -2,7 +2,7 @@
 import { emotes, env } from "@utils/constants";
 import Embed from "@utils/embed";
 import { listener } from "@utils/listener";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import scheduler from "@utils/scheduler";

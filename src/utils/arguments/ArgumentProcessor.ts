@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import Discord from "discord.js";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 
 class ArgConstructor {
   parts: string[];
@@ -63,7 +63,7 @@ export default class ArgTextProcessor {
   async one(parser: (arg: string, msg: Discord.Message) => Promise<unknown>, msg: Discord.Message): Promise<unknown> {
     // Get the argument if we can.
     const x = this.getArgumentString();
-    if (!x) throw new Error(strings.arguments.noArgumentSupplied);
+    if (!x) throw new Error(strings.errors.arguments.noArgumentSupplied);
 
     try {
       // Attempt to parse this argument.

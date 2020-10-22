@@ -1,6 +1,6 @@
 import { command, CommandCategories } from "@utils/commands";
 import { env, colors } from "@utils/constants";
-import { commandDescriptions, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
@@ -18,11 +18,11 @@ export default class DirectMessageModule extends Module {
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
-      .setFooter(strings.modules.directmessages.embedFooter(message.id))
-      .setAuthor(strings.modules.directmessages.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setFooter(strings.modules.administrator.directmessages.embedFooter(message.id))
+      .setAuthor(strings.modules.administrator.directmessages.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setDescription(message.content);
-    if (message.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, message.attachments.map((attachment) => attachment.url).join("\n"));
-    channel.send(strings.modules.directmessages.directMessageReceived, embed);
+    if (message.attachments.size > 0) embed.addField(strings.modules.administrator.directmessages.attachments, message.attachments.map((attachment) => attachment.url).join("\n"));
+    channel.send(strings.modules.administrator.directmessages.directMessageReceived, embed);
   }
 
   @monitor({ event: "messageUpdate" })
@@ -34,12 +34,12 @@ export default class DirectMessageModule extends Module {
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_EDITED_MESSAGE)
-      .setFooter(strings.modules.directmessages.embedFooter(newMsg.id))
-      .setAuthor(strings.modules.directmessages.embedAuthor(newMsg), newMsg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .addField(strings.modules.directmessages.originalMessage, oldMsg.content || strings.modules.directmessages.orignalContentError)
-      .addField(strings.modules.directmessages.editedMessage, newMsg.content);
-    if (newMsg.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, newMsg.attachments.map((attachment) => attachment.url).join("\n"));
-    channel.send(strings.modules.directmessages.directMessageEdited, embed);
+      .setFooter(strings.modules.administrator.directmessages.embedFooter(newMsg.id))
+      .setAuthor(strings.modules.administrator.directmessages.embedAuthor(newMsg), newMsg.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .addField(strings.modules.administrator.directmessages.originalMessage, oldMsg.content || strings.modules.administrator.directmessages.orignalContentError)
+      .addField(strings.modules.administrator.directmessages.editedMessage, newMsg.content);
+    if (newMsg.attachments.size > 0) embed.addField(strings.modules.administrator.directmessages.attachments, newMsg.attachments.map((attachment) => attachment.url).join("\n"));
+    channel.send(strings.modules.administrator.directmessages.directMessageEdited, embed);
   }
 
   @monitor({ event: "messageDelete" })
@@ -51,11 +51,11 @@ export default class DirectMessageModule extends Module {
     const embed = new Embed()
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
-      .setFooter(strings.modules.directmessages.embedFooter(msg.id))
-      .setAuthor(strings.modules.directmessages.embedAuthor(msg), msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setFooter(strings.modules.administrator.directmessages.embedFooter(msg.id))
+      .setAuthor(strings.modules.administrator.directmessages.embedAuthor(msg), msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
       .setDescription(msg.content);
-    if (msg.attachments.size > 0) embed.addField(strings.modules.directmessages.attachments, msg.attachments.map((attachment) => attachment.proxyURL).join("\n"));
-    channel.send(strings.modules.directmessages.directMessageDeleted, embed);
+    if (msg.attachments.size > 0) embed.addField(strings.modules.administrator.directmessages.attachments, msg.attachments.map((attachment) => attachment.proxyURL).join("\n"));
+    channel.send(strings.modules.administrator.directmessages.directMessageDeleted, embed);
   }
 
   @command({
@@ -69,10 +69,10 @@ export default class DirectMessageModule extends Module {
       .setTimestamp()
       .setColor(colors.DM_SEND_MESSAGE)
       .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setFooter(strings.modules.directmessages.embedFooter(msg.id))
+      .setFooter(strings.modules.administrator.directmessages.embedFooter(msg.id))
       .setDescription(msg.content);
-    channel.send(strings.modules.directmessages.commands.directMessageSentExecution(message, user), embed);
-    message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageSent(user, msg.content)));
+    channel.send(strings.modules.administrator.directmessages.commands.directMessageSentExecution(message, user), embed);
+    message.channel.send(strings.general.success(strings.modules.administrator.directmessages.commands.directMessageSent(user, msg.content)));
   }
 
   @command({
@@ -90,9 +90,9 @@ export default class DirectMessageModule extends Module {
       .setTimestamp()
       .setColor(colors.DM_DELETED_MESSAGE)
       .setAuthor(`${dmMessage.author.tag} (${dmMessage.author.id})`, dmMessage.author.displayAvatarURL({ dynamic: true, format: "png" }))
-      .setFooter(strings.modules.directmessages.embedFooter(dmMessage.id))
+      .setFooter(strings.modules.administrator.directmessages.embedFooter(dmMessage.id))
       .setDescription(dmMessage.content);
-    channel.send(strings.modules.directmessages.commands.directMessageDeleteExecution(message, user), embed);
-    message.channel.send(strings.general.success(strings.modules.directmessages.commands.directMessageDeleted(user, dmMessage.content)));
+    channel.send(strings.modules.administrator.directmessages.commands.directMessageDeleteExecution(message, user), embed);
+    message.channel.send(strings.general.success(strings.modules.administrator.directmessages.commands.directMessageDeleted(user, dmMessage.content)));
   }
 }

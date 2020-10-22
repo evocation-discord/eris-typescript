@@ -2,7 +2,7 @@ import { ErisClient } from "@utils/client";
 import { command, CommandCategories } from "@utils/commands";
 import { env } from "@utils/constants";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
-import { strings, commandDescriptions, errorMessage } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import * as Arguments from "@utils/arguments";
@@ -32,9 +32,9 @@ export default class PurchaseableRolesModule extends Module {
   })
   async cancel(message: Discord.Message, user: Discord.User): Promise<Discord.Message|void> {
     const guild = message.client.guilds.resolve(env.MAIN_GUILD_ID);
-    if (message.author === user) return errorMessage(message, strings.general.error(strings.modules.purchaseableroles.cantCancelYourself));
-    if (user.id === message.client.user.id) return errorMessage(message, strings.general.error(strings.modules.purchaseableroles.cantCancelEris));
-    if (guild.members.resolve(user).roles.cache.has(env.ROLES.ADMINISTRATORS) || guild.members.resolve(user).roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)) return message.channel.send(strings.general.error(strings.modules.purchaseableroles.cantCancelAdmins));
+    if (message.author === user) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.purchaseableroles.cantCancelYourself));
+    if (user.id === message.client.user.id) return strings.errors.errorMessage(message, strings.errors.error(strings.modules.purchaseableroles.cantCancelEris));
+    if (guild.members.resolve(user).roles.cache.has(env.ROLES.ADMINISTRATORS) || guild.members.resolve(user).roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)) return message.channel.send(strings.errors.error(strings.modules.purchaseableroles.cantCancelAdmins));
     const random = Math.round(Math.random());
     if (random === 1) return message.channel.send(strings.general.success(strings.modules.purchaseableroles.cancel_0(user)));
     if (random === 0) return message.channel.send(strings.modules.purchaseableroles.cancel_1(user));
