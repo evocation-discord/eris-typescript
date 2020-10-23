@@ -48,7 +48,9 @@ export default {
     hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
   },
   permissions: {
-    negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback" | "Events") => `${type} negations have been executed for the specified users.`
+    negations: (type: "Reaction" | "Art" | "Media" | "Experience" | "Feedback" | "Events") => `${type} negations have been executed for the specified users.`,
+    addLog: (user: Discord.User, moderator: Discord.User, role: Discord.Role) => `\`[${timeFormatter()}]\` ${emotes.logging.members.updatemember} **NEGATION ROLE ADDED**\n**USER**: ${user.tag} (${user.id}) (${user})\n**ROLE**: ${role.name} (${role.id})\n**RESPONSIBLE MODERATOR**: ${moderator.tag} (${moderator.id})`,
+    removeLog: (user: Discord.User, moderator: Discord.User, role: Discord.Role) => `\`[${timeFormatter()}]\` ${emotes.logging.members.updatemember} **NEGATION ROLE REMOVED**\n**USER**: ${user.tag} (${user.id}) (${user})\n**ROLE**: ${role.name} (${role.id})\n**RESPONSIBLE MODERATOR**: ${moderator.tag} (${moderator.id})`
   },
   quote: {
     embedAuthor: (msg: Discord.Message) => `${msg.author.tag} (${msg.author.id})`,

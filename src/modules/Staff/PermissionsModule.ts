@@ -22,9 +22,11 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.ART)) {
         member.roles.remove(env.NEGATIONS.ART);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.ART);
       } else {
         member.roles.add(env.NEGATIONS.ART);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.ART);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Art")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
@@ -44,9 +46,11 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.FEEDBACK)) {
         member.roles.remove(env.NEGATIONS.FEEDBACK);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.FEEDBACK);
       } else {
         member.roles.add(env.NEGATIONS.FEEDBACK);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.FEEDBACK);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Feedback")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
@@ -66,9 +70,11 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.REACTIONS)) {
         member.roles.remove(env.NEGATIONS.REACTIONS);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.REACTIONS);
       } else {
         member.roles.add(env.NEGATIONS.REACTIONS);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.REACTIONS);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Reaction")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
@@ -88,9 +94,11 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.MEDIA)) {
         member.roles.remove(env.NEGATIONS.MEDIA);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.MEDIA);
       } else {
         member.roles.add(env.NEGATIONS.MEDIA);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.MEDIA);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Media")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
@@ -110,9 +118,11 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.EXPERIENCE)) {
         member.roles.remove(env.NEGATIONS.EXPERIENCE);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.EXPERIENCE);
       } else {
         member.roles.add(env.NEGATIONS.EXPERIENCE);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.EXPERIENCE);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Experience")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
@@ -132,19 +142,25 @@ export default class PermissionsModule extends Module {
       if (member.roles.cache.has(env.NEGATIONS.EVENTS)) {
         member.roles.remove(env.NEGATIONS.EVENTS);
         removed.push(member);
+        await this.logRoleRemove(member.user, msg.author, env.NEGATIONS.EVENTS);
       } else {
         member.roles.add(env.NEGATIONS.EVENTS);
         added.push(member);
+        await this.logRoleAdd(member.user, msg.author, env.NEGATIONS.EVENTS);
       }
     }
     await msg.channel.send([strings.general.success(strings.modules.moderation.permissions.negations("Events")), strings.general.codeblockMember(added, removed)].join("\n"), { split: true });
   }
 
-  async logRoleAdd(): Promise<void> {
-    //
+  async logRoleAdd(user: Discord.User, moderator: Discord.User, _role: string): Promise<void> {
+    const channel = user.client.channels.resolve(env.CHANNELS.MODERATION_LOG) as Discord.TextChannel;
+    const role = channel.guild.roles.cache.get(_role);
+    await channel.send(strings.modules.moderation.permissions.addLog(user, moderator, role), { allowedMentions: { users: [] } });
   }
 
-  async logRoleRemove(): Promise<void> {
-    //
+  async logRoleRemove(user: Discord.User, moderator: Discord.User, _role: string): Promise<void> {
+    const channel = user.client.channels.resolve(env.CHANNELS.MODERATION_LOG) as Discord.TextChannel;
+    const role = channel.guild.roles.cache.get(_role);
+    await channel.send(strings.modules.moderation.permissions.removeLog(user, moderator, role), { allowedMentions: { users: [] } });
   }
 }
