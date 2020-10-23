@@ -400,7 +400,7 @@ export default class LevelModule extends Module {
       if (type === "user") {
         if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingUserId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
-        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("user")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "server") {
@@ -410,13 +410,13 @@ export default class LevelModule extends Module {
       } else if (type === "role") {
         if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingRoleId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "role" } });
-        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("role")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "channel") {
         if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingChannelId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "channel" } });
-        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("channel")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       }

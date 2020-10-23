@@ -40,7 +40,7 @@ export default {
   missingRoleId: "No role ID can be deduced from your command invocation. Please try again.",
   missingChannelId: "No channel ID can be deduced from your command invocation. Please try again.",
   removedMultiplier: "Multiplier(s) exhausted.",
-  noMultiplierFound: "It does not appear that this user has an active experience multiplier.",
+  noMultiplierFound: (type: "user" | "role" | "channel") => `It does not appear that this ${type} has an active experience multiplier.`,
   multiplierEmbedName: (type: "Server" | "User" | "Role" | "Channel") => `${type} Multipliers`,
   noMultipliers: "There are no active multipliers under this category.",
   multiplierMapping: (ur: XPMultiplier) => {
