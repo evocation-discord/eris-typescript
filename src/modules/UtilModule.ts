@@ -78,11 +78,6 @@ export default class UtilCommandModule extends Module {
     goodnightEris();
   }
 
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.datamine })
-  async datamine(msg: Discord.Message): Promise<void> {
-    msg.channel.send(strings.modules.util.datamine);
-  }
-
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.version })
   async version(msg: Discord.Message): Promise<void> {
     msg.channel.send(strings.general.version);

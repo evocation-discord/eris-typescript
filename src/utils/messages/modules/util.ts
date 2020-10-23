@@ -32,10 +32,5 @@ export default {
       "__**ERASURE OF DATA**__",
       "Leaving the server will not result in any of your data being deleted. Instead, it will be saved so that it can be accessed again should you decide to re-join. You may request for the perpetual erasure of data that is directly associated with your account. To facilitate this, please send a Direct Message to <@747105315840983212>. You may only request one data deletion per thirty days. No exceptional anomalies will be allowed within the scope of possibility."
     ].join("\n\n")
-  },
-  datamine: [
-    "Datamining is achieved through comparing the JavaScript files served to the Discord Canary client which have different hashes per build change.",
-    "Please remember that a lot of build changes feature variable renaming, new tabs, newlines, etc., which usually do not change anything for the end user. With that in mind, do not take channel entries to be of definitive nature for upcoming features/releases.",
-    "You can access all entries through the GitHub repository: https://github.com/DJScias/Discord-Datamining."
-  ].join("\n\n")
+  }
 };
