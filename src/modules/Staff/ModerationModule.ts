@@ -23,7 +23,7 @@ export default class ModerationModule extends Module {
       if (!guild) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.guildWasNotFound(guildId)));
       const channel = guild.channels.resolve(channelId) as Discord.TextChannel;
       if (!channel) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.channelWasNotFound(channelId)));
-      if (["Staff", "Oversight & Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.quote.restrictedChannel));
+      if (["Staff", "Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.quote.restrictedChannel));
       if (["729429041022500885"].includes(channel.id)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.quote.restrictedChannel));
       const message = await channel.messages.fetch(messageId);
       if (!message) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.messageWasNotFound(messageId)));
@@ -60,7 +60,7 @@ export default class ModerationModule extends Module {
         if (!guild || guild.id !== env.MAIN_GUILD_ID) continue;
         const channel = guild.channels.resolve(channelId) as Discord.TextChannel;
         if (!channel) continue;
-        if (["Staff", "Oversight & Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) continue;
+        if (["Staff", "Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) continue;
         if (["729429041022500885"].includes(channel.id)) continue;
         const message = await channel.messages.fetch(messageId);
         if (!message) continue;
