@@ -1,10 +1,13 @@
+/* eslint-disable no-continue */
 import inhibitors from "@utils/inhibitors";
 import strings, { commandDescriptions } from "@utils/messages";
 import { command, CommandCategories } from "@utils/commands";
 import Discord from "discord.js";
 import { Module } from "@utils/modules";
-import { regex } from "@utils/constants";
+import { env, regex } from "@utils/constants";
 import Embed from "@utils/embed";
+import { monitor } from "@utils/monitor";
+import { escapeRegex } from "@utils/constants/regex";
 
 export default class ModerationModule extends Module {
   @command({
@@ -34,6 +37,43 @@ export default class ModerationModule extends Module {
       msg.channel.send(embed);
     } catch (e) {
       strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.quote.unknownError));
+    }
+  }
+
+  @monitor({ event: "message" })
+  async onMessage(msg: Discord.Message): Promise<void> {
+    try {
+      if (msg.guild.id !== env.MAIN_GUILD_ID) return;
+      if (!msg.guild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return;
+      if (msg.author.bot) return;
+      const prefix = process.env.PREFIX;
+      const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
+      if (prefixRegex.test(msg.content)) return;
+
+      const messageLinks = msg.content.match(regex.messageLinkg) ?? [];
+      if (messageLinks.length > 0) msg.delete();
+      for await (const link of messageLinks) {
+        const executedRegex = regex.messageLink.exec(link);
+        const [, guildId, channelId, messageId] = executedRegex;
+        const guild = this.client.guilds.resolve(guildId);
+        if (!guild || guild.id !== env.MAIN_GUILD_ID) continue;
+        const channel = guild.channels.resolve(channelId) as Discord.TextChannel;
+        if (!channel) continue;
+        if (["Staff", "Oversight & Development", "Moderator Inbox", "Eris Registers"].includes(channel.parent.name)) continue;
+        if (["729429041022500885"].includes(channel.id)) continue;
+        const message = await channel.messages.fetch(messageId);
+        if (!message) continue;
+        if (message.author.bot) continue;
+
+        const embed = new Embed()
+          .setAuthor(strings.modules.moderation.quote.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
+          .setDescription(message.content)
+          .attachFiles(message.attachments.map((a) => a))
+          .setFooter(strings.modules.moderation.quote.embedFooter(message.id, channel.name));
+        msg.channel.send(embed);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
 }
