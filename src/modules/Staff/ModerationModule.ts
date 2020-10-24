@@ -64,7 +64,7 @@ export default class ModerationModule extends Module {
         if (["729429041022500885"].includes(channel.id)) continue;
         const message = await channel.messages.fetch(messageId);
         if (!message) continue;
-        if (message.author.bot) continue;
+        if (message.author.id !== "561514414675853312" && message.author.bot) continue;
 
         const embed = new Embed()
           .setAuthor(strings.modules.moderation.quote.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
