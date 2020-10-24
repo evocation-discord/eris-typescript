@@ -43,9 +43,10 @@ export default class ModerationModule extends Module {
   @monitor({ event: "message" })
   async onMessage(msg: Discord.Message): Promise<void> {
     try {
+      if (!msg.guild) return;
       if (msg.guild.id !== env.MAIN_GUILD_ID) return;
-      if (!msg.guild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return;
       if (msg.author.bot) return;
+      if (!msg.guild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.STAFF, env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) return;
       const prefix = process.env.PREFIX;
       const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(prefix)})\\s*`);
       if (prefixRegex.test(msg.content)) return;
