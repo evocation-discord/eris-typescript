@@ -4,7 +4,7 @@
 import { emotes } from "@utils/constants";
 
 export default {
-  joined: "Joined Evocation Voice",
-  left: "Left Evocation Voice",
+  joined: (name: string) => `Joined ${name}`,
+  left: (name: string) => `Left ${name}`,
   deafMessage: (oldVoice: string, newVoice: string) => `${emotes.logging.members.updatemember} **MOVED**: You have been moved from **${oldVoice.toUpperCase()}** to **${newVoice.toUpperCase()}**. This is to ensure occupants of voice channels are actively contributing.`
 };

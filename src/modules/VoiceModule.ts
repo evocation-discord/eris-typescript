@@ -8,24 +8,24 @@ export default class VoiceModule extends Module {
   @monitor({ event: "voiceChannelJoin" })
   async voiceChannelJoin(member: Discord.GuildMember, voiceChannel: Discord.VoiceChannel): Promise<void> {
     if (voiceChannel.id === env.CHANNELS.EVOCATION_VOICE || voiceChannel.parent.name === "Among Us") {
-      await member.roles.add(env.ROLES.VOICE_CONNECTED, strings.modules.voice.joined);
+      await member.roles.add(env.ROLES.VOICE_CONNECTED, strings.modules.voice.joined(voiceChannel.name));
     }
   }
 
   @monitor({ event: "voiceChannelLeave" })
   async voiceChannelLeave(member: Discord.GuildMember, voiceChannel: Discord.VoiceChannel): Promise<void> {
     if (voiceChannel.id === env.CHANNELS.EVOCATION_VOICE || voiceChannel.parent.name === "Among Us") {
-      await member.roles.remove(env.ROLES.VOICE_CONNECTED, strings.modules.voice.left);
+      await member.roles.remove(env.ROLES.VOICE_CONNECTED, strings.modules.voice.left(voiceChannel.name));
     }
   }
 
   @monitor({ event: "voiceChannelSwitch" })
   async voiceChannelSwitch(member: Discord.GuildMember, oldVoice: Discord.VoiceChannel, newVoice: Discord.VoiceChannel): Promise<void> {
     if (oldVoice.id === env.CHANNELS.EVOCATION_VOICE || oldVoice.parent.name === "Among Us") {
-      await member.roles.remove(env.ROLES.VOICE_CONNECTED, strings.modules.voice.left);
+      await member.roles.remove(env.ROLES.VOICE_CONNECTED, strings.modules.voice.left(oldVoice.name));
     }
     if (newVoice.id === env.CHANNELS.EVOCATION_VOICE || newVoice.parent.name === "Among Us") {
-      await member.roles.add(env.ROLES.VOICE_CONNECTED, strings.modules.voice.joined);
+      await member.roles.add(env.ROLES.VOICE_CONNECTED, strings.modules.voice.joined(newVoice.name));
     }
   }
 
