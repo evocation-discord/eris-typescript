@@ -135,6 +135,7 @@ export default class EventModule extends Module {
   @monitor({ event: "messageReactionAdd" })
   async onFeedbackMessageReaction(reaction: Discord.MessageReaction, user: Discord.User): Promise<void> {
     if (user.bot) return;
+    if (reaction.partial) reaction = await reaction.fetch();
     if (reaction.message.channel.type === "dm") return;
     reaction.message.channel = reaction.message.channel as Discord.TextChannel;
     if (reaction.message.guild.id !== env.MAIN_GUILD_ID) return;
