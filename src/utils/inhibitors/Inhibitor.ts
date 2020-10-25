@@ -6,10 +6,10 @@ import Discord from "discord.js";
 import humanizeDuration from "humanize-duration";
 
 export function mergeInhibitors(a: Inhibitor, b: Inhibitor): Inhibitor {
-  return async (msg, client): Promise<string | undefined> => {
-    const aReason = await a(msg, client);
+  return async (msg, cmd): Promise<string | undefined> => {
+    const aReason = await a(msg, cmd);
     if (aReason) return aReason;
-    return b(msg, client);
+    return b(msg, cmd);
   };
 }
 
@@ -43,8 +43,8 @@ const moderatorOnly: Inhibitor = async (msg) => {
   return strings.errors.inhibitors.noPermission;
 };
 
-const adminOnly: Inhibitor = async (msg, client) => {
-  const isNotGuild = await guildsOnly(msg, client);
+const adminOnly: Inhibitor = async (msg) => {
+  const isNotGuild = await guildsOnly(msg);
   if (isNotGuild) return isNotGuild;
   if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
@@ -53,8 +53,8 @@ const adminOnly: Inhibitor = async (msg, client) => {
   return strings.errors.inhibitors.noPermission;
 };
 
-const serverGrowthLeadOnly: Inhibitor = async (msg, client) => {
-  const isNotGuild = await guildsOnly(msg, client);
+const serverGrowthLeadOnly: Inhibitor = async (msg) => {
+  const isNotGuild = await guildsOnly(msg);
   if (isNotGuild) return isNotGuild;
   if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);

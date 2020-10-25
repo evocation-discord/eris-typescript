@@ -42,7 +42,7 @@ export default class HelpModule extends Module {
       const messageArray: string[] = [];
 
       for await (const commandGroup of commandGroups) {
-        const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter((c) => c.group === commandGroup)));
+        const cmds = await this.filterCommands(msg, commands.filter((c) => c.group === commandGroup));
         if (cmds.length > 0) messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map((cmd) => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(strings.modules.help.specificCommandHelp);
@@ -69,27 +69,17 @@ export default class HelpModule extends Module {
     return null;
   }
 
-  filterAdminCommands(msg: Discord.Message, commands: Command[]): Command[] {
+  async filterCommands(msg: Discord.Message, commands: Command[]): Promise<Command[]> {
     const cmds: Command[] = [];
-
-    commands.forEach((cmmand) => {
-      if (cmmand.admin) {
-        if (this.client.botMaintainers.includes(msg.author.id)) cmds.push(cmmand);
-      } else cmds.push(cmmand);
-    });
-
-    return cmds;
-  }
-
-  filterStaffCommands(msg: Discord.Message, commands: Command[]): Command[] {
-    const cmds: Command[] = [];
-
-    commands.forEach((cmmand) => {
-      if (cmmand.staff) {
-        if (msg.member.roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(cmmand);
-      } else cmds.push(cmmand);
-    });
-
+    for await (const cmd of commands) {
+      const inhibitors = cmd.inhibitors.filter((i) => i.name);
+      let allow = true;
+      for await (const inhibitor of inhibitors) {
+        const reason = await inhibitor(msg, cmd);
+        if (reason) allow = false;
+      }
+      if (allow) cmds.push(cmd);
+    }
     return cmds;
   }
 }
