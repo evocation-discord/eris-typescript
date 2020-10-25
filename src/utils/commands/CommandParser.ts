@@ -3,7 +3,7 @@ import { getArgumentParser } from "@utils/arguments/Arguments";
 import { ErisClient, RedisClient } from "@utils/client";
 import { escapeRegex } from "@utils/constants/regex";
 import { Blacklist, DisabledCommand } from "@utils/database/models";
-import { errorMessage, strings } from "@utils/messages";
+import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import Discord from "discord.js";
@@ -29,7 +29,7 @@ export class CommandParserModule extends Module {
     const cmd = this.client.commandManager.getByTrigger(cmdTrigger);
     if (!cmd) return;
 
-    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return errorMessage(msg, strings.general.error(strings.general.commandDisabled));
+    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandDisabled));
 
     // blacklists, woohoo
     const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
@@ -42,7 +42,7 @@ export class CommandParserModule extends Module {
       if (reason) {
         // It inhibited
         if (reason === "Silent") return;
-        errorMessage(msg, strings.general.error(reason));
+        strings.errors.errorMessage(msg, strings.errors.error(reason));
         return;
       }
     }
@@ -63,7 +63,7 @@ export class CommandParserModule extends Module {
           if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
             await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
           }
-          return errorMessage(msg, strings.general.error(strings.general.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`, error.message)));
+          return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntaxError(`${prefix}${cmdTrigger} ${cmd.usage}`, error.message)));
         } catch (_) {
           // Do nothing. The user doesn't have the correct arguments.
           return;
@@ -89,7 +89,7 @@ export class CommandParserModule extends Module {
       if (await RedisClient.get(`user:${msg.author.id}:command:${cmd.triggers[0]}`)) {
         await RedisClient.del(`user:${msg.author.id}:command:${cmd.triggers[0]}`);
       }
-      errorMessage(msg, strings.general.error(strings.general.somethingWentWrong));
+      strings.errors.errorMessage(msg, strings.errors.error(strings.errors.somethingWentWrong));
     }
   }
 }

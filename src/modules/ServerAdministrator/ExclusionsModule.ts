@@ -1,6 +1,6 @@
 import { command, CommandCategories } from "@utils/commands";
 import inhibitors from "@utils/inhibitors";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
@@ -15,28 +15,28 @@ export default class ExclusionsModule extends Module {
   })
   async exclude(msg: Discord.Message, type?: "user" | "role", id?: string): Promise<void | Discord.Message> {
     if (msg.channel.type === "dm") return;
-    if (!type || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
+    if (!type || !id) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!exclude [user|role] [ID/mention]")));
     if (type === "role") {
       if (!msg.member.roles.cache.has(env.ROLES.LEAD_ADMINISTRATORS)) return;
       const role = await roleParser(id, msg);
-      if (typeof role === "string") return errorMessage(msg, strings.general.error(role));
-      if (msg.member.roles.cache.has(role.id)) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
+      if (typeof role === "string") return strings.errors.errorMessage(msg, strings.errors.error(role));
+      if (msg.member.roles.cache.has(role.id)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.cantAddRoleToExclusions));
       await Blacklist.create({
         type: "role",
         id: role.id
       }).save();
-      msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("role")));
+      msg.channel.send(strings.general.success(strings.modules.moderation.exclusions.executedExclusions("role")));
     } else if (type === "user") {
       const user = await userParser(id, msg);
-      if (typeof user === "string") return errorMessage(msg, strings.general.error(user));
-      if (user.id === msg.author.id) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantExcludeYourself));
-      if (user.bot) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantExcludeBots));
+      if (typeof user === "string") return strings.errors.errorMessage(msg, strings.errors.error(user));
+      if (user.id === msg.author.id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.cantExcludeYourself));
+      if (user.bot) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.cantExcludeBots));
       await Blacklist.create({
         type: "user",
         id: user.id
       }).save();
-      msg.channel.send(strings.general.success(strings.modules.exclusions.executedExclusions("user")));
-    } else return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclude [user|role] [ID/mention]")));
+      msg.channel.send(strings.general.success(strings.modules.moderation.exclusions.executedExclusions("user")));
+    } else return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!exclude [user|role] [ID/mention]")));
   }
 
   @command({
@@ -47,29 +47,29 @@ export default class ExclusionsModule extends Module {
       const roleBlacklists = await Blacklist.find({ where: { type: "role" } });
       const userBlacklists = await Blacklist.find({ where: { type: "user" } });
       const embed = new Embed()
-        .addField(strings.modules.exclusions.exclusionEmbedName("User"), userBlacklists.map((u) => strings.modules.exclusions.exclusionMapping(u)).join("\n") || strings.modules.exclusions.noUsersExcluded)
-        .addField(strings.modules.exclusions.exclusionEmbedName("Role"), roleBlacklists.map((r) => strings.modules.exclusions.exclusionMapping(r)).join("\n") || strings.modules.exclusions.noRolesExcluded);
+        .addField(strings.modules.moderation.exclusions.exclusionEmbedName("User"), userBlacklists.map((u) => strings.modules.moderation.exclusions.exclusionMapping(u)).join("\n") || strings.modules.moderation.exclusions.noUsersExcluded)
+        .addField(strings.modules.moderation.exclusions.exclusionEmbedName("Role"), roleBlacklists.map((r) => strings.modules.moderation.exclusions.exclusionMapping(r)).join("\n") || strings.modules.moderation.exclusions.noRolesExcluded);
       return msg.channel.send(embed);
     }
-    if (!["remove", "clear"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
+    if (!["remove", "clear"].includes(what)) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
 
     if (what === "remove") {
-      if (!type || !["user", "role"].includes(type) || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
+      if (!type || !["user", "role"].includes(type) || !id) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!exclusions [remove|clear] [user|role] [ID/mention]")));
       if (type === "role") {
         const blacklist = await Blacklist.findOne({ where: { id, type: "role" } });
-        if (!blacklist) return errorMessage(msg, strings.general.error(strings.modules.exclusions.roleNotExcluded));
+        if (!blacklist) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.roleNotExcluded));
         blacklist.remove();
-        msg.channel.send(strings.general.success(strings.modules.exclusions.updatedExclusionsForRole));
+        msg.channel.send(strings.general.success(strings.modules.moderation.exclusions.updatedExclusionsForRole));
       } else if (type === "user") {
         const blacklist = await Blacklist.findOne({ where: { id, type: "user" } });
-        if (!blacklist) return errorMessage(msg, strings.general.error(strings.modules.exclusions.userNotExcluded));
+        if (!blacklist) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.userNotExcluded));
         blacklist.remove();
-        msg.channel.send(strings.general.success(strings.modules.exclusions.updatedExclusionsForUser));
+        msg.channel.send(strings.general.success(strings.modules.moderation.exclusions.updatedExclusionsForUser));
       }
     } else if (what === "clear") {
       const blacklists = await Blacklist.find();
       blacklists.forEach((b) => b.remove());
-      msg.channel.send(strings.general.success(strings.modules.exclusions.removedAllExclusions));
+      msg.channel.send(strings.general.success(strings.modules.moderation.exclusions.removedAllExclusions));
     }
   }
 }

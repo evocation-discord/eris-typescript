@@ -1,6 +1,6 @@
 import { monitor } from "@utils/monitor";
 import inhibitors from "@utils/inhibitors";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { command, CommandCategories } from "@utils/commands";
 import Discord from "discord.js";
 import { Giveaway, LevelRole } from "@database/models";
@@ -28,7 +28,7 @@ export default class GiveawayModule extends Module {
   })
   async start(msg: Discord.Message, duration: Arguments.Duration, winners: number, prize: string): Promise<void> {
     msg.delete();
-    const giveawayMsg = await msg.channel.send(strings.modules.giveaway.loadingMessage);
+    const giveawayMsg = await msg.channel.send(strings.modules.administrator.giveaways.loadingMessage);
     giveawayMsg.react(emotes.giveaway.giftreactionid);
 
     const startTimestamp = Math.round(Date.now());
@@ -59,9 +59,9 @@ export default class GiveawayModule extends Module {
   })
   async reroll(msg: Discord.Message, messageId?: string): Promise<void> {
     if (messageId) {
-      if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
+      if (!messageId.match("\\d{17,20}")) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.notValidMessageID));
       const message = await msg.channel.messages.fetch(messageId);
-      if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid)) { return errorMessage(msg, strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked)); }
+      if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid)) { return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noGiveawayMessageLinked)); }
 
       const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
       if (!giveaway) return;
@@ -73,7 +73,7 @@ export default class GiveawayModule extends Module {
         .random(1)
         .filter((u) => u)[0];
 
-      msg.channel.send(strings.general.success(strings.modules.giveaway.rerollNewWinner(message.embeds[0].author.name, user, `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${message.id}`)));
+      msg.channel.send(strings.general.success(strings.modules.administrator.giveaways.rerollNewWinner(message.embeds[0].author.name, user, `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${message.id}`)));
     } else {
       const _msgs = await msg.channel.messages.fetch({ limit: 100 });
       const message = _msgs
@@ -82,7 +82,7 @@ export default class GiveawayModule extends Module {
         .filter((m) => m.reactions.cache.has(emotes.giveaway.giftreactionid))
         .first();
 
-      if (!message) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
+      if (!message) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noRecentGiveawaysFound));
 
       const reaction = message.reactions.resolve(emotes.giveaway.giftreactionid);
       const __users = await reaction.users.fetch();
@@ -92,7 +92,7 @@ export default class GiveawayModule extends Module {
         .random(1)
         .filter((u) => u)[0];
 
-      msg.channel.send(strings.general.success(strings.modules.giveaway.rerollNewWinner(message.embeds[0].author.name, user, `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${message.id}`)));
+      msg.channel.send(strings.general.success(strings.modules.administrator.giveaways.rerollNewWinner(message.embeds[0].author.name, user, `https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${message.id}`)));
     }
   }
 
@@ -101,22 +101,22 @@ export default class GiveawayModule extends Module {
   })
   async end(msg: Discord.Message, messageId?: string): Promise<void> {
     if (messageId) {
-      if (!messageId.match("\\d{17,20}")) return errorMessage(msg, strings.general.error(strings.modules.giveaway.notValidMessageID));
+      if (!messageId.match("\\d{17,20}")) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.notValidMessageID));
       try {
         const message = await msg.channel.messages.fetch(messageId);
-        if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid)) { return errorMessage(msg, strings.general.error(strings.modules.giveaway.noGiveawayMessageLinked)); }
+        if (message.author.id !== this.client.user.id || message.embeds.length === 0 || !message.reactions.cache.has(emotes.giveaway.giftreactionid)) { return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noGiveawayMessageLinked)); }
 
         const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-        if (giveaway.ended) return errorMessage(msg, strings.general.error(strings.modules.giveaway.giveawayAlreadyEnded));
+        if (giveaway.ended) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.giveawayAlreadyEnded));
         await handleGiveawayWin({
           channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null
         }, giveaway);
       } catch (e) {
         const giveaway = await Giveaway.findOne({ where: { messageId } });
-        if (!giveaway) return errorMessage(msg, strings.modules.giveaway.notValidMessageID);
+        if (!giveaway) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.notValidMessageID));
         giveaway.ended = true;
         await giveaway.save();
-        msg.channel.send(strings.modules.giveaway.giveawayEnded);
+        msg.channel.send(strings.modules.administrator.giveaways.giveawayEnded);
       }
     } else {
       const _msgs = await msg.channel.messages.fetch({ limit: 100 });
@@ -126,10 +126,10 @@ export default class GiveawayModule extends Module {
         .filter((m) => m.reactions.cache.has(emotes.giveaway.giftreactionid))
         .first();
 
-      if (!message) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noRecentGiveawaysFound));
+      if (!message) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noRecentGiveawaysFound));
 
       const giveaway = await Giveaway.findOne({ where: { messageId: message.id } });
-      if (giveaway.ended) return errorMessage(msg, strings.general.error(strings.modules.giveaway.mostRecentGiveawayAlreadyEnded));
+      if (giveaway.ended) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.mostRecentGiveawayAlreadyEnded));
       await handleGiveawayWin({
         channelId: msg.channel.id, giveawayId: giveaway.id, duration: giveaway.duration, startTime: null, endTime: null
       }, giveaway);
@@ -141,13 +141,13 @@ export default class GiveawayModule extends Module {
   })
   async list(msg: Discord.Message): Promise<void> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
-    const messageArray = [strings.modules.giveaway.activeGiveaways];
+    const messageArray = [strings.modules.administrator.giveaways.activeGiveaways];
 
     for (const [index, giveaway] of giveaways.entries()) {
-      messageArray.push(strings.modules.giveaway.giveawayListMap(index, giveaway));
+      messageArray.push(strings.modules.administrator.giveaways.giveawayListMap(index, giveaway));
     }
 
-    if (messageArray.length === 1) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
+    if (messageArray.length === 1) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noCurrentActiveGiveaway));
 
     await msg.channel.send(messageArray.join("\n\n"), { allowedMentions: { users: [] } });
   }
@@ -157,7 +157,7 @@ export default class GiveawayModule extends Module {
   })
   async endall(msg: Discord.Message): Promise<void> {
     const giveaways = await Giveaway.find({ where: { ended: false } });
-    const endedGiveaways = [strings.modules.giveaway.endedGivewaways];
+    const endedGiveaways = [strings.modules.administrator.giveaways.endedGivewaways];
 
     for await (const giveaway of giveaways) {
       const message = await msg.channel.messages.fetch(giveaway.messageId);
@@ -173,7 +173,7 @@ export default class GiveawayModule extends Module {
       endedGiveaways.push();
     }
 
-    if (endedGiveaways.length === 1) return errorMessage(msg, strings.general.error(strings.modules.giveaway.noCurrentActiveGiveaway));
+    if (endedGiveaways.length === 1) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.administrator.giveaways.noCurrentActiveGiveaway));
 
     await msg.channel.send(endedGiveaways.join("\n\n"), { allowedMentions: { users: [] } });
   }

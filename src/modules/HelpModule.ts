@@ -1,7 +1,7 @@
 import { command, CommandCategories } from "@utils/commands";
 import { Command } from "@utils/commands/Command";
 import { emotes, env } from "@utils/constants";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
@@ -43,7 +43,7 @@ export default class HelpModule extends Module {
       const messageArray: string[] = [];
 
       for await (const commandGroup of commandGroups) {
-        const cmds = this.filterStaffCommands(msg, this.filterAdminCommands(msg, commands.filter((c) => c.group === commandGroup)));
+        const cmds = await this.filterCommands(msg, commands.filter((c) => c.group === commandGroup));
         if (cmds.length > 0) messageArray.push(`${commandGroupsWithEmojis[commandGroup] || strings.modules.help.unknownCategory}\n${cmds.sort((a, b) => a.triggers[0].localeCompare(b.triggers[0])).map((cmd) => `\`${process.env.PREFIX}${cmd.triggers[0]}\``).join(", ")}\n`);
       }
       messageArray.push(strings.modules.help.specificCommandHelp);
@@ -51,9 +51,9 @@ export default class HelpModule extends Module {
     } else if (this.client.commandManager.getByTrigger(cmmand)) {
       const cmd = this.client.commandManager.getByTrigger(cmmand);
       if (cmd.admin) {
-        if (!this.client.botMaintainers.includes(msg.author.id)) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
+        if (!this.client.botMaintainers.includes(msg.author.id)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.help.noPermission));
       } else if (cmd.staff) {
-        if (!msg.member.roles.cache.some((role) => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id))) return errorMessage(msg, strings.general.error(strings.modules.help.noPermission));
+        if (!msg.member.roles.cache.some((role) => [env.ROLES.STAFF, env.ROLES.ADMINISTRATORS].includes(role.id))) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.help.noPermission));
       }
       const triggers = [...cmd.triggers];
       const cmdName = triggers.shift();
@@ -65,32 +65,22 @@ export default class HelpModule extends Module {
       ];
       msg.channel.send(message.join("\n"));
     } else {
-      errorMessage(msg, strings.general.error(strings.modules.help.noCommandFound));
+      strings.errors.errorMessage(msg, strings.errors.error(strings.modules.help.noCommandFound));
     }
     return null;
   }
 
-  filterAdminCommands(msg: Discord.Message, commands: Command[]): Command[] {
+  async filterCommands(msg: Discord.Message, commands: Command[]): Promise<Command[]> {
     const cmds: Command[] = [];
-
-    commands.forEach((cmmand) => {
-      if (cmmand.admin) {
-        if (this.client.botMaintainers.includes(msg.author.id)) cmds.push(cmmand);
-      } else cmds.push(cmmand);
-    });
-
-    return cmds;
-  }
-
-  filterStaffCommands(msg: Discord.Message, commands: Command[]): Command[] {
-    const cmds: Command[] = [];
-
-    commands.forEach((cmmand) => {
-      if (cmmand.staff) {
-        if (msg.member.roles.cache.some((role) => [env.ROLES.MODERATOR, env.ROLES.ADMINISTRATORS, env.ROLES.LEAD_ADMINISTRATORS].includes(role.id))) cmds.push(cmmand);
-      } else cmds.push(cmmand);
-    });
-
+    for await (const cmd of commands) {
+      const inhibitors = cmd.inhibitors.filter((i) => i.name);
+      let allow = true;
+      for await (const inhibitor of inhibitors) {
+        const reason = await inhibitor(msg, cmd);
+        if (reason) allow = false;
+      }
+      if (allow) cmds.push(cmd);
+    }
     return cmds;
   }
 }

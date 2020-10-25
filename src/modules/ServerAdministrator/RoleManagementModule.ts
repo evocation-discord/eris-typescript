@@ -4,7 +4,7 @@ import * as Arguments from "@utils/arguments";
 import { command, CommandCategories } from "@utils/commands";
 import { env } from "@utils/constants";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
-import { commandDescriptions, strings, codeblockMember } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { guildMember as guildMemberParser } from "@utils/parsers";
 import Discord from "discord.js";
@@ -26,11 +26,11 @@ export default class RoleManagementModule extends Module {
         roles: roles.map((r) => r.id)
       }).save();
       logObject.push({ member, roles });
-      await member.roles.remove(roles, strings.modules.rolemanagement.dethrone.auditLogReason(msg.author));
+      await member.roles.remove(roles, strings.modules.administrator.rolemanagement.dethrone.auditLogReason(msg.author));
     }
-    await msg.channel.send([strings.modules.rolemanagement.dethrone.success, codeblockMember([], logObject.map((o) => o.member))].join("\n"), { split: true });
+    await msg.channel.send([strings.modules.administrator.rolemanagement.dethrone.success, strings.general.codeblockMember([], logObject.map((o) => o.member))].join("\n"), { split: true });
     const channel = await msg.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
-    await channel.send(strings.modules.rolemanagement.dethrone.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
+    await channel.send(strings.modules.administrator.rolemanagement.dethrone.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
   }
 
   @command({
@@ -45,11 +45,11 @@ export default class RoleManagementModule extends Module {
       const user = await DethronedUser.findOne({ where: { id: member.user.id } });
       if (!user) continue;
       logObject.push({ member, roles: user.roles.map((r) => msg.guild.roles.resolve(r)) });
-      await member.roles.add(user.roles.map((r) => msg.guild.roles.resolve(r)), strings.modules.rolemanagement.crown.auditLogReason(msg.author));
+      await member.roles.add(user.roles.map((r) => msg.guild.roles.resolve(r)), strings.modules.administrator.rolemanagement.crown.auditLogReason(msg.author));
       await user.remove();
     }
-    await msg.channel.send([strings.modules.rolemanagement.crown.success, codeblockMember(logObject.map((o) => o.member), [])].join("\n"), { split: true });
+    await msg.channel.send([strings.modules.administrator.rolemanagement.crown.success, strings.general.codeblockMember(logObject.map((o) => o.member), [])].join("\n"), { split: true });
     const channel = await msg.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
-    await channel.send(strings.modules.rolemanagement.crown.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
+    await channel.send(strings.modules.administrator.rolemanagement.crown.log(msg.author, logObject), { allowedMentions: { roles: [], users: [] } });
   }
 }

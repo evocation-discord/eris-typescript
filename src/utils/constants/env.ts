@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export const { PREFIX } = process.env;
+
 const ROLES = {
   HYPERION: process.env.WHITE_HALLOWS,
   SENTRIES_OF_DESCENSUS: process.env.SENTRIES_OF_DESCENSUS_ROLE,
@@ -47,7 +49,8 @@ const NEGATIONS = {
   MEDIA: process.env.NEGATION_MEDIA,
   REACTIONS: process.env.NEGATION_REACTIONS,
   ART: process.env.NEGATION_ART,
-  FEEDBACK: process.env.NEGATION_FEEDBACK
+  FEEDBACK: process.env.NEGATION_FEEDBACK,
+  EVENTS: process.env.NEGATION_EVENTS
 };
 
 const DATABASE_INFO = {

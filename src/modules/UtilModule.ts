@@ -2,9 +2,10 @@ import { command, CommandCategories } from "@utils/commands";
 import { emotes, env } from "@utils/constants";
 import Embed from "@utils/embed";
 import inhibitors from "@utils/inhibitors";
-import { commandDescriptions, strings, errorMessage } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
+import * as Arguments from "@utils/arguments";
 import Discord from "discord.js";
 
 export default class UtilCommandModule extends Module {
@@ -33,7 +34,7 @@ export default class UtilCommandModule extends Module {
       await msg.author.send(strings.modules.util.privacypolicy.message1);
       await msg.author.send(strings.modules.util.privacypolicy.message2);
     } catch (e) {
-      errorMessage(msg, strings.general.error(strings.general.dmsclosed));
+      strings.errors.errorMessage(msg, strings.errors.error(strings.general.dmsclosed));
     }
     try {
       await msg.delete();
@@ -55,7 +56,7 @@ export default class UtilCommandModule extends Module {
       ["thanks eris", "thanks, eris", "thank you eris", "thank you, eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
-          message.channel.send(strings.modules.erisThanksMessage[Math.floor(Math.random() * strings.modules.erisThanksMessage.length)]);
+          message.channel.send(strings.modules.purchaseableroles.erisThanksMessage[Math.floor(Math.random() * strings.modules.purchaseableroles.erisThanksMessage.length)]);
           done = true;
         }
       });
@@ -69,17 +70,12 @@ export default class UtilCommandModule extends Module {
       ["goodnight eris", "night eris", "gn eris", "gngn eris"].forEach((erisString) => {
         if (message.content.toLowerCase().includes(erisString)) {
           if (done) return;
-          message.channel.send(strings.modules.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.erisGoodnightMessage.length)](message));
+          message.channel.send(strings.modules.purchaseableroles.erisGoodnightMessage[Math.floor(Math.random() * strings.modules.purchaseableroles.erisGoodnightMessage.length)](message));
           done = true;
         }
       });
     };
     goodnightEris();
-  }
-
-  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.datamine })
-  async datamine(msg: Discord.Message): Promise<void> {
-    msg.channel.send(strings.modules.util.datamine);
   }
 
   @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], group: CommandCategories.Informational, description: commandDescriptions.version })
@@ -124,5 +120,15 @@ export default class UtilCommandModule extends Module {
     if (member.user.bot) return;
     const channel = await member.client.channels.fetch(env.CHANNELS.LOUNGE) as Discord.TextChannel;
     channel.send(`Welcome, ${member.user} (\`${member.user.tag}\`), to Evocation. See <#528593800839561216> and <#528593834947379239>. We now have **${member.guild.memberCount}** members.`);
+  }
+
+  @command({
+    group: CommandCategories.Informational, description: commandDescriptions.avatar, inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Arguments.Optional(Discord.User)]
+  })
+  async avatar(message: Discord.Message, user = message.author): Promise<void> {
+    const embed = new Embed()
+      .setAuthor(`Avatar of ${user.tag} (${user.id})`, user.displayAvatarURL({ dynamic: true, format: "png" }))
+      .setImage(user.displayAvatarURL({ dynamic: true, format: "png", size: 4096 }));
+    await message.channel.send(embed);
   }
 }

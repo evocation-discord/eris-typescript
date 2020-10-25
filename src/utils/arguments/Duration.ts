@@ -1,4 +1,4 @@
-import { strings } from "../messages";
+import strings from "../messages";
 
 export default class Duration {
   duration: number;
@@ -20,10 +20,10 @@ export default class Duration {
     for (const fragment of fragments) {
       const char = fragment[fragment.length - 1];
       const num = Number(fragment.slice(0, -1));
-      if (Number.isNaN(num)) throw new Error(strings.arguments.invalidDuration);
+      if (Number.isNaN(num)) throw new Error(strings.errors.arguments.invalidDuration);
       t += multiplier[char] * num;
     }
-    if (t === 0) throw new Error(strings.arguments.invalidDuration);
+    if (t === 0) throw new Error(strings.errors.arguments.invalidDuration);
     return t;
   }
 

@@ -1,10 +1,9 @@
 /* eslint-disable no-continue */
-// TODO: Rewrite functions
 import { monitor } from "@utils/monitor";
 import * as Arguments from "@utils/arguments";
 import { command, CommandCategories } from "@utils/commands";
 import { env, levels } from "@utils/constants";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { inhibitors, roleValidation } from "@utils/inhibitors/Inhibitor";
 import { Module } from "@utils/modules";
 import {
@@ -53,7 +52,7 @@ export default class LevelModule extends Module {
     const levelData = await LevelRole.find();
     const roles = levelData.map((r) => r.id);
     if (roles.some((r) => r === role.id)) {
-      if (newMember.roles.cache.has(env.ROLES.HYACINTH)) newMember.roles.remove(env.ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
+      if (newMember.roles.cache.has(env.ROLES.HYACINTH)) newMember.roles.remove(env.ROLES.HYACINTH, strings.modules.moderation.logging.hyacinthRoleRemoval);
     }
   }
 
@@ -63,7 +62,7 @@ export default class LevelModule extends Module {
     const levelData = await LevelRole.find();
     const roles = levelData.map((r) => r.id);
     if (role.id === env.ROLES.HYACINTH) {
-      if (newMember.roles.cache.some((r) => roles.includes(r.id))) newMember.roles.remove(env.ROLES.HYACINTH, strings.modules.logging.hyacinthRoleRemoval);
+      if (newMember.roles.cache.some((r) => roles.includes(r.id))) newMember.roles.remove(env.ROLES.HYACINTH, strings.modules.moderation.logging.hyacinthRoleRemoval);
     }
   }
 
@@ -151,8 +150,7 @@ export default class LevelModule extends Module {
     if (msg.channel.type === "dm") return;
     if (type === "role") {
       const role = await roleParser(id, msg);
-      if (typeof role === "string") return errorMessage(msg, strings.general.error(role));
-      if (msg.member.roles.cache.has(role.id)) return errorMessage(msg, strings.general.error(strings.modules.exclusions.cantAddRoleToExclusions));
+      if (msg.member.roles.cache.has(role.id)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.exclusions.cantAddRoleToExclusions));
       await XPExclusion.create({
         type: "role",
         id: role.id
@@ -160,7 +158,6 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("role")));
     } else if (type === "channel") {
       const channel = await textChannelParser(id, msg);
-      if (!channel) return;
       await XPExclusion.create({
         type: "channel",
         id: channel.id
@@ -168,7 +165,6 @@ export default class LevelModule extends Module {
       msg.channel.send(strings.general.success(strings.modules.levels.executedExclusions("channel")));
     } else if (type === "category") {
       const channel = await categoryChannelParser(id, msg);
-      if (typeof channel === "string") return errorMessage(msg, strings.general.error(channel));
       await XPExclusion.create({
         type: "category",
         id: channel.id
@@ -191,23 +187,26 @@ export default class LevelModule extends Module {
         .addField(strings.modules.levels.exclusionEmbedName("Role"), roleExclusions.map((r) => strings.modules.levels.exclusionMapping(r)).join("\n") || strings.modules.levels.noRolesExcluded);
       return msg.channel.send(embed);
     }
-    if (!["remove"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
+    if (!["remove"].includes(what)) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
 
     if (what === "remove") {
-      if (!type || !["channel", "role", "category"].includes(type) || !id) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
+      if (!type || !["channel", "role", "category"].includes(type) || !id) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!xpexclusions [remove] [channel|role|category] [ID/mention]")));
       if (type === "role") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "role" } });
-        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.roleNotExcluded));
+        const role = await roleParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: role.id, type: "role" } });
+        if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.roleNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForRole));
       } else if (type === "channel") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "channel" } });
-        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.channelNotExcluded));
+        const channel = await textChannelParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: channel.id, type: "channel" } });
+        if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.channelNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForChannel));
       } else if (type === "category") {
-        const exclusion = await XPExclusion.findOne({ where: { id, type: "category" } });
-        if (!exclusion) return errorMessage(msg, strings.general.error(strings.modules.levels.categoryNotExcluded));
+        const channel = await categoryChannelParser(id, msg);
+        const exclusion = await XPExclusion.findOne({ where: { id: channel.id, type: "category" } });
+        if (!exclusion) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.categoryNotExcluded));
         exclusion.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.updatedExclusionsForCategory));
       }
@@ -259,7 +258,7 @@ export default class LevelModule extends Module {
         await this.levelRoleCheck(member, xpData.xp);
       }
       msg.channel.send(strings.general.success(strings.modules.levels.resetxp.resetxpsuccessfull("role", roles.length, members.length)));
-    } else return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
+    } else return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!resetxp <user|role|server> [users:...user]")));
   }
 
   @command({
@@ -394,14 +393,14 @@ export default class LevelModule extends Module {
   })
   async multiplier(msg: Discord.Message, what?: "exhaust" | "list", type?: "user" | "server" | "role" | "channel", id?: string): Promise<Discord.Message|void> {
     await msg.delete();
-    if (!["exhaust", "list"].includes(what)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
+    if (!["exhaust", "list"].includes(what)) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
 
     if (what === "exhaust") {
-      if (!type || !["user", "server", "role", "channel"].includes(type)) return errorMessage(msg, strings.general.error(strings.general.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
+      if (!type || !["user", "server", "role", "channel"].includes(type)) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.commandSyntax("e!multiplier <exhaust|list> [user|server|role|channel] [user|role|channel]")));
       if (type === "user") {
-        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingUserId));
+        if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingUserId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "user" } });
-        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("user")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "server") {
@@ -409,15 +408,15 @@ export default class LevelModule extends Module {
         await multipliers.map((m) => m.remove());
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "role") {
-        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingRoleId));
+        if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingRoleId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "role" } });
-        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("role")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       } else if (type === "channel") {
-        if (!id) return errorMessage(msg, strings.general.error(strings.modules.levels.missingChannelId));
+        if (!id) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.missingChannelId));
         const multiplier = await XPMultiplier.findOne({ where: { thingID: id, type: "channel" } });
-        if (!multiplier) return errorMessage(msg, strings.general.error(strings.modules.levels.noMultiplierFound));
+        if (!multiplier) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.noMultiplierFound("channel")));
         multiplier.remove();
         msg.channel.send(strings.general.success(strings.modules.levels.removedMultiplier));
       }
@@ -440,7 +439,7 @@ export default class LevelModule extends Module {
     inhibitors: [inhibitors.adminOnly], args: [Arguments.Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.addlevelledrole, usage: "<role:role> <level:number>", aliases: ["alr"]
   })
   async addlevelledrole(msg: Discord.Message, role: Discord.Role, level: number): Promise<Discord.Message|void> {
-    if (await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.alreadyRegistered));
+    if (await LevelRole.findOne({ where: { id: role.id } })) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.levelRole.alreadyRegistered));
     await LevelRole.create({
       id: role.id,
       level
@@ -452,7 +451,7 @@ export default class LevelModule extends Module {
     inhibitors: [inhibitors.adminOnly], args: [Arguments.Role], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role>", aliases: ["rlr"]
   })
   async removelevelledrole(msg: Discord.Message, role: Discord.Role): Promise<Discord.Message|void> {
-    if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
+    if (!await LevelRole.findOne({ where: { id: role.id } })) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     await levelrole.remove();
     return msg.channel.send(strings.general.success(strings.modules.levels.levelRole.remove(role)), { allowedMentions: { roles: [] } });
@@ -462,7 +461,7 @@ export default class LevelModule extends Module {
     inhibitors: [inhibitors.adminOnly], args: [Arguments.Role, Number], group: CommandCategories["Server Administrator"], staff: true, description: commandDescriptions.removelevelledrole, usage: "<role:role> <level:number>", aliases: ["elr"]
   })
   async editlevelledrole(msg: Discord.Message, role: Discord.Role, level: number): Promise<Discord.Message|void> {
-    if (!await LevelRole.findOne({ where: { id: role.id } })) return errorMessage(msg, strings.general.error(strings.modules.levels.levelRole.doesNotExist));
+    if (!await LevelRole.findOne({ where: { id: role.id } })) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.levels.levelRole.doesNotExist));
     const levelrole = await LevelRole.findOne({ where: { id: role.id } });
     levelrole.level = level;
     await levelrole.save();
@@ -533,7 +532,7 @@ export default class LevelModule extends Module {
         await message.author.send(embed);
         await message.channel.send(strings.general.success(strings.general.checkdms));
       } catch (e) {
-        message.channel.send(strings.general.error(strings.general.dmsclosed));
+        message.channel.send(strings.errors.error(strings.general.dmsclosed));
       }
       return;
     }

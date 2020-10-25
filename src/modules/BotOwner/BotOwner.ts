@@ -1,6 +1,6 @@
 import { command, CommandCategories } from "@utils/commands";
 import { emotes, regex } from "@utils/constants";
-import { commandDescriptions, errorMessage, strings } from "@utils/messages";
+import strings, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import * as Arguments from "@utils/arguments";
 import Discord, { DataResolver } from "discord.js";
@@ -44,9 +44,9 @@ export default class BotOwner extends Module {
         break;
 
       default:
-        return errorMessage(msg, strings.general.error(strings.modules.util.statusError));
+        return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.botmaintainer.statusError));
     }
-    return msg.channel.send(strings.general.success(strings.modules.util.statusSet(status)));
+    return msg.channel.send(strings.general.success(strings.modules.botmaintainer.statusSet(status)));
   }
 
   @command({
@@ -64,9 +64,9 @@ export default class BotOwner extends Module {
         this.client.user.setActivity(game, { type: "PLAYING" });
         break;
       default:
-        return errorMessage(msg, strings.general.error(strings.modules.util.gameError));
+        return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.botmaintainer.gameError));
     }
-    return msg.channel.send(strings.general.success(strings.modules.util.gameSet(type, game)));
+    return msg.channel.send(strings.general.success(strings.modules.botmaintainer.gameSet(type, game)));
   }
 
   @command({
@@ -75,16 +75,16 @@ export default class BotOwner extends Module {
   async edit(msg: Discord.Message, messageLink: string, newContent: string): Promise<Discord.Message | void> {
     let isError = false;
     const executedRegex = regex.messageLink.exec(messageLink);
-    if (!executedRegex) return errorMessage(msg, strings.general.error(strings.modules.util.linkDoesNotMatchDiscordLink));
+    if (!executedRegex) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.linkDoesNotMatchDiscordLink));
     const [, guildId, channelId, messageId] = executedRegex;
     const guild = this.client.guilds.resolve(guildId);
-    if (!guild) return errorMessage(msg, strings.general.error(strings.modules.util.guildWasNotFound(guildId)));
+    if (!guild) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.guildWasNotFound(guildId)));
     const channel = guild.channels.resolve(channelId) as Discord.TextChannel;
-    if (!channel) return errorMessage(msg, strings.general.error(strings.modules.util.channelWasNotFound(channelId)));
+    if (!channel) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.channelWasNotFound(channelId)));
     const message = await channel.messages.fetch(messageId);
-    if (!message) return errorMessage(msg, strings.general.error(strings.modules.util.messageWasNotFound(messageId)));
+    if (!message) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.messageWasNotFound(messageId)));
     await message.edit(newContent).catch(() => isError = true);
-    if (isError) return errorMessage(msg, strings.general.error(strings.general.somethingWentWrong));
+    if (isError) return strings.errors.errorMessage(msg, strings.errors.error(strings.errors.somethingWentWrong));
     return msg.channel.send(strings.general.success(strings.modules.util.messageEdited));
   }
 
@@ -139,7 +139,7 @@ export default class BotOwner extends Module {
     inhibitors: [inhibitors.botMaintainersOnly], group: CommandCategories["Bot Maintainers"], aliases: ["kill", "die"], admin: true, description: commandDescriptions.shutdown
   })
   async shutdown(msg: Discord.Message): Promise<void> {
-    await msg.channel.send(strings.general.success(strings.modules.util.shutdown));
+    await msg.channel.send(strings.general.success(strings.modules.botmaintainer.shutdown));
     process.exit(0);
   }
 
@@ -147,15 +147,15 @@ export default class BotOwner extends Module {
     inhibitors: [inhibitors.botMaintainersOnly], args: [String], group: CommandCategories["Bot Maintainers"], admin: true, description: commandDescriptions.disablecmd, usage: "<command:string>"
   })
   async disablecmd(msg: Discord.Message, cmd: string): Promise<Discord.Message | void> {
-    if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return errorMessage(msg, strings.general.error(strings.modules.util.cantdisablecommands));
+    if (["enablecmd", "disablecmd", "listdisabledcommands", "ldc"].includes(cmd)) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.botmaintainer.cantdisablecommands));
     const commandToDisable = this.client.commandManager.getByTrigger(cmd);
     const commandName = commandToDisable.triggers[0];
-    if (await DisabledCommand.findOne({ where: { commandName } })) return errorMessage(msg, strings.general.error(strings.modules.util.alreadydisabled));
+    if (await DisabledCommand.findOne({ where: { commandName } })) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.botmaintainer.alreadydisabled));
     await DisabledCommand.create({
       disabledBy: msg.author.id,
       commandName: cmd
     }).save();
-    return msg.channel.send(strings.general.success(strings.modules.util.disabledcommand));
+    return msg.channel.send(strings.general.success(strings.modules.botmaintainer.disabledcommand));
   }
 
   @command({
@@ -167,8 +167,8 @@ export default class BotOwner extends Module {
     if (await DisabledCommand.findOne({ where: { commandName } })) {
       const disabled = await DisabledCommand.findOne({ where: { commandName } });
       await disabled.remove();
-      return msg.channel.send(strings.general.success(strings.modules.util.undisabledcommand));
-    } return errorMessage(msg, strings.general.error(strings.modules.util.notdisabledcommand));
+      return msg.channel.send(strings.general.success(strings.modules.botmaintainer.undisabledcommand));
+    } return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.botmaintainer.notdisabledcommand));
   }
 
   @command({
@@ -177,8 +177,8 @@ export default class BotOwner extends Module {
   async listdisabledcmds(msg: Discord.Message): Promise<Discord.Message> {
     const disabledcommands = await DisabledCommand.find();
     const embed = new Embed()
-      .setAuthor(strings.modules.util.disabledCommandsEmbedHeader)
-      .setDescription(disabledcommands.map(strings.modules.util.disabledCommandMap).join("\n") || strings.modules.util.noDisabledCommands);
+      .setAuthor(strings.modules.botmaintainer.disabledCommandsEmbedHeader)
+      .setDescription(disabledcommands.map(strings.modules.botmaintainer.disabledCommandMap).join("\n") || strings.modules.botmaintainer.noDisabledCommands);
     return msg.channel.send(embed);
   }
 
@@ -209,7 +209,7 @@ export default class BotOwner extends Module {
     await message.delete();
     if (!server) server = message.guild;
     const emojis = server.emojis.cache.array();
-    await message.channel.send([strings.modules.botowner.emojis.messageHeader(server), emojis.sort((a, b) => a.name.localeCompare(b.name)).map((emoji) => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
+    await message.channel.send([strings.modules.botmaintainer.emojis.messageHeader(server), emojis.sort((a, b) => a.name.localeCompare(b.name)).map((emoji) => `${emoji} \`:${emoji.name}:\` \\${emoji}`).join("\n")].join("\n"), { split: true });
   }
 }
 

@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export function newsChannel(arg: string, message: Discord.Message): Discord.NewsChannel {
@@ -22,7 +22,7 @@ export function newsChannel(arg: string, message: Discord.Message): Discord.News
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindNewsChannel);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindNewsChannel);
   return querySearch[0];
 }
 

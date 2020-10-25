@@ -2,7 +2,7 @@
 import { emotes, env } from "@utils/constants";
 import Embed from "@utils/embed";
 import { listener } from "@utils/listener";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import scheduler from "@utils/scheduler";
@@ -134,6 +134,7 @@ export default class EventModule extends Module {
   @monitor({ event: "messageReactionAdd" })
   async onFeedbackMessageReaction(reaction: Discord.MessageReaction, user: Discord.User): Promise<void> {
     if (user.bot) return;
+    if (reaction.partial) reaction = await reaction.fetch();
     if (reaction.message.channel.type === "dm") return;
     reaction.message.channel = reaction.message.channel as Discord.TextChannel;
     if (reaction.message.guild.id !== env.MAIN_GUILD_ID) return;

@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export function guildChannel(arg: string, message: Discord.Message): Discord.GuildChannel {
@@ -22,7 +22,7 @@ export function guildChannel(arg: string, message: Discord.Message): Discord.Gui
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindGuildChannel);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindGuildChannel);
   return querySearch[0];
 }
 

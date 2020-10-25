@@ -1,7 +1,7 @@
 import { emotes } from "@utils/constants";
 import { Giveaway } from "@utils/database/models";
 import Embed from "@utils/embed";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import scheduler from "@utils/scheduler";
 import { getDuration } from "@utils/time";
 import Discord from "discord.js";
@@ -58,15 +58,15 @@ const handleNoWinner = async (args: GiveawayArgs, giveaway: Giveaway): Promise<v
   const embed = new Embed()
     .setColor("#36393F")
     .setAuthor(giveaway.prize)
-    .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners))
+    .setFooter(strings.modules.administrator.giveaways.embed.footerEnded(giveaway.winners))
     .setTimestamp(new Date(args.startTime + giveaway.duration))
-    .setDescription(strings.giveaway.embed.noWinner);
+    .setDescription(strings.modules.administrator.giveaways.embed.noWinner);
   const channel = await client.channels.fetch(args.channelId) as Discord.TextChannel;
   const message = await channel.messages.fetch(giveaway.messageId);
 
-  await channel.send(strings.giveaway.noWinner(giveaway.prize));
+  await channel.send(strings.modules.administrator.giveaways.noWinner(giveaway.prize));
 
-  await message.edit(strings.giveaway.embed.giveawayEndedHeader, { embed });
+  await message.edit(strings.modules.administrator.giveaways.embed.giveawayEndedHeader, { embed });
 };
 
 export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
@@ -92,13 +92,13 @@ export const handleGiveawayWin = async (args: GiveawayArgs, giveaway: Giveaway):
 
   embed
     .setAuthor(giveaway.prize)
-    .setDescription(strings.giveaway.embed.winners(users.map((user) => `→ ${user} (\`${user.id}\`)`).join("\n")))
+    .setDescription(strings.modules.administrator.giveaways.embed.winners(users.map((user) => `→ ${user} (\`${user.id}\`)`).join("\n")))
     .setTimestamp(new Date(args.startTime + giveaway.duration))
-    .setFooter(strings.giveaway.embed.footerEnded(giveaway.winners));
+    .setFooter(strings.modules.administrator.giveaways.embed.footerEnded(giveaway.winners));
 
-  await message.edit(strings.giveaway.embed.giveawayEndedHeader, { embed });
+  await message.edit(strings.modules.administrator.giveaways.embed.giveawayEndedHeader, { embed });
 
-  await channel.send(strings.giveaway.winners(users.map((user) => user).join(", "), giveaway.prize, `https://discord.com/channels/${guild.id}/${channel.id}/${message.id}`));
+  await channel.send(strings.modules.administrator.giveaways.winners(users.map((user) => user).join(", "), giveaway.prize, `https://discord.com/channels/${guild.id}/${channel.id}/${message.id}`));
 };
 
 const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> => {
@@ -112,10 +112,10 @@ const editEmbed = async (args: GiveawayArgs, giveaway: Giveaway): Promise<void> 
   // Create the embed.
   const embed = new Embed()
     .setAuthor(giveaway.prize)
-    .setDescription(strings.giveaway.embed.description(getDuration(args.startTime + giveaway.duration - Date.now())))
-    .setFooter(strings.giveaway.embed.footer(giveaway.winners))
+    .setDescription(strings.modules.administrator.giveaways.embed.description(getDuration(args.startTime + giveaway.duration - Date.now())))
+    .setFooter(strings.modules.administrator.giveaways.embed.footer(giveaway.winners))
     .setTimestamp(new Date(args.startTime + giveaway.duration));
 
   // Edit the message.
-  await message.edit(strings.giveaway.embed.giveawayHeader, { embed });
+  await message.edit(strings.modules.administrator.giveaways.embed.giveawayHeader, { embed });
 };

@@ -1,6 +1,6 @@
 import { regex } from "@utils/constants";
 import { regExpEsc } from "@utils/constants/regex";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import Discord from "discord.js";
 
 export function categoryChannel(arg: string, message: Discord.Message): Discord.CategoryChannel {
@@ -22,7 +22,7 @@ export function categoryChannel(arg: string, message: Discord.Message): Discord.
     querySearch = results;
   }
 
-  if (querySearch.length === 0) throw new Error(strings.parsers.couldNotFindCategory);
+  if (querySearch.length === 0) throw new Error(strings.errors.parsers.couldNotFindCategory);
   return querySearch[0];
 }
 

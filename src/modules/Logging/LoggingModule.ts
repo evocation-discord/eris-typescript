@@ -1,6 +1,6 @@
 /* eslint-disable no-continue */
 import { env } from "@utils/constants";
-import { strings } from "@utils/messages";
+import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import Discord from "discord.js";
 import { monitor } from "@utils/monitor";
@@ -29,9 +29,9 @@ export default class LoggingModule extends Module {
 
     const channel = await msg.client.channels.fetch(env.CHANNELS.ERIS_LOG) as Discord.TextChannel;
 
-    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return channel.send(strings.modules.logging.disabledCommand(msg, cmdTrigger, stringArgs));
-    if (cmd.staff || cmd.admin) return channel.send(strings.modules.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
-    return channel.send(strings.modules.logging.command(msg, cmdTrigger, stringArgs));
+    if (await DisabledCommand.findOne({ where: { commandName: cmd.triggers[0] } })) return channel.send(strings.modules.moderation.logging.disabledCommand(msg, cmdTrigger, stringArgs));
+    if (cmd.staff || cmd.admin) return channel.send(strings.modules.moderation.logging.administrativeCommand(msg, cmdTrigger, stringArgs));
+    return channel.send(strings.modules.moderation.logging.command(msg, cmdTrigger, stringArgs));
   }
 
   @monitor({ event: "message" })
@@ -52,7 +52,7 @@ export default class LoggingModule extends Module {
         const diff = getDifference(_link, link);
         if (diff && diff === "www.") continue;
         if (link === _link) continue;
-        channel.send(strings.modules.logging.linkResolver(msg, _link, link));
+        channel.send(strings.modules.moderation.logging.linkResolver(msg, _link, link));
       }
     }
   }
@@ -62,17 +62,16 @@ export default class LoggingModule extends Module {
     if (newUser.bot) return;
     if (oldUser.username !== newUser.username) {
       const channel = await this.client.channels.fetch(env.CHANNELS.DENOMINATION_LOG) as Discord.TextChannel;
-      channel.send(strings.modules.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
+      channel.send(strings.modules.moderation.logging.userUpdate(oldUser, newUser), { allowedMentions: { users: [] } });
     }
   }
 
-  @monitor({ event: "guildMemberUpdate" })
-  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember): Promise<void> {
+  @monitor({ event: "guildMemberRoleAdd" })
+  async onGuildMemberRoleAdd(oldMember: Discord.GuildMember, newMember: Discord.GuildMember, role: Discord.Role): Promise<void> {
     if (newMember.guild.id !== env.MAIN_GUILD_ID) return;
-    if (!oldMember.roles.cache.has(env.ROLES.EOS) && newMember.roles.cache.has(env.ROLES.EOS)) {
-      const channel = newMember.guild.channels.cache.find((c) => c.name === "lounge") as Discord.TextChannel;
-      channel.send(strings.modules.logging.userBoost(newMember.user));
-    }
+    if (role.id !== env.ROLES.EOS) return;
+    const channel = newMember.guild.channels.cache.find((c) => c.name === "lounge") as Discord.TextChannel;
+    channel.send(strings.modules.moderation.logging.userBoost(newMember.user));
   }
 }
 
