@@ -6,7 +6,7 @@ import { env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
 import { cron } from "@utils/cron";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
-import { strings, commandDescriptions, errorMessage } from "@utils/messages";
+import messages, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
 import Discord from "discord.js";
@@ -27,7 +27,7 @@ export default class SoulstoneModule extends Module {
     if (num > 100) {
       const code = Math.floor(Math.random() * 16777215).toString(16);
       const dropAmount = getRandomInt(5, 21);
-      const msg = await message.channel.send(strings.modules.soulstones.generationMessage(dropAmount, code));
+      const msg = await message.channel.send(messages.modules.soulstones.generationMessage(dropAmount, code));
       await PlantedSoulstones.create({
         soulstones: dropAmount, code, message: msg.id, channel: msg.channel.id
       }).save();
@@ -42,10 +42,10 @@ export default class SoulstoneModule extends Module {
     if (await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } })) {
       const gc = await SoulstoneGenerationChannel.findOne({ where: { channel: channel.id } });
       await gc.remove();
-      await message.channel.send(strings.general.success(strings.modules.soulstones.commands.gc.disabled(channel)));
+      await message.channel.send(messages.general.success(messages.modules.soulstones.commands.gc.disabled(channel)));
     } else {
       await SoulstoneGenerationChannel.create({ channel: channel.id }).save();
-      await message.channel.send(strings.general.success(strings.modules.soulstones.commands.gc.enabled(channel)));
+      await message.channel.send(messages.general.success(messages.modules.soulstones.commands.gc.enabled(channel)));
     }
   }
 
@@ -61,7 +61,7 @@ export default class SoulstoneModule extends Module {
     user.soulstones += planted.soulstones;
     await user.save();
     await planted.remove();
-    const msg = await message.channel.send(strings.modules.soulstones.commands.collect.claim(message.author, planted.soulstones));
+    const msg = await message.channel.send(messages.modules.soulstones.commands.collect.claim(message.author, planted.soulstones));
     msg.delete({ timeout: 5000 });
     await (msg.client.channels.resolve(planted.channel) as Discord.TextChannel).messages.delete(planted.message);
   }
@@ -108,12 +108,12 @@ export default class SoulstoneModule extends Module {
     soulstoneData = soulstoneData.sort((a, b) => b.soulstones - a.soulstones);
     soulstoneData = soulstoneData.slice(0, 10);
 
-    const message: string[] = [strings.modules.soulstones.commands.leaderboard.header];
+    const message: string[] = [messages.modules.soulstones.commands.leaderboard.header];
 
     for await (const data of soulstoneData) {
       const user = await msg.client.users.fetch(data.id);
       const info = await userInfo(user);
-      message.push(strings.modules.soulstones.commands.leaderboard.row(info.rank, user, info.soulstones));
+      message.push(messages.modules.soulstones.commands.leaderboard.row(info.rank, user, info.soulstones));
     }
     await msg.channel.send(message.join("\n"), { allowedMentions: { users: [] } });
   }
@@ -125,7 +125,7 @@ export default class SoulstoneModule extends Module {
     const soulstoneData = await Soulstone.findOne({ where: { id: message.author.id } });
     soulstoneData.soulstones += 25;
     await soulstoneData.save();
-    await message.channel.send(strings.general.success(strings.modules.soulstones.commands.redeeminducements.success));
+    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.redeeminducements.success));
   }
 
   @command({
@@ -133,7 +133,7 @@ export default class SoulstoneModule extends Module {
   })
   async soulstones(message: Discord.Message, user = message.author): Promise<void> {
     const soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
-    await message.channel.send(strings.modules.soulstones.commands.soulstones.success(user, soulstoneData.soulstones));
+    await message.channel.send(messages.modules.soulstones.commands.soulstones.success(user, soulstoneData.soulstones));
   }
 
   @command({
@@ -144,7 +144,7 @@ export default class SoulstoneModule extends Module {
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     soulstoneData.soulstones += amount;
     await soulstoneData.save();
-    await message.channel.send(strings.modules.soulstones.commands.awardsoulstones.success(user, amount, soulstoneData.soulstones));
+    await message.channel.send(messages.modules.soulstones.commands.awardsoulstones.success(user, amount, soulstoneData.soulstones));
   }
 
   @command({
@@ -155,10 +155,10 @@ export default class SoulstoneModule extends Module {
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     soulstoneData.soulstones -= amount;
     if (soulstoneData.soulstones < amount) {
-      await errorMessage(message, strings.general.error(strings.modules.soulstones.commands.deductsoulstones.error));
+      await messages.errors.errorMessage(message, messages.errors.error(messages.modules.soulstones.commands.deductsoulstones.error));
     } else {
       await soulstoneData.save();
-      await message.channel.send(strings.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
+      await message.channel.send(messages.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
     }
   }
 }

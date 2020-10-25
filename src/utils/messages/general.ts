@@ -14,5 +14,11 @@ export default {
     ...added.map((r) => `+ ${r.user.tag}`),
     ...removed.map((r) => `- ${r.user.tag}`),
     "```"
-  ].join("\n")
+  ].join("\n"),
+  rankEmoji: (rank: number): string => {
+    if (rank === 1) return `${emotes.commandresponses.leaderboard.numberone} `;
+    if (rank === 2) return `${emotes.commandresponses.leaderboard.numbertwo} `;
+    if (rank === 3) return `${emotes.commandresponses.leaderboard.numberthree} `;
+    return "       ";
+  }
 };
