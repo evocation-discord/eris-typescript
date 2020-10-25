@@ -52,7 +52,6 @@ export default class ModerationModule extends Module {
       if (prefixRegex.test(msg.content)) return;
 
       const messageLinks = msg.content.match(regex.messageLinkg) ?? [];
-      if (messageLinks.length > 0) msg.delete();
       for await (const link of messageLinks) {
         const executedRegex = regex.messageLink.exec(link);
         const [, guildId, channelId, messageId] = executedRegex;
@@ -65,6 +64,7 @@ export default class ModerationModule extends Module {
         const message = await channel.messages.fetch(messageId);
         if (!message) continue;
         if (message.author.id !== "561514414675853312" && message.author.bot) continue;
+        if (!msg.deleted) await msg.delete();
 
         const embed = new Embed()
           .setAuthor(strings.modules.moderation.quote.embedAuthor(message), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
