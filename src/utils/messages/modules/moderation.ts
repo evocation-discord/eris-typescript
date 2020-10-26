@@ -33,7 +33,7 @@ export default {
       `**RESOLVED LINK**: <${resLink}>\n`,
       "No automatic action has been taken against their account or the message itself. Please review the above to ensure that the link is not violative of Evocation's regulations."
     ].join("\n"),
-    userUpdate: (oldUser: Discord.User, newUser: Discord.User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}>) has changed their Discord username: \`**[${oldUser.username}]**\` → \`**[${newUser.username}]**\`.`,
+    userUpdate: (oldUser: Discord.User, newUser: Discord.User) => `\`[${timeFormatter()}]\` ${emotes.logging.nameupdate} User with ID \`${newUser.id}\` (${newUser}) has changed their Discord username: **\`[${oldUser.username}]\`** → **\`[${newUser.username}]\`**.`,
     userBoost: (user: Discord.User) => [
       `Thank you for boosting **EVOCATION**, ${user}! You now have access to change your own nickname, embed links, attach files and stream into the server. If these permissions seem familiar to you, that means you are **LEVEL 3** or above.\n`,
       "**SUCCESSFULLY UNLOCKED**:",
