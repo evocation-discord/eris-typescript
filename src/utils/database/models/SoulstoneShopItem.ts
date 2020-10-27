@@ -7,6 +7,9 @@ export class SoulstoneShopItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
+  /**
+   * Can be "item" or "role"
+   */
   @Column()
   type: string;
 
@@ -15,4 +18,7 @@ export class SoulstoneShopItem extends BaseEntity {
 
   @Column({ default: 0 })
   cost: number;
+
+  @Column({ nullable: true })
+  buyableAmount?: number;
 }

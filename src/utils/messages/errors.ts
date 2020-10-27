@@ -35,8 +35,8 @@ export default {
   },
   commandSyntax: (text: string) => `Syntactic fallacy detected. **COMMAND SYNTAX**: \`${text}\``,
   error: (text: string) => `${emotes.commandresponses.denial} **COMMAND INHIBITED**: ${text}`,
-  errorMessage: async (message: Discord.Message, error: string): Promise<void> => {
+  errorMessage: async (message: Discord.Message, error: string, timeout = 5000): Promise<void> => {
     const msg = await message.channel.send(error);
-    msg.delete({ timeout: 5000 });
+    msg.delete({ timeout });
   }
 };

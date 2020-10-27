@@ -1,10 +1,13 @@
-import { PlantedSoulstones, Soulstone, SoulstoneGenerationChannel } from "@database/models";
+import {
+  PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem
+} from "@database/models";
 import * as Arguments from "@utils/arguments";
 import { RedisClient } from "@utils/client";
 import { command, CommandCategories } from "@utils/commands";
-import { env } from "@utils/constants";
+import { emotes, env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
 import { cron } from "@utils/cron";
+import Embed from "@utils/embed";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
 import messages, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
@@ -122,7 +125,8 @@ export default class SoulstoneModule extends Module {
     group: CommandCategories.Soulstones, description: commandDescriptions.redeeminducements, aliases: ["ri"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.userCooldown(21600000, false)]
   })
   async redeeminducements(message: Discord.Message): Promise<void> {
-    const soulstoneData = await Soulstone.findOne({ where: { id: message.author.id } });
+    let soulstoneData = await Soulstone.findOne({ where: { id: message.author.id } });
+    if (!soulstoneData) soulstoneData = await Soulstone.create({ id: message.author.id }).save();
     soulstoneData.soulstones += 25;
     await soulstoneData.save();
     await message.channel.send(messages.general.success(messages.modules.soulstones.commands.redeeminducements.success));
@@ -132,7 +136,8 @@ export default class SoulstoneModule extends Module {
     group: CommandCategories.Soulstones, description: commandDescriptions.soulstones, aliases: ["s"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Arguments.Optional(Discord.User)]
   })
   async soulstones(message: Discord.Message, user = message.author): Promise<void> {
-    const soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+    let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
+    if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     await message.channel.send(messages.modules.soulstones.commands.soulstones.success(user, soulstoneData.soulstones));
   }
 
@@ -140,17 +145,21 @@ export default class SoulstoneModule extends Module {
     group: CommandCategories.Soulstones, description: commandDescriptions.awardsoulstones, aliases: ["awardss"], inhibitors: [inhibitors.botMaintainersOnly], usage: "<user:user> <amount:number>", args: [Arguments.User, Number]
   })
   async awardsoulstones(message: Discord.Message, user: Discord.User, amount: number): Promise<void> {
+    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     soulstoneData.soulstones += amount;
     await soulstoneData.save();
     await message.channel.send(messages.modules.soulstones.commands.awardsoulstones.success(user, amount, soulstoneData.soulstones));
+    const channel = guild.channels.resolve(env.CHANNELS.SOULSTONE_LOG) as Discord.TextChannel;
+    channel.send(messages.modules.soulstones.commands.awardsoulstones.log(message.author, user, amount));
   }
 
   @command({
     group: CommandCategories.Soulstones, description: commandDescriptions.deductsoulstones, aliases: ["deductss"], inhibitors: [inhibitors.botMaintainersOnly], usage: "<user:user> <amount:number>", args: [Arguments.User, Number]
   })
   async deductsoulstones(message: Discord.Message, user: Discord.User, amount: number): Promise<void> {
+    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
     soulstoneData.soulstones -= amount;
@@ -159,6 +168,89 @@ export default class SoulstoneModule extends Module {
     } else {
       await soulstoneData.save();
       await message.channel.send(messages.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
+      const channel = guild.channels.resolve(env.CHANNELS.SOULSTONE_LOG) as Discord.TextChannel;
+      channel.send(messages.modules.soulstones.commands.deductsoulstones.log(message.author, user, amount));
+    }
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, aliases: ["sshop"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands]
+  })
+  async soulstoneshop(message: Discord.Message): Promise<void> {
+    const items = await SoulstoneShopItem.find();
+    const embed = new Embed().setTitle(`${emotes.commandresponses.soulstones} Soulstone Shop`);
+    for await (const [index, item] of items.entries()) {
+      let text = `You will get the **${item.data}**.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
+      if (item.type === "role") text = `You will get the **<@&${item.data}>** role.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
+      embed.addField(`#${index + 1} - ${item.cost}${emotes.commandresponses.soulstones}`, text, true);
+    }
+    message.channel.send(embed);
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, aliases: ["sbuy"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.guildsOnly], usage: "<item:number>", args: [Number]
+  })
+  async soulstonebuy(message: Discord.Message, itemNumber: number): Promise<void> {
+    const roleArray = [
+      env.ROLES.CHRONOS,
+      env.ROLES.ORION,
+      env.ROLES.SCIONS_OF_ELYSIUM,
+      env.ROLES.SENTRIES_OF_DESCENSUS
+    ];
+    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
+    const items = await SoulstoneShopItem.find();
+    const item = items[itemNumber - 1];
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    let userSoulstones = await Soulstone.findOne({ where: { id: message.author.id } });
+    if (!userSoulstones) userSoulstones = await Soulstone.create({ id: message.author.id }).save();
+    if (typeof item.buyableAmount === "number" && item.buyableAmount === 0) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.notBuyableAnymore, 10000);
+    if (userSoulstones.soulstones < item.cost) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.notEnoughSoulstones(item.cost - userSoulstones.soulstones), 10000);
+    const member = guild.members.resolve(message.author);
+    if (item.type === "role") {
+      if (roleArray.includes(item.data)) {
+        const indexOfItemUserTriesToBuy = roleArray.findIndex((r) => r === item.data);
+        const itemBeforeThatRole = roleArray[indexOfItemUserTriesToBuy - 1];
+        const role = guild.roles.resolve(item.data);
+        if (!itemBeforeThatRole) {
+          // Chronos
+          if (member.roles.cache.filter((_role) => roleArray.includes(_role.id)).first() && (indexOfItemUserTriesToBuy < roleArray.findIndex((r) => r === member.roles.cache.filter((_role) => roleArray.includes(_role.id)).first().id))) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.alreadyhasRoleAboveThatRole(role), 10000);
+          if (member.roles.cache.has(item.data)) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.alreadyHasThatRole, 10000);
+          member.roles.add(role, messages.modules.soulstones.commands.buy.role.auditReasonAdd);
+          message.channel.send(messages.modules.soulstones.commands.buy.role.purchase(role));
+        } else {
+          const soulstoneRoleUserHas = member.roles.cache.filter((_role) => roleArray.includes(_role.id)).first();
+          if (!soulstoneRoleUserHas) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.cantBuyRoleThatIsNotDirectlyAboveTheirRole(guild.roles.resolve(item.data), guild.roles.resolve(itemBeforeThatRole)), 10000);
+          if (member.roles.cache.has(item.data)) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.alreadyHasThatRole, 10000);
+          if (indexOfItemUserTriesToBuy < roleArray.findIndex((r) => r === soulstoneRoleUserHas.id)) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.alreadyhasRoleAboveThatRole(role), 10000);
+          if (!member.roles.cache.has(itemBeforeThatRole)) {
+            const triedRole = guild.roles.resolve(item.data);
+            const roleTheyNeed = guild.roles.resolve(itemBeforeThatRole);
+            return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.cantBuyRoleThatIsNotDirectlyAboveTheirRole(triedRole, roleTheyNeed), 10000);
+          }
+          await member.roles.remove(soulstoneRoleUserHas, messages.modules.soulstones.commands.buy.role.auditReasonRemove);
+          await member.roles.add(role, messages.modules.soulstones.commands.buy.role.auditReasonAdd);
+          message.channel.send(messages.modules.soulstones.commands.buy.role.purchase(role));
+        }
+      } else {
+        if (typeof item.buyableAmount === "number") {
+          item.buyableAmount -= 1;
+          await item.save();
+        }
+        const role = guild.roles.resolve(item.data);
+        if (member.roles.cache.has(item.data)) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.role.alreadyHasThatRole, 10000);
+        member.roles.add(role, messages.modules.soulstones.commands.buy.role.auditReasonAdd);
+        message.channel.send(messages.modules.soulstones.commands.buy.role.purchase(role));
+      }
+      userSoulstones.soulstones -= item.cost;
+      await userSoulstones.save();
+    } else {
+      userSoulstones.soulstones -= item.cost;
+      if (typeof item.buyableAmount === "number") item.buyableAmount -= 1;
+      await item.save();
+      await userSoulstones.save();
+      const channel = guild.channels.resolve(env.CHANNELS.SOULSTONE_LOG) as Discord.TextChannel;
+      channel.send(messages.modules.soulstones.commands.buy.item.log(message.author, item));
+      message.channel.send(messages.modules.soulstones.commands.buy.item.purchase(item));
     }
   }
 }
