@@ -133,7 +133,7 @@ export default class SoulstoneModule extends Module {
   }
 
   @command({
-    group: CommandCategories.Soulstones, description: commandDescriptions.soulstones, aliases: ["s"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Arguments.Optional(Discord.User)]
+    group: CommandCategories.Soulstones, description: commandDescriptions.soulstones, aliases: ["s", "ss"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands], usage: "[user:user]", args: [new Arguments.Optional(Discord.User)]
   })
   async soulstones(message: Discord.Message, user = message.author): Promise<void> {
     let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
