@@ -76,5 +76,6 @@ export default {
   soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds.",
   resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0.",
   sscommonality: "Changes the chance of Soulstones being generated for each message in channels in which currency generation is enabled.",
-  currency: "Returns information about Soulstones."
+  currency: "Returns information about Soulstones.",
+  ssrate: "Updates range of Soulstone emergence."
 };

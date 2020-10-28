@@ -69,6 +69,10 @@ export default {
       update: (oldValue: number, newValue: number) => `${emotes.commandresponses.soulstones} **COMMONALITY MANAGEMENT**: Soulstone currency generation commonality updated from **${oldValue}** to **${newValue}**.`,
       info: (value: number) => `${emotes.commandresponses.soulstones} **COMMONALITY MANAGEMENT**: Soulstone currency generation commonality is **${value}**.`
     },
+    ssrate: {
+      update: (oldValue: string, newValue: string) => `${emotes.commandresponses.soulstones} **EMERGENCE MANAGEMENT**: The rate of emergence is now ${newValue}, where it was previously ${oldValue}.`,
+      info: (value: string) => `${emotes.commandresponses.soulstones} **EMERGENCE MANAGEMENT**: The rate of emergence is ${value}.`
+    },
     itemDoesNotExist: "This item does not exist."
   }
 };

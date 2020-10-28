@@ -30,13 +30,12 @@ export default class SoulstoneModule extends Module {
     if (prefixRegex.test(message.content)) return;
 
     if (!await SoulstoneGenerationChannel.findOne({ where: { channel: message.channel.id } })) return;
-    if (await RedisClient.get(`soulstone-generation:${message.channel.id}`)) return;
     let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
     if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
     const num = getRandomInt(1, 101) + settings.spawnCommonality * 100;
     if (num > 100) {
       const code = getSoulstoneCode();
-      const dropAmount = getRandomInt(5, 21);
+      const dropAmount = getRandomInt(settings.lowerEmergence, settings.higherEmergence);
       const msg = await message.channel.send(messages.modules.soulstones.generationMessage(dropAmount, code));
       await PlantedSoulstones.create({
         soulstones: dropAmount, code, message: msg.id, channel: msg.channel.id
@@ -332,7 +331,7 @@ export default class SoulstoneModule extends Module {
   }
 
   @command({
-    group: CommandCategories.Soulstones, description: commandDescriptions.sscommonality, inhibitors: [inhibitors.botMaintainersOnly], usage: "<number:number>", args: [new Arguments.Optional(Number)]
+    group: CommandCategories.Soulstones, description: commandDescriptions.sscommonality, inhibitors: [inhibitors.botMaintainersOnly], usage: "[number:number]", args: [new Arguments.Optional(Number)]
   })
   async sscommonality(msg: Discord.Message, value?: number): Promise<void> {
     let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
@@ -344,6 +343,24 @@ export default class SoulstoneModule extends Module {
       settings.spawnCommonality = value;
       await settings.save();
       await msg.channel.send(messages.modules.soulstones.commands.sscommonality.update(oldValue, value));
+    }
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.ssrate, inhibitors: [inhibitors.botMaintainersOnly], usage: "[lower-higher:string]", args: [new Arguments.Optional(String)]
+  })
+  async ssrate(msg: Discord.Message, value?: string): Promise<void> {
+    let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
+    if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
+    if (!value) {
+      await msg.channel.send(messages.modules.soulstones.commands.ssrate.info(`**${settings.lowerEmergence}**-**${settings.higherEmergence}**`));
+    } else {
+      const oldValue = `**${settings.lowerEmergence}**-**${settings.higherEmergence}**`;
+      const [lower, higher] = value.split("-");
+      settings.lowerEmergence = Number(lower);
+      settings.higherEmergence = Number(higher);
+      await settings.save();
+      await msg.channel.send(messages.modules.soulstones.commands.ssrate.update(oldValue, `**${settings.lowerEmergence}**-**${settings.higherEmergence}**`));
     }
   }
 }
@@ -365,12 +382,17 @@ const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getSoulstoneCode = () :string => {
+const getSoulstoneCode = (): string => {
   let result = "";
   const characters = "abcdefghijklmnopqrstuvwxyz012345678901234567890123456789";
   const charactersLength = characters.length;
   for (let i = 0; i < 4; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  const randomNumber = getRandomInt(1, 101) + 0.0001 * 100;
+  if (randomNumber > 100) {
+    const secrets = ["stijn", "ace", "adi"];
+    return secrets[Math.floor(Math.random() * secrets.length)];
   }
   return result;
 };
