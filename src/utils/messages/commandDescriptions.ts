@@ -68,5 +68,10 @@ export default {
   redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
   soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned.",
   awardsoulstones: "Awards a user a certain amount of Soulstones",
-  deductsoulstones: "Removes a certain amount of Soulstones from a user."
+  deductsoulstones: "Removes a certain amount of Soulstones from a user.",
+  addsquantity: "Adds a specified amount of available items to an item in the Soulstone shop.",
+  deletesshopitem: "Removes an item from the Soulstone shop.",
+  addsshopitem: "Adds an item to the Soulstone shop.",
+  soulstoneshop: "Returns an embed with items and roles that are purchasable with Soulstones.",
+  soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds."
 };

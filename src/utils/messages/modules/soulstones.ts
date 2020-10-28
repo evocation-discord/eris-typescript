@@ -50,6 +50,8 @@ export default {
       },
       notEnoughSoulstones: (amountNeeded: number) => `${emotes.commandresponses.soulstones} **INSUFFICIENT FUNDS**: You do not have enough Soulstones to purchase this item or role. You require **${amountNeeded}** more Soulstones.`,
       notBuyableAnymore: `${emotes.commandresponses.soulstones} **TRANSACTION FAILED**: This item is no longer purchasable. Please contact an administrator if you believe this is in error.`
-    }
+    },
+    deletesshopitem: (itemName: string) => `Removed shop item with name **${itemName.toUpperCase()}**. Users will no longer be able to purchase this item.`,
+    addsshopitem: (itemName: string) => `Added shop item with name **${itemName.toUpperCase()}**. Applied specified properties, if any.`
   }
 };

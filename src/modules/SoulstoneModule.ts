@@ -174,7 +174,7 @@ export default class SoulstoneModule extends Module {
   }
 
   @command({
-    group: CommandCategories.Soulstones, aliases: ["sshop"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands]
+    group: CommandCategories.Soulstones, description: commandDescriptions.soulstoneshop, aliases: ["sshop"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands]
   })
   async soulstoneshop(message: Discord.Message): Promise<void> {
     const items = await SoulstoneShopItem.find();
@@ -188,7 +188,7 @@ export default class SoulstoneModule extends Module {
   }
 
   @command({
-    group: CommandCategories.Soulstones, aliases: ["sbuy"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.guildsOnly], usage: "<item:number>", args: [Number]
+    group: CommandCategories.Soulstones, description: commandDescriptions.soulstonebuy, aliases: ["sbuy"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.guildsOnly], usage: "<item:number>", args: [Number]
   })
   async soulstonebuy(message: Discord.Message, itemNumber: number): Promise<void> {
     const roleArray = [
@@ -252,6 +252,52 @@ export default class SoulstoneModule extends Module {
       channel.send(messages.modules.soulstones.commands.buy.item.log(message.author, item));
       message.channel.send(messages.modules.soulstones.commands.buy.item.purchase(item));
     }
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.addsquantity, inhibitors: [inhibitors.adminOnly], usage: "<item:number> <whatToDo:string>", args: [Number, String]
+  })
+  async addsquantity(message: Discord.Message, itemNumber: number, whatToDo: string): Promise<void> {
+    const items = await SoulstoneShopItem.find();
+    const item = items[itemNumber - 1];
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    if (whatToDo.startsWith("+")) {
+      const number = Number(whatToDo.slice(1, whatToDo.length));
+      item.buyableAmount += number;
+    } else if (whatToDo.startsWith("-")) {
+      const number = Number(whatToDo.slice(1, whatToDo.length));
+      item.buyableAmount -= number;
+    } else {
+      item.buyableAmount = whatToDo === "null" ? null : Number(whatToDo);
+    }
+    await item.save();
+    await message.channel.send(messages.general.success(`Added **${whatToDo}** availability points to the quantity of item **${item.type === "role" ? `<@&${item.data}>` : item.data}**.`));
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.addsshopitem, inhibitors: [inhibitors.adminOnly], usage: "<role|key> [role|key_item_name] <cost> [amount_buyable]", args: [String, String, Number, new Arguments.Optional(Number)]
+  })
+  async addsshopitem(message: Discord.Message, what: string, data: string, cost: number, amountBuyale?: number): Promise<void> {
+    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
+    const item = new SoulstoneShopItem();
+    item.buyableAmount = amountBuyale;
+    item.cost = cost;
+    item.data = data;
+    item.type = what;
+    await item.save();
+    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.addsshopitem(what === "role" ? guild.roles.resolve(data).name : data)));
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.deletesshopitem, inhibitors: [inhibitors.adminOnly], usage: "<item:number>", args: [Number]
+  })
+  async deletesshopitem(message: Discord.Message, itemNumber: number): Promise<void> {
+    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
+    const items = await SoulstoneShopItem.find();
+    const item = items[itemNumber - 1];
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    await item.remove();
+    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.deletesshopitem(item.type === "role" ? guild.roles.resolve(item.data).name : item.data)));
   }
 }
 
