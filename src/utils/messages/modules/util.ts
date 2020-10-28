@@ -32,5 +32,21 @@ export default {
       "__**ERASURE OF DATA**__",
       "Leaving the server will not result in any of your data being deleted. Instead, it will be saved so that it can be accessed again should you decide to re-join. You may request for the perpetual erasure of data that is directly associated with your account. To facilitate this, please send a Direct Message to <@747105315840983212>. You may only request one data deletion per thirty days. No exceptional anomalies will be allowed within the scope of possibility."
     ].join("\n\n")
-  }
+  },
+  currency: [
+    `${emotes.commandresponses.soulstones} __**SOULSTONES**__\n`,
+    "The following roles __**must**__ be purchased in order, with the first being at the top and the final role being at the bottom. Commands will error if you attempt to purchase a role that is not directly after the one you currently have.\n",
+    "**<@&728566031022555176>** » Purchasable with **500** Soulstones.",
+    "**<@&728566064388112384>** » Purchasable with **1000** Soulstones.",
+    "**<@&730129487806726145>** » Purchasable with **3000** Soulstones.",
+    "**<@&730510562202615809>** » Purchasable with **5000** Soulstones.\n",
+    "In certain channels, currency generation is enabled, where the first user to perform a command will be able to 'collect' the Soulstones that have emerged. There will always be a unique code to prevent immediate collection!\n",
+    "__**COMMANDS**__\n",
+    "`e!sshop` » Displays a list of available roles and items that you can purchase.",
+    "`e!sbuy <index>` » Purchases a role or item. Indexes are denoted by the number after the #.",
+    "`e!ss` » Returns the amount of Soulstones you currently have.",
+    `\`e!ri\` » Redeems **25** ${emotes.commandresponses.soulstones}. Upon this command being processed, a **6 hour** user cooldown will be activated.`,
+    "`e!collect <code>` » Collects an amount of Soulstones that have emerged.\n",
+    "**<@&528574377722249216>** and/or bot maintainers will be notified in an internal channel when you purchase an item; the command success message will verify this. You will be contacted through Hexyte to seal the transaction."
+  ].join("\n")
 };

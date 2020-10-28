@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { Module } from "@utils/modules";
-import { CronJob } from "cron";
+import { Job } from "node-schedule";
+import { Module } from "../modules";
 
 export interface Cron {
     id: string,
     module: Module,
-    func: Function,
+    func: (...args: unknown[]) => unknown,
     cronTime: string | Date,
-    cronJob?: CronJob
+    cronJob?: Job
 }

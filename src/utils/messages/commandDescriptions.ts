@@ -61,5 +61,21 @@ export default {
   crown: "Re-assigns roles that were removed using the `e!dethrone` conmand.",
   emojis: "Returns a list of emojis on the specified server (Eris must be in it). If no argument is specified, Eris will return emoji information about the current server.",
   staff: "Returns a list of current Evocation staff members, distinguished by hierarchical position.",
-  avatar: "Retrieves the avatar of a user. If no argument is provided, the invoking user's avatar will be returned."
+  avatar: "Retrieves the avatar of a user. If no argument is provided, the invoking user's avatar will be returned.",
+  gc: "Toggles currency generation in the specified channel. If no arguments are provided, Eris should make the channel in which the command is being run in, a currency generation channel.",
+  collect: "Collects Soulstones that have been placed automatically.",
+  soulstoneleaderboard: "Leaderboard for Soulstones.",
+  redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
+  soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned.",
+  awardsoulstones: "Awards a user a certain amount of Soulstones",
+  deductsoulstones: "Removes a certain amount of Soulstones from a user.",
+  addsquantity: "Adds a specified amount of available items to an item in the Soulstone shop.",
+  deletesshopitem: "Removes an item from the Soulstone shop.",
+  addsshopitem: "Adds an item to the Soulstone shop. Item names have to be separated by underscores if spaces are needed.",
+  soulstoneshop: "Returns an embed with items and roles that are purchasable with Soulstones.",
+  soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds.",
+  resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0.",
+  sscommonality: "Changes the chance of Soulstones being generated for each message in channels in which currency generation is enabled.",
+  currency: "Returns information about Soulstones.",
+  ssrate: "Updates range of Soulstone emergence."
 };

@@ -1,5 +1,5 @@
-import { ErisClient } from "@utils/client";
-import { CronJob } from "cron";
+import schedule from "node-schedule";
+import { ErisClient } from "../client/ErisClient";
 import { Cron } from "./Cron";
 
 export class CronManager {
@@ -18,7 +18,7 @@ export class CronManager {
         `Cannot add ${cron.id} because it would conflict with ${conflictingCron.id}.`
       );
     }
-    cron.cronJob = new CronJob(cron.cronTime, cron.func.apply(cron.module), null, true, null, null, false);
+    cron.cronJob = schedule.scheduleJob(cron.cronTime, cron.func.bind(cron.module));
     this.crons.add(cron);
   }
 

@@ -24,11 +24,11 @@ const hasGuildPermission = (perm: Discord.PermissionResolvable): Inhibitor => me
   ? undefined
   : strings.errors.inhibitors.missingDiscordPermission(perm)));
 
-const userCooldown = (ms: number): Inhibitor => async (msg, cmd): Promise<string | undefined> => {
+const userCooldown = (ms: number, adminBypass = true): Inhibitor => async (msg, cmd): Promise<string | undefined> => {
   const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);
   const redisString = `user:${msg.author.id}:command:${cmd.triggers[0]}`;
-  if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS].includes(role.id))) return undefined;
-  if (msg.client.botMaintainers.includes(msg.author.id)) return undefined;
+  if (mainGuild.members.resolve(msg.author.id).roles.cache.some((role) => [env.ROLES.ADMINISTRATORS].includes(role.id)) && adminBypass) return undefined;
+  if (msg.client.botMaintainers.includes(msg.author.id) && adminBypass) return undefined;
   if (await RedisClient.get(redisString)) return strings.errors.inhibitors.cooldown(humanizeDuration(await RedisClient.ttl(redisString) * 1000 || 0));
   await RedisClient.set(redisString, "1", "ex", ms / 1000);
   return undefined;

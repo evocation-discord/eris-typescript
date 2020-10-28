@@ -14,7 +14,8 @@ const commandGroupsWithEmojis = {
   Giveaways: `${emotes.giveaway.donation} **GIVEAWAYS**`,
   Moderation: `${emotes.commandresponses.moderation} **MODERATION**`,
   "Purchasable Role Limitation": `${emotes.commandresponses.creditcard} **PURCHASABLE ROLE LIMITATION**`,
-  "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`
+  "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`,
+  Soulstones: `${emotes.commandresponses.soulstones} **SOULSTONES** ${emotes.commandresponses.beta}`
 };
 
 export default class HelpModule extends Module {
@@ -33,7 +34,7 @@ export default class HelpModule extends Module {
         CommandCategories.Giveaways,
         CommandCategories.Moderation,
         // CommandCategories["Currency (Endorphins)"],
-        // CommandCategories["Currency (Soulstones)"],
+        CommandCategories.Soulstones,
         // CommandCategories["Relics"],
         CommandCategories["Levelling System"],
         CommandCategories.Informational,

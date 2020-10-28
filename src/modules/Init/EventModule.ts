@@ -18,7 +18,6 @@ export default class EventModule extends Module {
   @listener({ event: "ready" })
   onReady(): void {
     scheduler.loadEvents();
-    // [...this.client.cronManager.crons].map((cron) => cron.cronJob.fireOnTick());
     console.log("Bot up and running!");
     this.client.user.setActivity(`Evocation | ${process.env.PREFIX}`, { type: "WATCHING" });
 

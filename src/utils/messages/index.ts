@@ -9,6 +9,7 @@ import help from "./modules/help";
 import levels from "./modules/levels";
 import moderation from "./modules/moderation";
 import purchaseableroles from "./modules/purchaseableroles";
+import soulstones from "./modules/soulstones";
 import util from "./modules/util";
 import voice from "./modules/voice";
 
@@ -25,7 +26,8 @@ export default {
     moderation,
     purchaseableroles,
     util,
-    voice
+    voice,
+    soulstones
   }
 };
 

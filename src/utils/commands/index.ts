@@ -8,7 +8,8 @@ enum CommandCategories {
   "Moderation" = "Moderation",
   "Purchasable Role Limitation" = "Purchasable Role Limitation",
   "Levelling System" = "Levelling System",
-  "Affiliation Management" = "Affiliation Management"
+  "Affiliation Management" = "Affiliation Management",
+  "Soulstones" = "Soulstones"
 }
 
 export {

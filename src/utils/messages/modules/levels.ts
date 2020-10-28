@@ -6,6 +6,7 @@ import {
 import Discord from "discord.js";
 import { emotes } from "@utils/constants";
 import { timeFormatter } from "@utils/time";
+import messages from "..";
 
 export default {
   auditlog: {
@@ -63,17 +64,10 @@ export default {
   leaderboard: {
     header: `${emotes.commandresponses.leaderboard.leaderboard} **SERVER LEADERBOARD**\n`,
     boosterHeader: `\n${emotes.commandresponses.leaderboard.blobboost} **BOOSTER LEADERBOARD**`,
-    row: (rank: number, user: Discord.User, level: number, totalXP: number, booster = false) => `${rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
+    row: (rank: number, user: Discord.User, level: number, totalXP: number, booster = false) => `${messages.general.rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **LEVEL \`${level}\`** » **\`${totalXP}\` TOTAL EXPERIENCE** ${booster ? emotes.commandresponses.leaderboard.blobboost : ""}`
   },
   checkmultipliers: {
     userProvided: "The above multipliers have been determined to influence this user's experience gain.",
     noUserProvided: "The above multipliers have been determined to influence your experience gain."
   }
-};
-
-const rankEmoji = (rank: number): string => {
-  if (rank === 1) return `${emotes.commandresponses.leaderboard.numberone} `;
-  if (rank === 2) return `${emotes.commandresponses.leaderboard.numbertwo} `;
-  if (rank === 3) return `${emotes.commandresponses.leaderboard.numberthree} `;
-  return "       ";
 };

@@ -13,7 +13,7 @@ export default class ModerationModule extends Module {
   @command({
     inhibitors: [inhibitors.moderatorOnly], group: CommandCategories.Moderation, args: [String], staff: true, usage: "<messageLink:string>", description: commandDescriptions.quote
   })
-  async quote(msg: Discord.Message, messageLink: string): Promise<void> {
+  async quote(msg: Discord.Message, messageLink: string): Promise<Discord.Message|void> {
     msg.delete();
     const executedRegex = regex.messageLink.exec(messageLink);
     if (!executedRegex) return strings.errors.errorMessage(msg, strings.errors.error(strings.modules.util.linkDoesNotMatchDiscordLink));
@@ -34,7 +34,7 @@ export default class ModerationModule extends Module {
         .setDescription(message.content)
         .attachFiles(message.attachments.map((a) => a))
         .setFooter(strings.modules.moderation.quote.embedFooter(message.id, channel.name));
-      msg.channel.send(embed);
+      return msg.channel.send(embed);
     } catch (e) {
       strings.errors.errorMessage(msg, strings.errors.error(strings.modules.moderation.quote.unknownError));
     }
