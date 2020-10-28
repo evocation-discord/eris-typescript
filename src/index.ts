@@ -27,6 +27,7 @@ import RoleManagementModule from "@modules/ServerAdministrator/RoleManagementMod
 import HalloweenModule from "@modules/HalloweenModule";
 import SoulstoneModule from "@modules/SoulstoneModule";
 import VoiceModule from "@modules/VoiceModule";
+import EndorphinModule from "@modules/EndorphinModule";
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ client
   .registerModule(LevelModule)
   .registerModule(SoulstoneModule)
   .registerModule(VoiceModule)
+  .registerModule(EndorphinModule)
   // Event Modules
   .registerModule(HalloweenModule)
   .login(process.env.DISCORD_TOKEN);

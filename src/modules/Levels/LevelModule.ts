@@ -83,7 +83,6 @@ export default class LevelModule extends Module {
     const prefixRegex = new RegExp(`^(<@!?${this.client.user.id}>|${escapeRegex(process.env.PREFIX)})\\s*`);
     if (prefixRegex.test(message.content)) return;
 
-    // blacklists, woohoo
     const roleExclusions = await XPExclusion.find({ where: { type: "role" } });
     const channelExclusions = await XPExclusion.find({ where: { type: "channel" } });
     const categoryExclusions = await XPExclusion.find({ where: { type: "category" } });
@@ -114,6 +113,8 @@ export default class LevelModule extends Module {
     await user.save();
 
     await this.levelRoleCheck(message.member, user.xp);
+
+    // TODO: Endorphin Level Up Check
 
     await RedisClient.set(`player:${message.author.id}:check`, "1", "ex", 60);
   }
