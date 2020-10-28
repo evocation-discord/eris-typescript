@@ -83,6 +83,11 @@ export default class UtilCommandModule extends Module {
     msg.channel.send(strings.general.version);
   }
 
+  @command({ inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands, inhibitors.userCooldown(120000)], group: CommandCategories.Informational, description: commandDescriptions.currency })
+  async currency(msg: Discord.Message): Promise<void> {
+    msg.channel.send(strings.modules.util.currency, { allowedMentions: { roles: [], users: [] } });
+  }
+
   @command({ group: CommandCategories.Informational, description: commandDescriptions.staff })
   async staff(msg: Discord.Message): Promise<void> {
     const mainGuild = msg.client.guilds.resolve(env.MAIN_GUILD_ID);

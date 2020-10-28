@@ -74,5 +74,7 @@ export default {
   addsshopitem: "Adds an item to the Soulstone shop. Item names have to be separated by underscores if spaces are needed.",
   soulstoneshop: "Returns an embed with items and roles that are purchasable with Soulstones.",
   soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds.",
-  resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0."
+  resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0.",
+  sscommonality: "Changes the chance of Soulstones being generated for each message in channels in which currency generation is enabled.",
+  currency: "Returns information about Soulstones."
 };

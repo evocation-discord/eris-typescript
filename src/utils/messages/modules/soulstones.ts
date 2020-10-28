@@ -65,6 +65,10 @@ export default {
     addsquantity: {
       succes: (whatToDo: string, item: SoulstoneShopItem) => `Added **${whatToDo}** availability points to the quantity of item **${item.type === "role" ? `<@&${item.data}>` : item.data.toUpperCase()}**.`
     },
+    sscommonality: {
+      update: (oldValue: number, newValue: number) => `${emotes.commandresponses.soulstones} **COMMONALITY MANAGEMENT**: Soulstone currency generation commonality updated from **${oldValue}** to **${newValue}**.`,
+      info: (value: number) => `${emotes.commandresponses.soulstones} **COMMONALITY MANAGEMENT**: Soulstone currency generation commonality is **${value}**.`
+    },
     itemDoesNotExist: "This item does not exist."
   }
 };

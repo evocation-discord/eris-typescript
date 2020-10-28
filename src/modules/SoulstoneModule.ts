@@ -7,6 +7,7 @@ import { command, CommandCategories } from "@utils/commands";
 import { emotes, env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
 import { cron } from "@utils/cron";
+import { SoulstoneSettings } from "@utils/database/models/SoulstoneSettings";
 import Embed from "@utils/embed";
 import { inhibitors } from "@utils/inhibitors/Inhibitor";
 import messages, { commandDescriptions } from "@utils/messages";
@@ -30,9 +31,11 @@ export default class SoulstoneModule extends Module {
 
     if (!await SoulstoneGenerationChannel.findOne({ where: { channel: message.channel.id } })) return;
     if (await RedisClient.get(`soulstone-generation:${message.channel.id}`)) return;
-    const num = getRandomInt(1, 101) + 0.005 * 100;
+    let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
+    if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
+    const num = getRandomInt(1, 101) + settings.spawnCommonality * 100;
     if (num > 100) {
-      const code = Math.floor(Math.random() * 16777215).toString(16);
+      const code = getSoulstoneCode();
       const dropAmount = getRandomInt(5, 21);
       const msg = await message.channel.send(messages.modules.soulstones.generationMessage(dropAmount, code));
       await PlantedSoulstones.create({
@@ -108,7 +111,7 @@ export default class SoulstoneModule extends Module {
   }
 
   @command({
-    group: CommandCategories.Soulstones, description: commandDescriptions.soulstoneleaderboard, aliases: ["slb"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands]
+    group: CommandCategories.Soulstones, description: commandDescriptions.soulstoneleaderboard, aliases: ["slb", "sslb"], inhibitors: [inhibitors.canOnlyBeExecutedInBotCommands]
   })
   async soulstoneleaderboard(msg: Discord.Message): Promise<void> {
     let soulstoneData = await Soulstone.find();
@@ -327,6 +330,22 @@ export default class SoulstoneModule extends Module {
     }
     msg.channel.send([messages.modules.soulstones.commands.resetsoulstones.response, messages.general.codeblockMember([], members)].join("\n"), { split: true });
   }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.sscommonality, inhibitors: [inhibitors.botMaintainersOnly], usage: "<number:number>", args: [new Arguments.Optional(Number)]
+  })
+  async sscommonality(msg: Discord.Message, value?: number): Promise<void> {
+    let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
+    if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
+    if (!value) {
+      await msg.channel.send(messages.modules.soulstones.commands.sscommonality.info(settings.spawnCommonality));
+    } else {
+      const oldValue = settings.spawnCommonality;
+      settings.spawnCommonality = value;
+      await settings.save();
+      await msg.channel.send(messages.modules.soulstones.commands.sscommonality.update(oldValue, value));
+    }
+  }
 }
 
 const userInfo = async (user: Discord.User): Promise<{ soulstones: number; rank: number; }> => {
@@ -344,4 +363,14 @@ const getRandomInt = (min: number, max: number): number => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const getSoulstoneCode = () :string => {
+  let result = "";
+  const characters = "abcdefghijklmnopqrstuvwxyz012345678901234567890123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 4; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };
