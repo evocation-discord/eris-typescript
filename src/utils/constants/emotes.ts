@@ -102,7 +102,8 @@ const commandresponses = {
   version: "<:version:755867807106859089>",
   educateme: "<:educateme:756178333326245977>",
   affiliate: "<:affiliate:759818080489701397>",
-  beta: "<:beta:769975716045389824>"
+  beta: "<:beta:769975716045389824>",
+  new: "<:new:771100513290813450>"
 };
 
 const experiencecapsules = {
