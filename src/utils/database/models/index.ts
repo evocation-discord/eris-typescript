@@ -12,9 +12,10 @@ import { Soulstone } from "./Soulstone";
 import { SoulstoneGenerationChannel } from "./SoulstoneGenerationChannel";
 import { SoulstoneShopItem } from "./SoulstoneShopItem";
 import { SoulstoneSettings } from "./SoulstoneSettings";
+import { Endorphin } from "./Endorphin";
 
 export {
-  LockedChannel, DisabledCommand, Giveaway, Blacklist, XPExclusion, UserXP, LevelRole, XPMultiplier, DethronedUser, PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem, SoulstoneSettings
+  LockedChannel, DisabledCommand, Giveaway, Blacklist, XPExclusion, UserXP, LevelRole, XPMultiplier, DethronedUser, PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem, SoulstoneSettings, Endorphin
 };
 
-export default [LockedChannel, DisabledCommand, Giveaway, Blacklist, XPExclusion, UserXP, LevelRole, XPMultiplier, DethronedUser, PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem, SoulstoneSettings];
+export default [LockedChannel, DisabledCommand, Giveaway, Blacklist, XPExclusion, UserXP, LevelRole, XPMultiplier, DethronedUser, PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem, SoulstoneSettings, Endorphin];
