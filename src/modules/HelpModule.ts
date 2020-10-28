@@ -15,7 +15,7 @@ const commandGroupsWithEmojis = {
   Moderation: `${emotes.commandresponses.moderation} **MODERATION**`,
   "Purchasable Role Limitation": `${emotes.commandresponses.creditcard} **PURCHASABLE ROLE LIMITATION**`,
   "Levelling System": `${emotes.commandresponses.experience} **LEVELLING SYSTEM**`,
-  Soulstones: `${emotes.commandresponses.soulstones} **SOULSTONES**`
+  Soulstones: `${emotes.commandresponses.soulstones} **SOULSTONES** ${emotes.commandresponses.beta}`
 };
 
 export default class HelpModule extends Module {
