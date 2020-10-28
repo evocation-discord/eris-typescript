@@ -2,7 +2,6 @@ import {
   PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem
 } from "@database/models";
 import * as Arguments from "@utils/arguments";
-import { RedisClient } from "@utils/client";
 import { command, CommandCategories } from "@utils/commands";
 import { emotes, env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
