@@ -56,6 +56,15 @@ export default {
     resetsoulstones: {
       response: `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: I have reset the Soulstone balance of the specified users.`,
       log: (user: Discord.User, moderator: Discord.User, amount: number) => `${emotes.commandresponses.soulstones} **SOULSTONES RESET**: Bot maintainer **\`${moderator.tag}\`** (\`${moderator.id}\`) reset the Soulstones of **\`${user.tag}\`** (\`${user.id}\`). They had **${amount}** Soulstones.`
-    }
+    },
+    soulstoneshop: {
+      title: `${emotes.commandresponses.soulstones} Soulstone Shop`,
+      keyItem: (item: SoulstoneShopItem) => `You will get the **${item.data.toUpperCase()}** item.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`,
+      roleItem: (item: SoulstoneShopItem) => `You will get the **<@&${item.data}>** role.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`
+    },
+    addsquantity: {
+      succes: (whatToDo: string, item: SoulstoneShopItem) => `Added **${whatToDo}** availability points to the quantity of item **${item.type === "role" ? `<@&${item.data}>` : item.data.toUpperCase()}**.`
+    },
+    itemDoesNotExist: "This item does not exist."
   }
 };

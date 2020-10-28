@@ -182,10 +182,10 @@ export default class SoulstoneModule extends Module {
   })
   async soulstoneshop(message: Discord.Message): Promise<void> {
     const items = await SoulstoneShopItem.find();
-    const embed = new Embed().setTitle(`${emotes.commandresponses.soulstones} Soulstone Shop`);
+    const embed = new Embed().setTitle(messages.modules.soulstones.commands.soulstoneshop.title);
     for await (const [index, item] of items.entries()) {
-      let text = `You will get the **${item.data.toUpperCase()}** item.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
-      if (item.type === "role") text = `You will get the **<@&${item.data}>** role.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
+      let text = messages.modules.soulstones.commands.soulstoneshop.keyItem(item);
+      if (item.type === "role") text = messages.modules.soulstones.commands.soulstoneshop.roleItem(item);
       embed.addField(`#${index + 1} - ${item.cost}${emotes.commandresponses.soulstones}`, text, true);
     }
     message.channel.send(embed);
@@ -204,7 +204,7 @@ export default class SoulstoneModule extends Module {
     const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     const items = await SoulstoneShopItem.find();
     const item = items[itemNumber - 1];
-    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error(messages.modules.soulstones.commands.itemDoesNotExist));
     let userSoulstones = await Soulstone.findOne({ where: { id: message.author.id } });
     if (!userSoulstones) userSoulstones = await Soulstone.create({ id: message.author.id }).save();
     if (typeof item.buyableAmount === "number" && item.buyableAmount === 0) return messages.errors.errorMessage(message, messages.modules.soulstones.commands.buy.notBuyableAnymore, 10000);
@@ -264,7 +264,7 @@ export default class SoulstoneModule extends Module {
   async addsquantity(message: Discord.Message, itemNumber: number, whatToDo: string): Promise<void> {
     const items = await SoulstoneShopItem.find();
     const item = items[itemNumber - 1];
-    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error(messages.modules.soulstones.commands.itemDoesNotExist));
     if (whatToDo.startsWith("+")) {
       const number = Number(whatToDo.slice(1, whatToDo.length));
       item.buyableAmount += number;
@@ -275,7 +275,7 @@ export default class SoulstoneModule extends Module {
       item.buyableAmount = whatToDo === "null" ? null : Number(whatToDo);
     }
     await item.save();
-    await message.channel.send(messages.general.success(`Added **${whatToDo}** availability points to the quantity of item **${item.type === "role" ? `<@&${item.data}>` : item.data}**.`));
+    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.addsquantity.succes(whatToDo, item)));
   }
 
   @command({
@@ -307,7 +307,7 @@ export default class SoulstoneModule extends Module {
     const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     const items = await SoulstoneShopItem.find();
     const item = items[itemNumber - 1];
-    if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
+    if (!item) return messages.errors.errorMessage(message, messages.errors.error(messages.modules.soulstones.commands.itemDoesNotExist));
     await item.remove();
     await message.channel.send(messages.general.success(messages.modules.soulstones.commands.deletesshopitem(item.type === "role" ? guild.roles.resolve(item.data).name : item.data)));
   }
