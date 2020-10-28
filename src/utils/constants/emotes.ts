@@ -103,7 +103,8 @@ const commandresponses = {
   educateme: "<:educateme:756178333326245977>",
   affiliate: "<:affiliate:759818080489701397>",
   beta: "<:beta:769975716045389824>",
-  new: "<:new:771100513290813450>"
+  new: "<:new:771100513290813450>",
+  verified: "<:verified:770238042899218454>"
 };
 
 const experiencecapsules = {

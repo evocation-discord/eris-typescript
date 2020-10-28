@@ -98,7 +98,7 @@ export default class UtilCommandModule extends Module {
     const developers = members.filter((m) => m.roles.cache.has(env.ROLES.ERIS_DEVELOPER)).sort((a, b) => a.user.username.localeCompare(b.user.username)).array();
 
     const embed = new Embed()
-      .setAuthor("Evocation Staff")
+      .setTitle(`${emotes.commandresponses.verified} Evocation Staff`)
       .addField("Administrators", admins.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
       .addField("Moderators", mods.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
       .addField("Eris Developers", developers.map(this.formatStaffMessage).join("\n") || "This position has no occupants.")
