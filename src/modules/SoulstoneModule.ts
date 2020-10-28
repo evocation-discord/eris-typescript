@@ -12,6 +12,10 @@ import { inhibitors } from "@utils/inhibitors/Inhibitor";
 import messages, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
+import {
+  guildMember,
+  role as roleParser
+} from "@utils/parsers";
 import Discord from "discord.js";
 
 export default class SoulstoneModule extends Module {
@@ -26,7 +30,7 @@ export default class SoulstoneModule extends Module {
 
     if (!await SoulstoneGenerationChannel.findOne({ where: { channel: message.channel.id } })) return;
     if (await RedisClient.get(`soulstone-generation:${message.channel.id}`)) return;
-    const num = getRandomInt(1, 101) + 0.1 * 100;
+    const num = getRandomInt(1, 101) + 0.005 * 100;
     if (num > 100) {
       const code = Math.floor(Math.random() * 16777215).toString(16);
       const dropAmount = getRandomInt(5, 21);
@@ -129,7 +133,7 @@ export default class SoulstoneModule extends Module {
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: message.author.id }).save();
     soulstoneData.soulstones += 25;
     await soulstoneData.save();
-    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.redeeminducements.success));
+    await message.channel.send(messages.modules.soulstones.commands.redeeminducements.success);
   }
 
   @command({
@@ -180,7 +184,7 @@ export default class SoulstoneModule extends Module {
     const items = await SoulstoneShopItem.find();
     const embed = new Embed().setTitle(`${emotes.commandresponses.soulstones} Soulstone Shop`);
     for await (const [index, item] of items.entries()) {
-      let text = `You will get the **${item.data}**.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
+      let text = `You will get the **${item.data.toUpperCase()}** item.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
       if (item.type === "role") text = `You will get the **<@&${item.data}>** role.${typeof item.buyableAmount === "number" ? ` This item is limited; **${item.buyableAmount}** left.` : ""}`;
       embed.addField(`#${index + 1} - ${item.cost}${emotes.commandresponses.soulstones}`, text, true);
     }
@@ -277,15 +281,23 @@ export default class SoulstoneModule extends Module {
   @command({
     group: CommandCategories.Soulstones, description: commandDescriptions.addsshopitem, inhibitors: [inhibitors.adminOnly], usage: "<role|key> [role|key_item_name] <cost> [amount_buyable]", args: [String, String, Number, new Arguments.Optional(Number)]
   })
-  async addsshopitem(message: Discord.Message, what: string, data: string, cost: number, amountBuyale?: number): Promise<void> {
-    const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
+  async addsshopitem(message: Discord.Message, what: "role" | "key", data: string, cost: number, buyableAmount?: number): Promise<void> {
     const item = new SoulstoneShopItem();
-    item.buyableAmount = amountBuyale;
-    item.cost = cost;
-    item.data = data;
-    item.type = what;
+    if (what === "role") {
+      const role = await roleParser(data, message);
+      item.type = "role";
+      item.data = role.id;
+      item.cost = cost;
+      item.buyableAmount = buyableAmount;
+      await message.channel.send(messages.general.success(messages.modules.soulstones.commands.addsshopitem(role.name)));
+    } else {
+      item.type = "key";
+      item.data = data.replace(/_/g, " ");
+      item.cost = cost;
+      item.buyableAmount = buyableAmount;
+      await message.channel.send(messages.general.success(messages.modules.soulstones.commands.addsshopitem(data.replace(/_/g, " "))));
+    }
     await item.save();
-    await message.channel.send(messages.general.success(messages.modules.soulstones.commands.addsshopitem(what === "role" ? guild.roles.resolve(data).name : data)));
   }
 
   @command({
@@ -298,6 +310,22 @@ export default class SoulstoneModule extends Module {
     if (!item) return messages.errors.errorMessage(message, messages.errors.error("This item does not exist."));
     await item.remove();
     await message.channel.send(messages.general.success(messages.modules.soulstones.commands.deletesshopitem(item.type === "role" ? guild.roles.resolve(item.data).name : item.data)));
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.resetsoulstones, inhibitors: [inhibitors.botMaintainersOnly], usage: "<members:...guildmember|snowflake>", args: [new Arguments.Remainder(String)]
+  })
+  async resetsoulstones(msg: Discord.Message, _members: string): Promise<void> {
+    msg.delete();
+    const members: Discord.GuildMember[] = [];
+    for await (const _member of _members.split(" ")) members.push(await guildMember(_member, msg));
+    for await (const member of members) {
+      const data = await Soulstone.findOne({ where: { id: member.user.id } });
+      const channel = msg.client.channels.resolve(env.CHANNELS.SOULSTONE_LOG) as Discord.TextChannel;
+      await channel.send(messages.modules.soulstones.commands.resetsoulstones.log(member.user, msg.author, data.soulstones), { allowedMentions: { users: [] } });
+      await data.remove();
+    }
+    msg.channel.send([messages.modules.soulstones.commands.resetsoulstones.response, messages.general.codeblockMember([], members)].join("\n"), { split: true });
   }
 }
 

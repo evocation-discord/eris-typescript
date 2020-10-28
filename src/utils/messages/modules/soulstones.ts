@@ -13,14 +13,14 @@ export default {
       disabled: (channel: Discord.TextChannel) => `Disabled currency generation in ${channel}.`
     },
     collect: {
-      claim: (author: Discord.User, amount: number) => `**${author.tag}** collected **${amount}** ${emotes.commandresponses.soulstones}.`
+      claim: (author: Discord.User, amount: number) => `**${author.username}**#${author.discriminator} collected **${amount}** ${emotes.commandresponses.soulstones}.`
     },
     leaderboard: {
       header: `${emotes.commandresponses.soulstones} **SOULSTONE LEADERBOARD**\n`,
       row: (rank: number, user: Discord.User, soulstones: number) => `${messages.general.rankEmoji(rank)}**${rank}**. ${user} (\`${user.id}\`) » **\`${soulstones}\` SOULSTONES**`
     },
     redeeminducements: {
-      success: "You have redeemed **25** Soulstones."
+      success: `${emotes.commandresponses.soulstones} **INDUCEMENTS REDEEMED**: You have redeemed **25** Soulstones. You can run this command again in **6 hours**.`
     },
     soulstones: {
       success: (user: Discord.User, soulstones: number) => `${emotes.commandresponses.soulstones} **BALANCE**: **${user.username}**#${user.discriminator} has **${soulstones}** Soulstone(s).`
@@ -52,6 +52,10 @@ export default {
       notBuyableAnymore: `${emotes.commandresponses.soulstones} **TRANSACTION FAILED**: This item is no longer purchasable. Please contact an administrator if you believe this is in error.`
     },
     deletesshopitem: (itemName: string) => `Removed shop item with name **${itemName.toUpperCase()}**. Users will no longer be able to purchase this item.`,
-    addsshopitem: (itemName: string) => `Added shop item with name **${itemName.toUpperCase()}**. Applied specified properties, if any.`
+    addsshopitem: (itemName: string) => `Added shop item with name **${itemName.toUpperCase()}**. Applied specified properties, if any.`,
+    resetsoulstones: {
+      response: `${emotes.commandresponses.soulstones} **SOULSTONE MANAGEMENT**: I have reset the Soulstone balance of the specified users.`,
+      log: (user: Discord.User, moderator: Discord.User, amount: number) => `${emotes.commandresponses.soulstones} **SOULSTONES RESET**: Bot maintainer **\`${moderator.tag}\`** (\`${moderator.id}\`) reset the Soulstones of **\`${user.tag}\`** (\`${user.id}\`). They had **${amount}** Soulstones.`
+    }
   }
 };

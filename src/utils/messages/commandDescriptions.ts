@@ -71,7 +71,8 @@ export default {
   deductsoulstones: "Removes a certain amount of Soulstones from a user.",
   addsquantity: "Adds a specified amount of available items to an item in the Soulstone shop.",
   deletesshopitem: "Removes an item from the Soulstone shop.",
-  addsshopitem: "Adds an item to the Soulstone shop.",
+  addsshopitem: "Adds an item to the Soulstone shop. Item names have to be separated by underscores if spaces are needed.",
   soulstoneshop: "Returns an embed with items and roles that are purchasable with Soulstones.",
-  soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds."
+  soulstonebuy: "Buys an item from the Soulstone shop, assuming the invoking user has sufficient funds.",
+  resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0."
 };
