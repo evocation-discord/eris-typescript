@@ -1,0 +1,62 @@
+{
+	// Place your Eris workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"command": {
+		"scope": "typescript",
+		"prefix": ["commands", "command"],
+		"body": [
+			"@command({ group: $1, description: commandDescriptions.$2, usage: \"$3\", args: [$4] })",
+			"async ${5:commandNameHere}(message: Discord.Message, $6): Promise<void> {",
+			"\t$0",
+			"}"
+		],
+		"description": "Add new command decorator"
+	},
+	"monitor": {
+		"scope": "typescript",
+		"prefix": ["monitors", "monitor"],
+		"body": [
+			"@monitor({ event: \"$1\" })",
+			"async ${2:monitorNameHere}($3): Promise<void> {",
+			"\t$0",
+			"}"
+		],
+		"description": "Add new monitor decorator"
+	},
+	"listener": {
+		"scope": "typescript",
+		"prefix": ["listeners", "listener"],
+		"body": [
+			"@listener({ event: \"$1\" })",
+			"async ${2:listenerNameHere}($3): Promise<void> {",
+			"\t$0",
+			"}"
+		],
+		"description": "Add new listener decorator"
+	},
+	"cron": {
+		"scope": "typescript",
+		"prefix": ["crons", "cron"],
+		"body": [
+			"@cron({ cronTime: \"$1\" })",
+			"async ${2:cronNameHere}($3): Promise<void> {",
+			"\t$0",
+			"}"
+		],
+		"description": "Add new cron decorator"
+	}
+}

@@ -4,7 +4,7 @@ import { ListenerManager } from "@utils/listener/ListenerManager";
 import { Module } from "@utils/modules";
 import { CommandParserModule } from "@utils/commands/CommandParser";
 import { MonitorManager } from "@utils/monitor/MonitorManager";
-// import { CronManager } from "@utils/cron/CronManager";
+import { CronManager } from "@utils/cron/CronManager";
 
 export class ErisClient extends Client {
   public commandManager: CommandManager;
@@ -13,7 +13,7 @@ export class ErisClient extends Client {
 
   public monitorManager: MonitorManager;
 
-  // public cronManager: CronManager;
+  public cronManager: CronManager;
 
   public modules: Set<Module> = new Set();
 
@@ -44,7 +44,7 @@ export class ErisClient extends Client {
     this.commandManager = new CommandManager();
     this.listenerManager = new ListenerManager(this);
     this.monitorManager = new MonitorManager(this);
-    // this.cronManager = new CronManager(this);
+    this.cronManager = new CronManager(this);
     this.registerModule(CommandParserModule);
   }
 
@@ -75,9 +75,9 @@ export class ErisClient extends Client {
     mod.processMonitors
       .bind(mod)()
       .forEach((c) => this.monitorManager.add(c));
-    // mod.processCrons
-    //   .bind(mod)()
-    //   .forEach((c) => this.cronManager.add(c));
+    mod.processCrons
+      .bind(mod)()
+      .forEach((c) => this.cronManager.add(c));
     this.modules.add(mod);
     return this;
   }
