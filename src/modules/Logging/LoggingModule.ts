@@ -4,7 +4,7 @@ import strings from "@utils/messages";
 import { Module } from "@utils/modules";
 import Discord from "discord.js";
 import { monitor } from "@utils/monitor";
-import { DisabledCommand } from "@database/models";
+import { DisabledCommand, Soulstone } from "@database/models";
 import regex, { escapeRegex } from "@utils/constants/regex";
 import linkResolver from "@utils/linkResolver";
 
@@ -72,6 +72,10 @@ export default class LoggingModule extends Module {
     if (role.id !== env.ROLES.EOS) return;
     const channel = newMember.guild.channels.cache.find((c) => c.name === "lounge") as Discord.TextChannel;
     channel.send(strings.modules.moderation.logging.userBoost(newMember.user));
+    let user = await Soulstone.findOne({ where: { id: newMember.user.id } });
+    if (!user) user = await Soulstone.create({ id: newMember.user.id }).save();
+    user.soulstones += 5000;
+    await user.save();
   }
 }
 
