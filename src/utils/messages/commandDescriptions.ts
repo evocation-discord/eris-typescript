@@ -67,7 +67,7 @@ export default {
   soulstoneleaderboard: "Leaderboard for Soulstones.",
   redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
   soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned.",
-  awardsoulstones: "Awards a user a certain amount of Soulstones",
+  awardsoulstones: "Awards a user a certain amount of Soulstones.",
   deductsoulstones: "Removes a certain amount of Soulstones from a user.",
   addsquantity: "Adds a specified amount of available items to an item in the Soulstone shop.",
   deletesshopitem: "Removes an item from the Soulstone shop.",
