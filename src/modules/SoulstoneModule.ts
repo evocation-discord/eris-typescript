@@ -16,6 +16,7 @@ import {
   guildMember,
   role as roleParser
 } from "@utils/parsers";
+import { getRandomInt } from "@utils/utils";
 import Discord from "discord.js";
 
 export default class SoulstoneModule extends Module {
@@ -373,12 +374,6 @@ const userInfo = async (user: Discord.User): Promise<{ soulstones: number; rank:
     soulstones: soulstoneData.soulstones,
     rank: allData.findIndex((a) => a.id === user.id) + 1
   };
-};
-
-const getRandomInt = (min: number, max: number): number => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const getSoulstoneCode = (): string => {

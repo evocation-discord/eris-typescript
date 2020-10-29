@@ -7,7 +7,7 @@ import strings, { commandDescriptions } from "@utils/messages";
 import { inhibitors, roleValidation } from "@utils/inhibitors/Inhibitor";
 import { Module } from "@utils/modules";
 import {
-  UserXP, XPExclusion, LevelRole, XPMultiplier, DethronedUser
+  UserXP, XPExclusion, LevelRole, XPMultiplier, DethronedUser, Endorphin
 } from "@database/models";
 import Embed from "@utils/embed";
 import Discord from "discord.js";
@@ -16,6 +16,7 @@ import { escapeRegex } from "@utils/constants/regex";
 import {
   guildMember as guildMemberParser, role as roleParser, textChannel as textChannelParser, categoryChannel as categoryChannelParser
 } from "@utils/parsers";
+import { getRandomInt } from "@utils/utils";
 
 export default class LevelModule extends Module {
   @monitor({ event: "guildMemberRoleRemove" })
@@ -109,14 +110,50 @@ export default class LevelModule extends Module {
       user.xp += Math.round((multiplier.multiplier * randomXP));
     }
 
+    const oldXP = user.xp;
+
     user.xp += randomXP;
     await user.save();
 
     await this.levelRoleCheck(message.member, user.xp);
 
-    // TODO: Endorphin Level Up Check
+    await this.giveEndorphins(message.member, oldXP, user.xp);
 
     await RedisClient.set(`player:${message.author.id}:check`, "1", "ex", 60);
+  }
+
+  async giveEndorphins(member: Discord.GuildMember, oldXP: number, newXP: number): Promise<void> {
+    const levelOld = levels.getLevelFromXP(oldXP);
+    const levelNew = levels.getLevelFromXP(newXP);
+    let endorphins = await Endorphin.findOne({ where: { id: member.user.id } });
+    if (!endorphins) endorphins = await Endorphin.create({ id: member.user.id }).save();
+    let randomAmount: number;
+    if (levelNew > levelOld) {
+      if (levelNew >= 1 && levelNew <= 10) {
+        randomAmount = getRandomInt(1, 11);
+      } else if (levelNew >= 11 && levelNew <= 20) {
+        randomAmount = getRandomInt(10, 21);
+      } else if (levelNew >= 21 && levelNew <= 30) {
+        randomAmount = getRandomInt(20, 31);
+      } else if (levelNew >= 31 && levelNew <= 40) {
+        randomAmount = getRandomInt(30, 41);
+      } else if (levelNew >= 41 && levelNew <= 50) {
+        randomAmount = getRandomInt(40, 51);
+      } else if (levelNew >= 51 && levelNew <= 60) {
+        randomAmount = getRandomInt(50, 61);
+      } else if (levelNew >= 61 && levelNew <= 70) {
+        randomAmount = getRandomInt(60, 71);
+      } else if (levelNew >= 71 && levelNew <= 80) {
+        randomAmount = getRandomInt(70, 81);
+      } else if (levelNew >= 81 && levelNew <= 90) {
+        randomAmount = getRandomInt(80, 91);
+      } else if (levelNew >= 91 && levelNew <= 100) {
+        randomAmount = getRandomInt(90, 101);
+      } else randomAmount = 175;
+
+      endorphins.endorphins += randomAmount;
+      await endorphins.save();
+    }
   }
 
   async levelRoleCheck(member: Discord.GuildMember, xp: number): Promise<void> {
