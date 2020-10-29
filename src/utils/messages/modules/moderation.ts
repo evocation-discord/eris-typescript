@@ -38,11 +38,11 @@ export default {
       `Thank you for boosting **EVOCATION**, ${user}! You now have access to change your own nickname, embed links, attach files and stream into the server. If these permissions seem familiar to you, that means you are **LEVEL 3** or above.\n`,
       "**SUCCESSFULLY UNLOCKED**:",
       `${emotes.commandresponses.soulstones} Coloured **EOS** Role [HOISTED]`,
+      `${emotes.commandresponses.soulstones} +**5***,**000** Soulstones`,      
       `${emotes.commandresponses.soulstones} Permanent x**2 EXPERIENCE MULTIPLIER**`,
       `${emotes.commandresponses.soulstones} Permanent Access to Voice Context Channel`,
       `${emotes.commandresponses.soulstones} Permanent Appearance in Server Leaderboard`,
       `${emotes.commandresponses.soulstones} Special Badge Appended to Your Entry in Server Leaderboard`,
-      `${emotes.commandresponses.soulstones} **\`e!vb\`** Command Access [COMING SOON]`,
       `${emotes.commandresponses.soulstones} **\`e!muse\`** Command Access`
     ].join("\n"),
     hyacinthRoleRemoval: "[CONDITIONAL REVOCATION] User has a levelled role."
