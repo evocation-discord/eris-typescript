@@ -1,14 +1,14 @@
 import {
-  PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem
+  PlantedSoulstones, Soulstone, SoulstoneGenerationChannel, SoulstoneShopItem, SoulstoneSettings
 } from "@database/models";
 import * as Arguments from "@utils/arguments";
+import { RedisClient } from "@utils/client";
 import { command, CommandCategories } from "@utils/commands";
 import { emotes, env } from "@utils/constants";
 import { escapeRegex } from "@utils/constants/regex";
 import { cron } from "@utils/cron";
-import { SoulstoneSettings } from "@utils/database/models/SoulstoneSettings";
 import Embed from "@utils/embed";
-import { inhibitors } from "@utils/inhibitors/Inhibitor";
+import inhibitors from "@utils/inhibitors";
 import messages, { commandDescriptions } from "@utils/messages";
 import { Module } from "@utils/modules";
 import { monitor } from "@utils/monitor";
@@ -32,6 +32,7 @@ export default class SoulstoneModule extends Module {
     if (!await SoulstoneGenerationChannel.findOne({ where: { channel: message.channel.id } })) return;
     let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
     if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
+    if (await RedisClient.get(`soulstone-generation:${message.channel.id}`)) return;
     const num = getRandomInt(1, 101) + settings.spawnCommonality * 100;
     if (num > 100) {
       const code = getSoulstoneCode();
@@ -40,6 +41,7 @@ export default class SoulstoneModule extends Module {
       await PlantedSoulstones.create({
         soulstones: dropAmount, code, message: msg.id, channel: msg.channel.id
       }).save();
+      await RedisClient.set(`soulstone-generation:${message.channel.id}`, "1", "ex", settings.channelSpawnCooldown);
     }
   }
 
@@ -361,6 +363,22 @@ export default class SoulstoneModule extends Module {
       settings.higherEmergence = Number(higher);
       await settings.save();
       await msg.channel.send(messages.modules.soulstones.commands.ssrate.update(oldValue, `**${settings.lowerEmergence}**-**${settings.higherEmergence}**`));
+    }
+  }
+
+  @command({
+    group: CommandCategories.Soulstones, description: commandDescriptions.sscooldown, inhibitors: [inhibitors.botMaintainersOnly], usage: "[seconds:number]", args: [new Arguments.Optional(String)]
+  })
+  async sscooldown(msg: Discord.Message, value?: number): Promise<void> {
+    let settings = await SoulstoneSettings.findOne({ where: { id: env.MAIN_GUILD_ID } });
+    if (!settings) settings = await SoulstoneSettings.create({ id: env.MAIN_GUILD_ID }).save();
+    if (!value) {
+      await msg.channel.send(messages.modules.soulstones.commands.sscooldown.info(settings.channelSpawnCooldown));
+    } else {
+      const oldValue = settings.channelSpawnCooldown;
+      settings.channelSpawnCooldown = value;
+      await settings.save();
+      await msg.channel.send(messages.modules.soulstones.commands.sscooldown.update(oldValue, value));
     }
   }
 }

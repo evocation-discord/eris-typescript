@@ -67,7 +67,7 @@ export default {
   soulstoneleaderboard: "Leaderboard for Soulstones.",
   redeeminducements: "Redeems currency inducements. Dependent upon roles, this value may be heightened.",
   soulstones: "Returns the amount of Soulstones the invoking user has. If a user is specified, their balance will be returned.",
-  awardsoulstones: "Awards a user a certain amount of Soulstones",
+  awardsoulstones: "Awards a user a certain amount of Soulstones.",
   deductsoulstones: "Removes a certain amount of Soulstones from a user.",
   addsquantity: "Adds a specified amount of available items to an item in the Soulstone shop.",
   deletesshopitem: "Removes an item from the Soulstone shop.",
@@ -77,5 +77,6 @@ export default {
   resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0.",
   sscommonality: "Changes the chance of Soulstones being generated for each message in channels in which currency generation is enabled.",
   currency: "Returns information about Soulstones.",
-  ssrate: "Updates range of Soulstone emergence."
+  ssrate: "Updates range of Soulstone emergence.",
+  sscooldown: "Updates the cooldown that is activated upon currency generation."
 };

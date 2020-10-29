@@ -15,4 +15,7 @@ export class SoulstoneSettings extends BaseEntity {
 
   @Column({ name: "higher_emergence", default: 21 })
   higherEmergence: number;
+
+  @Column({ name: "channel_spawn_cooldown", default: 120 })
+  channelSpawnCooldown: number;
 }
