@@ -73,6 +73,10 @@ export default {
       update: (oldValue: string, newValue: string) => `${emotes.commandresponses.soulstones} **EMERGENCE MANAGEMENT**: The rate of emergence is now ${newValue}, where it was previously ${oldValue}.`,
       info: (value: string) => `${emotes.commandresponses.soulstones} **EMERGENCE MANAGEMENT**: The rate of emergence is ${value}.`
     },
+    sscooldown: {
+      update: (oldValue: number, newValue: number) => `${emotes.commandresponses.soulstones} **COOLDOWN MANAGEMENT**: The new cooldown for Soulstone currency generation is **${newValue}**, where it was previously **${oldValue}**.`,
+      info: (value: number) => `${emotes.commandresponses.soulstones} **COOLDOWN MANAGEMENT**: The cooldown for Soulstone currency generation is **${value}**.`
+    },
     itemDoesNotExist: "This item does not exist."
   }
 };

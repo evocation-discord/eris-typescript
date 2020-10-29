@@ -77,5 +77,6 @@ export default {
   resetsoulstones: "Resets the Soulstones of one or more users to the default value of 0.",
   sscommonality: "Changes the chance of Soulstones being generated for each message in channels in which currency generation is enabled.",
   currency: "Returns information about Soulstones.",
-  ssrate: "Updates range of Soulstone emergence."
+  ssrate: "Updates range of Soulstone emergence.",
+  sscooldown: "Updates the cooldown that is activated upon currency generation."
 };
