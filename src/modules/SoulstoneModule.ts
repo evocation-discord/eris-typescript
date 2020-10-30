@@ -169,10 +169,10 @@ export default class SoulstoneModule extends Module {
     const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     let soulstoneData = await Soulstone.findOne({ where: { id: user.id } });
     if (!soulstoneData) soulstoneData = await Soulstone.create({ id: user.id }).save();
-    soulstoneData.soulstones -= amount;
     if (soulstoneData.soulstones < amount) {
       await messages.errors.errorMessage(message, messages.errors.error(messages.modules.soulstones.commands.deductsoulstones.error));
     } else {
+      soulstoneData.soulstones -= amount;
       await soulstoneData.save();
       await message.channel.send(messages.modules.soulstones.commands.deductsoulstones.success(user, amount, soulstoneData.soulstones));
       const channel = guild.channels.resolve(env.CHANNELS.SOULSTONE_LOG) as Discord.TextChannel;
