@@ -32,7 +32,6 @@ dotenv.config();
 
 export const client = new ErisClient({
   botMaintainers: [
-    "209609796704403456", // Stijn
     "369497100834308106" // Ace
   ]
 });
