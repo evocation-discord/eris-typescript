@@ -11,7 +11,6 @@ export default {
   aboutCommand: [
     "Hi! I am a custom bot designed for exclusive use by Evocation staff and members. An impermeable forcefield that surrounds the universe of Evocation prohibits me from being able to join and interact with other servers.\n",
     "__**CONTRIBUTORS**__\n",
-    "**DEVELOPMENT TEAM LEAD**: <@209609796704403456>", // Stijn
     "**CHARACTER CONCEPTUALIST**: <@369497100834308106>" // Ace
   ].join("\n"),
   pinging: `${emotes.commandresponses.server} Pinging...`,
