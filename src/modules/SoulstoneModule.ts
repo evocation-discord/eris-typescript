@@ -202,7 +202,8 @@ export default class SoulstoneModule extends Module {
       env.ROLES.CHRONOS,
       env.ROLES.ORION,
       env.ROLES.SCIONS_OF_ELYSIUM,
-      env.ROLES.SENTRIES_OF_DESCENSUS
+      env.ROLES.SENTRIES_OF_DESCENSUS,
+      env.ROLES.DRAGONHYMNS
     ];
     const guild = this.client.guilds.resolve(env.MAIN_GUILD_ID);
     const items = await SoulstoneShopItem.find();
