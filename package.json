@@ -28,7 +28,7 @@
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
     "@swc/cli": "0.1.27",
-    "@swc/core": "1.2.36",
+    "@swc/core": "1.2.40",
     "@types/humanize-duration": "3.18.0",
     "@types/ioredis": "4.17.4",
     "@types/node": "14.0.25",
